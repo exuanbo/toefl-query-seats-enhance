@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "托福考位查询增强",
+  "version": "1.0.0",
+  "description": "",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://toefl.neea.cn/myHome/*"],
+      "js": ["index.js"]
+    }
+  ],
+  "permissions": [
+    "https://toefl.neea.cn/myHome/*"
+  ],
+  "web_accessible_resources": ["app.js"]
+}

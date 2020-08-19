@@ -1,0 +1,16 @@
+{
+  "name": "toefl-query-seats-enhance",
+  "private": "true",
+  "scripts": {
+    "build": "npx gulp"
+  },
+  "author": "Exuanbo",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/stream": "^1.0.0",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "rollup": "^2.26.4",
+    "vinyl-source-stream": "^2.0.0"
+  }
+}

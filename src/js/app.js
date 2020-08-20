@@ -18,13 +18,13 @@ const query = () => {
   })
 
   document.getElementById('qrySeatResult').innerHTML = ''
-  View.popUpMsg(`正在查询中，请耐心等待${testDays.length}秒左右`, testDays.length * 1000, 6)
 
   ;(async () => {
     let availableSeats = 0
     let errNum = 0
 
     for(const day of testDays) {
+      View.popUpMsg(`正在查询中，剩余${testDays.length - testDays.indexOf(day)}个日期`, 1500, { icon: 6, anim: testDays.indexOf(day) === 0 ? 0 : -1 })
       $.getJSON(
         'testSeat/queryTestSeats',
         {
@@ -43,9 +43,9 @@ const query = () => {
       if(day !== testDays[testDays.length - 1]) {
         await sleep(1000)
       } else if(errNum) {
-        layer.alert(`服务器刚才打了${errNum}个盹儿，请重新查询`)
+        layer.alert(`服务器刚才打了个盹儿，漏掉了${errNum}个结果`)
       } else if(!availableSeats) {
-        View.popUpMsg("暂无可预定考位信息", 2000, 5)
+        View.popUpMsg("暂无可预定考位信息", 2000, { icon: 5 })
       }
     }
   })()

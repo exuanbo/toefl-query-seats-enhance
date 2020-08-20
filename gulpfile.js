@@ -1,4 +1,4 @@
-const { src, dest, series, parallel } = require('gulp')
+const { src, dest, series, parallel, watch } = require('gulp')
 const del = require('del')
 const rollupStream = require('@rollup/stream')
 const source = require('vinyl-source-stream')
@@ -24,3 +24,4 @@ function mix() {
 }
 
 exports.default = series(clean, parallel(build, mix))
+exports.watch = () => { watch('src/js/**', build) }

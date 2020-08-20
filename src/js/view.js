@@ -2,10 +2,10 @@ const addNewQueryBtn = () => {
   document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>')
 }
 
-const popUpMsg = (msg, time) => {
+const popUpMsg = (msg, time, icon = 0) => {
   layer.msg(msg, {
     time: time,
-    icon: 0,
+    icon: icon,
     shift: 0
   })
 }

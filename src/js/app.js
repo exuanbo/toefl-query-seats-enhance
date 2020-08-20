@@ -18,7 +18,7 @@ const query = () => {
   })
 
   document.getElementById('qrySeatResult').innerHTML = ''
-  View.popUpMsg('正在查询中，请耐心等待20秒左右', 20000)
+  View.popUpMsg(`正在查询中，请耐心等待${testDays.length}秒左右`, testDays.length * 1000, 6)
 
   ;(async () => {
     let availableSeats = 0
@@ -41,7 +41,7 @@ const query = () => {
       if(day !== testDays[testDays.length - 1]) {
         await timer(1000)
       } else if(!availableSeats) {
-        View.popUpMsg("暂无可预定考位信息", 2000)
+        View.popUpMsg("暂无可预定考位信息", 2000, 5)
       }
     }
   })()

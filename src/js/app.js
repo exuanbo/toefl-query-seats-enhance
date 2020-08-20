@@ -29,7 +29,7 @@ const query = () => {
         {
           time: 1500,
           icon: 6,
-          anim: testDays.indexOf(day) === 0 ? 0 : -1
+          anim: -1
         }
       )
 

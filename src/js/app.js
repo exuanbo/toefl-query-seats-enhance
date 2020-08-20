@@ -43,8 +43,6 @@ const query = () => {
 }
 
 const observeDom = () => {
-  const targetNode = document.getElementById('wg_center')
-  const config = { childList: true }
   const callback = (_, observer) => {
     if(window.location.href.toString().split('#!')[1] === '/testSeat') {
       view.addNewQueryBtn()
@@ -53,7 +51,18 @@ const observeDom = () => {
   }
 
   const observer = new MutationObserver(callback)
-  observer.observe(targetNode, config)
+
+  const addObserverIfNodeAvailable = () => {
+    const targetNode = document.getElementById('wg_center')
+    if(!targetNode) {
+      window.setTimeout(addObserverIfNodeAvailable, 100)
+      return
+    }
+    const config = { childList: true }
+    observer.observe(targetNode, config)
+  }
+
+  addObserverIfNodeAvailable()
 }
 
 observeDom()

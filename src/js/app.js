@@ -2,13 +2,13 @@ import * as View from './View'
 import { filterSeats } from './Seats'
 
 const sleep = ms => {
- return new Promise(res => setTimeout(res, ms))
+  return new Promise(res => setTimeout(res, ms))
 }
 
 const query = () => {
   const testCity = document.getElementById('centerProvinceCity').value
   if (testCity === '-1') {
-    return layer.msg("请选择考点所在城市", { time: 2000 })
+    return layer.msg('请选择考点所在城市', { time: 2000 })
   }
 
   const testDays = []
@@ -53,7 +53,7 @@ const query = () => {
       } else if(errNum) {
         layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦！' })
       } else if(!availableSeats) {
-        layer.msg("暂无可预定考位", { time: 2000, icon: 5 })
+        layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
       }
     }
   })()

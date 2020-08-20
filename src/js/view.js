@@ -1,10 +1,6 @@
-const addNewQueryBtn = () => {
-  document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>')
-}
-
 const renderResult = filteredData => {
   var formatCurrency = formatCurrency = value => {
-    return "RMB￥" + value.toFixed(2)
+    return 'RMB￥' + value.toFixed(2)
   }
 
   const tmpl = $.templates('testSeatListTemplate', {
@@ -18,4 +14,8 @@ const renderResult = filteredData => {
   document.getElementById('qrySeatResult').insertAdjacentHTML('beforeend', html)
 }
 
-export { addNewQueryBtn, renderResult }
+const addNewQueryBtn = () => {
+  document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>')
+}
+
+export { renderResult, addNewQueryBtn }

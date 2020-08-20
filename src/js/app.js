@@ -1,7 +1,7 @@
 import * as View from './View'
 import { filterSeats } from './Seats'
 
-const timer = ms => {
+const sleep = ms => {
  return new Promise(res => setTimeout(res, ms))
 }
 
@@ -41,7 +41,7 @@ const query = () => {
       ).fail(err => errNum++)
 
       if(day !== testDays[testDays.length - 1]) {
-        await timer(1000)
+        await sleep(1000)
       } else if(errNum) {
         layer.alert(`服务器刚才打了${errNum}个盹儿，请重新查询`)
       } else if(!availableSeats) {

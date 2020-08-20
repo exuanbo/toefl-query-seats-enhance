@@ -14,7 +14,7 @@
   "content_scripts": [
     {
       "matches": ["https://toefl.neea.cn/myHome/*"],
-      "js": ["index.js"]
+      "js": ["content.js"]
     }
   ],
   "permissions": [

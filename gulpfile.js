@@ -8,7 +8,7 @@ function clean() {
 }
 
 const options = {
-  input: 'src/js/main.js',
+  input: 'src/js/app.js',
   output: { format: 'iife' }
 }
 
@@ -19,7 +19,7 @@ function build() {
 }
 
 function mix() {
-  return src(['src/img/icon.png', 'src/js/index.js', 'src/manifest.json'])
+  return src(['src/img/icon.png', 'src/js/content.js', 'src/manifest.json'])
     .pipe(dest('dist'))
 }
 

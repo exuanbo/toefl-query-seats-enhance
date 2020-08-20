@@ -1,4 +1,5 @@
-import * as view from './view'
+import * as View from './View'
+import { filterSeats } from './Seats'
 
 const timer = ms => {
  return new Promise(res => setTimeout(res, ms))
@@ -7,7 +8,7 @@ const timer = ms => {
 const query = () => {
   const testCity = document.getElementById('centerProvinceCity').value
   if (testCity === '-1') {
-    return view.popUpMsg("请选择考点所在城市", 2000)
+    return View.popUpMsg("请选择考点所在城市", 2000)
   }
 
   const testDays = []
@@ -17,7 +18,7 @@ const query = () => {
   })
 
   document.getElementById('qrySeatResult').innerHTML = ''
-  view.popUpMsg('正在查询中，请耐心等待20秒左右', 20000)
+  View.popUpMsg('正在查询中，请耐心等待20秒左右', 20000)
 
   ;(async () => {
     let availableSeats = 0
@@ -29,14 +30,18 @@ const query = () => {
           testDay: day
         },
         data => {
-          if(view.renderResults(data)) availableSeats++
+          const result = filterSeats(data)
+          if(result) {
+            availableSeats++
+            View.renderResult(result)
+          }
         }
       )
 
       if(day !== testDays[testDays.length - 1]) {
         await timer(750)
       } else if(!availableSeats) {
-        view.popUpMsg("暂无可预定考位信息", 2000)
+        View.popUpMsg("暂无可预定考位信息", 2000)
       }
     }
   })()
@@ -45,7 +50,7 @@ const query = () => {
 const observeDom = () => {
   const callback = (_, observer) => {
     if(window.location.href.toString().split('#!')[1] === '/testSeat') {
-      view.addNewQueryBtn()
+      View.addNewQueryBtn()
       document.getElementById('newQueryBtn').addEventListener('click', query)
     }
   }

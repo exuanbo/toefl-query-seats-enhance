@@ -10,18 +10,18 @@ const popUpMsg = (msg, time, icon = 0) => {
   })
 }
 
-var formatCurrency = formatCurrency = value => {
-  return "RMB￥" + value.toFixed(2)
-}
-
-const tmpl = $.templates('testSeatListTemplate', {
-  markup: '#testSeatListTpl',
-  helpers: {
-    formatCurrency: formatCurrency
-  }
-})
-
 const renderResult = filteredData => {
+  var formatCurrency = formatCurrency = value => {
+    return "RMB￥" + value.toFixed(2)
+  }
+
+  const tmpl = $.templates('testSeatListTemplate', {
+    markup: '#testSeatListTpl',
+    helpers: {
+      formatCurrency: formatCurrency
+    }
+  })
+
   const html = tmpl.render(filteredData)
   document.getElementById('qrySeatResult').insertAdjacentHTML('beforeend', html)
 }

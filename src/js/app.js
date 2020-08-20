@@ -39,7 +39,7 @@ const query = () => {
       )
 
       if(day !== testDays[testDays.length - 1]) {
-        await timer(750)
+        await timer(1000)
       } else if(!availableSeats) {
         View.popUpMsg("暂无可预定考位信息", 2000)
       }

@@ -1,6 +1,6 @@
 const loadScript = source => {
   return new Promise((resolve, reject) => {
-    function onloadHander(_, isAbort) {
+    const onloadHander = (_, isAbort) => {
       if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
         script.onload = null
         script.onreadystatechange = null

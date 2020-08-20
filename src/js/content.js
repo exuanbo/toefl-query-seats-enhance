@@ -16,8 +16,7 @@ const loadScript = source => {
     script.onload = onloadHander
     script.onreadystatechange = onloadHander
 
-    const prior = document.getElementsByTagName('script')[0]
-    prior.parentNode.insertBefore(script, prior)
+    document.head.insertBefore(script, null)
   })
 }
 

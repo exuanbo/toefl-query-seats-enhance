@@ -27,7 +27,7 @@ const query = () => {
       layer.msg(
         `正在查询中，剩余${testDays.length - testDays.indexOf(day)}个日期`,
         {
-          time: 1500,
+          time: 2000,
           icon: 6,
           anim: -1
         }
@@ -49,7 +49,7 @@ const query = () => {
       ).fail(err => errNum++)
 
       if(day !== testDays[testDays.length - 1]) {
-        await sleep(1000)
+        await sleep(1500)
       } else if(errNum) {
         layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦！' })
       } else if(!availableSeats) {

@@ -8,7 +8,7 @@ const sleep = ms => {
 const query = () => {
   const testCity = document.getElementById('centerProvinceCity').value
   if (testCity === '-1') {
-    return View.popUpMsg("请选择考点所在城市", 2000)
+    return layer.msg("请选择考点所在城市", { time: 2000 })
   }
 
   const testDays = []
@@ -24,7 +24,15 @@ const query = () => {
     let errNum = 0
 
     for(const day of testDays) {
-      View.popUpMsg(`正在查询中，剩余${testDays.length - testDays.indexOf(day)}个日期`, 1500, { icon: 6, anim: testDays.indexOf(day) === 0 ? 0 : -1 })
+      layer.msg(
+        `正在查询中，剩余${testDays.length - testDays.indexOf(day)}个日期`,
+        {
+          time: 1500,
+          icon: 6,
+          anim: testDays.indexOf(day) === 0 ? 0 : -1
+        }
+      )
+
       $.getJSON(
         'testSeat/queryTestSeats',
         {
@@ -43,9 +51,9 @@ const query = () => {
       if(day !== testDays[testDays.length - 1]) {
         await sleep(1000)
       } else if(errNum) {
-        layer.alert(`服务器刚才打了个盹儿，漏掉了${errNum}个结果`)
+        layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦！' })
       } else if(!availableSeats) {
-        View.popUpMsg("暂无可预定考位信息", 2000, { icon: 5 })
+        layer.msg("暂无可预定考位", { time: 2000, icon: 5 })
       }
     }
   })()

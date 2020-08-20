@@ -2,14 +2,6 @@ const addNewQueryBtn = () => {
   document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>')
 }
 
-const popUpMsg = (msg, time, { icon = 0, anim = -1 } = {}) => {
-  layer.msg(msg, {
-    time: time,
-    icon: icon,
-    anim: anim
-  })
-}
-
 const renderResult = filteredData => {
   var formatCurrency = formatCurrency = value => {
     return "RMB￥" + value.toFixed(2)
@@ -26,4 +18,4 @@ const renderResult = filteredData => {
   document.getElementById('qrySeatResult').insertAdjacentHTML('beforeend', html)
 }
 
-export { addNewQueryBtn, popUpMsg, renderResult }
+export { addNewQueryBtn, renderResult }

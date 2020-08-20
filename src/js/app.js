@@ -22,6 +22,8 @@ const query = () => {
 
   ;(async () => {
     let availableSeats = 0
+    let errNum = 0
+
     for(const day of testDays) {
       $.getJSON(
         'testSeat/queryTestSeats',
@@ -36,10 +38,12 @@ const query = () => {
             View.renderResult(result)
           }
         }
-      )
+      ).fail(err => errNum++)
 
       if(day !== testDays[testDays.length - 1]) {
         await timer(1000)
+      } else if(errNum) {
+        layer.alert(`服务器刚才打了${errNum}个盹儿，请重新查询`)
       } else if(!availableSeats) {
         View.popUpMsg("暂无可预定考位信息", 2000, 5)
       }

@@ -6,18 +6,13 @@ const sleep = ms => {
 }
 
 const query = () => {
-  const testCity = document.getElementById('centerProvinceCity').value
+  const testCity = View.getTestCity()
   if (testCity === '-1') {
     return layer.msg('请选择考点所在城市', { time: 2000 })
   }
+  const testDays = View.getTestDaysArray()
 
-  const testDays = []
-  document.getElementById('testDays').childNodes.forEach(e => {
-    const day = e.value
-    if (day && day !== '-1') testDays.push(day)
-  })
-
-  document.getElementById('qrySeatResult').innerHTML = ''
+  View.clearResult()
 
   ;(async () => {
     let availableSeats = 0

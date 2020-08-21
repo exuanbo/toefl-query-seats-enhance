@@ -10,6 +10,7 @@ const filterSeats = data => {
     const availableSeatsNum = filteredSeatsArr.length
     if (availableSeatsNum) {
       data.testSeats[dataDate] = filteredSeatsArr
+      data.availableSeatsNum = availableSeatsNum
       return data
     }
   }

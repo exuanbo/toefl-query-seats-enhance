@@ -16,6 +16,7 @@ const query = () => {
 
   ;(async () => {
     let availableDatesNum = 0
+    let availableSeatsNum = 0
     let errNum = 0
 
     for (const day of testDates) {
@@ -23,7 +24,7 @@ const query = () => {
         `正在查询中，剩余${testDates.length - testDates.indexOf(day)}个日期`,
         {
           time: 2000,
-          icon: 6,
+          icon: 3,
           anim: -1
         }
       )
@@ -38,6 +39,7 @@ const query = () => {
           const result = filterSeats(data)
           if (result) {
             availableDatesNum++
+            availableSeatsNum += result.availableSeatsNum
             View.renderResult(result)
           }
         }
@@ -49,6 +51,8 @@ const query = () => {
         layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦' })
       } else if (!availableDatesNum) {
         layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
+      } else {
+        layer.msg(`查询完成，共找到${availableSeatsNum}个可预定考位`, { time: 2000, icon: 6 })
       }
     }
   })()

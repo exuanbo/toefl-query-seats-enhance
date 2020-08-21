@@ -18,7 +18,7 @@ const query = () => {
     let availableSeats = 0
     let errNum = 0
 
-    for(const day of testDays) {
+    for (const day of testDays) {
       layer.msg(
         `正在查询中，剩余${testDays.length - testDays.indexOf(day)}个日期`,
         {
@@ -36,18 +36,18 @@ const query = () => {
         },
         data => {
           const result = filterSeats(data)
-          if(result) {
+          if (result) {
             availableSeats++
             View.renderResult(result)
           }
         }
-      ).fail(err => errNum++)
+      ).fail(() => errNum++)
 
-      if(day !== testDays[testDays.length - 1]) {
+      if (day !== testDays[testDays.length - 1]) {
         await sleep(1500)
-      } else if(errNum) {
-        layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦！' })
-      } else if(!availableSeats) {
+      } else if (errNum) {
+        layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦' })
+      } else if (!availableSeats) {
         layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
       }
     }
@@ -56,7 +56,7 @@ const query = () => {
 
 const observeDom = () => {
   const callback = (_, observer) => {
-    if(window.location.href.toString().split('#!')[1] === '/testSeat') {
+    if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.addNewQueryBtn()
       document.getElementById('newQueryBtn').addEventListener('click', query)
     }
@@ -66,7 +66,7 @@ const observeDom = () => {
 
   const addObserverIfNodeAvailable = () => {
     const targetNode = document.getElementById('wg_center')
-    if(!targetNode) {
+    if (!targetNode) {
       window.setTimeout(addObserverIfNodeAvailable, 100)
       return
     }

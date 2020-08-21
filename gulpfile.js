@@ -3,7 +3,7 @@ const del = require('del')
 const rollupStream = require('@rollup/stream')
 const source = require('vinyl-source-stream')
 
-function clean() {
+function clean () {
   return del('dist')
 }
 
@@ -12,13 +12,13 @@ const options = {
   output: { format: 'iife' }
 }
 
-function build() {
+function build () {
   return rollupStream(options)
     .pipe(source('app.js'))
     .pipe(dest('dist'))
 }
 
-function mix() {
+function mix () {
   return src(['src/img/icon.png', 'src/js/content.js', 'src/manifest.json'])
     .pipe(dest('dist'))
 }

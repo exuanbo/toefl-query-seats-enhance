@@ -15,12 +15,12 @@ const options = {
 function build () {
   return rollupStream(options)
     .pipe(source('app.js'))
-    .pipe(dest('dist'))
+    .pipe(dest('dist/extension'))
 }
 
 function mix () {
   return src(['src/img/icon.png', 'src/js/content.js', 'src/manifest.json'])
-    .pipe(dest('dist'))
+    .pipe(dest('dist/extension'))
 }
 
 exports.default = series(clean, parallel(build, mix))

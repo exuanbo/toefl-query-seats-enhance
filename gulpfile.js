@@ -7,12 +7,11 @@ function clean () {
   return del('dist')
 }
 
-const options = {
-  input: 'src/js/app.js',
-  output: { format: 'iife' }
-}
-
 function build () {
+  const options = {
+    input: 'src/js/app.js',
+    output: { format: 'iife' }
+  }
   return rollupStream(options)
     .pipe(source('app.js'))
     .pipe(dest('dist/extension'))

@@ -16,7 +16,7 @@ const clearResult = () => {
 }
 
 const renderResult = filteredData => {
-  var formatCurrency = formatCurrency = value => {
+  const formatCurrency = value => {
     return 'RMB￥' + value.toFixed(2)
   }
 

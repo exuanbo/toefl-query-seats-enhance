@@ -2,13 +2,14 @@ const filterSeats = data => {
   if (data.status === true) {
     const dataDate = Object.keys(data.testSeats)[0]
     const SeatsArr = data.testSeats[dataDate]
-    const newSeatsArr = []
+    const filteredSeatsArr = []
     for (const seat of SeatsArr) {
-      if (seat.seatStatus) newSeatsArr.push(seat)
+      if (seat.seatStatus) filteredSeatsArr.push(seat)
     }
 
-    if (newSeatsArr.length) {
-      data.testSeats[dataDate] = newSeatsArr
+    const availableSeatsNum = filteredSeatsArr.length
+    if (availableSeatsNum) {
+      data.testSeats[dataDate] = filteredSeatsArr
       return data
     }
   }

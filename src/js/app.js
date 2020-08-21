@@ -10,17 +10,17 @@ const query = () => {
   if (testCity === '-1') {
     return layer.msg('请选择考点所在城市', { time: 2000 })
   }
-  const testDays = View.getTestDaysArray()
+  const testDates = View.getTestDatesArr()
 
   View.clearResult()
 
   ;(async () => {
-    let availableSeats = 0
+    let availableDatesNum = 0
     let errNum = 0
 
-    for (const day of testDays) {
+    for (const day of testDates) {
       layer.msg(
-        `正在查询中，剩余${testDays.length - testDays.indexOf(day)}个日期`,
+        `正在查询中，剩余${testDates.length - testDates.indexOf(day)}个日期`,
         {
           time: 2000,
           icon: 6,
@@ -37,17 +37,17 @@ const query = () => {
         data => {
           const result = filterSeats(data)
           if (result) {
-            availableSeats++
+            availableDatesNum++
             View.renderResult(result)
           }
         }
       ).fail(() => errNum++)
 
-      if (day !== testDays[testDays.length - 1]) {
+      if (day !== testDates[testDates.length - 1]) {
         await sleep(1500)
       } else if (errNum) {
         layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦' })
-      } else if (!availableSeats) {
+      } else if (!availableDatesNum) {
         layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
       }
     }

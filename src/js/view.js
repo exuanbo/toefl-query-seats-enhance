@@ -2,13 +2,13 @@ const getTestCity = () => {
   return document.getElementById('centerProvinceCity').value
 }
 
-const getTestDaysArray = () => {
-  const testDays = []
+const getTestDatesArr = () => {
+  const testDates = []
   document.getElementById('testDays').childNodes.forEach(e => {
     const day = e.value
-    if (day && day !== '-1') testDays.push(day)
+    if (day && day !== '-1') testDates.push(day)
   })
-  return testDays
+  return testDates
 }
 
 const clearResult = () => {
@@ -35,4 +35,4 @@ const addNewQueryBtn = () => {
   document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>')
 }
 
-export { getTestCity, getTestDaysArray, clearResult, renderResult, addNewQueryBtn }
+export { getTestCity, getTestDatesArr, clearResult, renderResult, addNewQueryBtn }

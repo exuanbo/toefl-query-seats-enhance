@@ -60,7 +60,7 @@ const renderResult = filteredData => {
         </table>
       {{/props}}
     </div>
-    `
+  `
   const tpl = $.templates(tplHtml)
   const html = tpl.render(filteredData, helper)
   qrySeatResult.insertAdjacentHTML('beforeend', html)
@@ -71,4 +71,10 @@ const addNewQueryBtn = () => {
   document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', btnHtml)
 }
 
-export { getTestCity, getTestDatesArr, clearResult, renderResult, addNewQueryBtn }
+export {
+  getTestCity,
+  getTestDatesArr,
+  clearResult,
+  renderResult,
+  addNewQueryBtn
+}

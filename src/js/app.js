@@ -6,7 +6,7 @@ const sleep = ms => {
 }
 
 const query = () => {
-  const testCity = View.getTestCity()
+  const testCity = View.getSelectedCity()
   if (testCity === '-1') {
     return layer.msg('请选择考点所在城市', { time: 2000 })
   }

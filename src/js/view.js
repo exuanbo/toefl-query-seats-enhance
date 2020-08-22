@@ -1,4 +1,4 @@
-const getTestCity = () => {
+const getSelectedCity = () => {
   return document.getElementById('centerProvinceCity').value
 }
 
@@ -72,7 +72,7 @@ const addNewQueryBtn = () => {
 }
 
 export {
-  getTestCity,
+  getSelectedCity,
   getTestDatesArr,
   clearResult,
   renderResult,

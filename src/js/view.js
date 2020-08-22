@@ -76,11 +76,6 @@ const renderResult = filteredData => {
   qrySeatResult.insertAdjacentHTML('beforeend', html)
 }
 
-const addNewQueryBtn = () => {
-  const btnHtml = '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>'
-  document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', btnHtml)
-}
-
 const addCityCheckbox = () => {
   const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup')
   if (!provinceGroup.length) {
@@ -130,13 +125,13 @@ const addExpandBtn = () => {
   document.getElementById('centerProvinceCity').insertAdjacentHTML('afterend', btnHtml)
 }
 
-const addCityQueryBtn = () => {
-  const btnHtml = '&nbsp;<button id="cityQueryBtn" class="btn btn-primary">查询所选城市</button>'
-  document.getElementById('expandBtn').insertAdjacentHTML('afterend', btnHtml)
-}
-
 const toggleExpand = () => {
   document.getElementById('checkboxes').classList.toggle('hide')
+}
+
+const addNewQueryBtn = () => {
+  const btnHtml = '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>'
+  document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', btnHtml)
 }
 
 export {
@@ -145,9 +140,8 @@ export {
   adjustStyle,
   clearResult,
   renderResult,
-  addNewQueryBtn,
   addCityCheckbox,
   addExpandBtn,
-  addCityQueryBtn,
-  toggleExpand
+  toggleExpand,
+  addNewQueryBtn
 }

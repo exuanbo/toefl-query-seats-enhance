@@ -5,12 +5,7 @@ const sleep = ms => {
   return new Promise(res => setTimeout(res, ms))
 }
 
-const singleQuery = () => {
-  const testCity = View.getSelectedCity()
-  if (testCity === '-1') {
-    return layer.msg('请选择考点所在城市', { time: 2000 })
-  }
-
+const singleQuery = testCity => {
   View.clearResult()
   const testDates = View.getTestDatesArr()
 
@@ -58,6 +53,22 @@ const singleQuery = () => {
   })()
 }
 
+const multiQuery = testCity => {
+  console.log(testCity)
+}
+
+const query = () => {
+  const testCity = View.getSelectedCity()
+  if (typeof(testCity) === 'string') {
+    if (testCity === '-1') {
+      return layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
+    }
+    singleQuery(testCity)
+  } else {
+    multiQuery(testCity)
+  }
+}
+
 const observeDom = () => {
   const callback = (_, observer) => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
@@ -66,7 +77,7 @@ const observeDom = () => {
       View.addExpandBtn()
       document.getElementById('expandBtn').addEventListener('click', View.toggleExpand)
       View.addNewQueryBtn()
-      document.getElementById('newQueryBtn').addEventListener('click', singleQuery)
+      document.getElementById('newQueryBtn').addEventListener('click', query)
     }
   }
 

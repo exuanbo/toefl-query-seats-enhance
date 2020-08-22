@@ -1,5 +1,10 @@
 const getSelectedCity = () => {
-  return document.getElementById('centerProvinceCity').value
+  const checkedCitiesArr = []
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]')
+  for (const box of checkboxes) {
+    if (box.checked) checkedCitiesArr.push(box.id)
+  }
+  return checkedCitiesArr.length ? checkedCitiesArr : document.getElementById('centerProvinceCity').value
 }
 
 const getTestDatesArr = () => {

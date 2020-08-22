@@ -115,7 +115,7 @@ const addCityCheckbox = () => {
     checkboxWrapper.insertAdjacentHTML('beforeend', html)
   }
 
-  const toggleLink = '<a href="javascript:void(0);" id="toggleLink" style="float:right;font-size:14px;text-decoration:underline;">全选/全不选</a>'
+  const toggleLink = '<a href="javascript:void(0);" id="toggleLink" style="float:right;font-size:13px;text-decoration:underline;">全选/全不选</a>'
   checkboxWrapper.insertAdjacentHTML('afterbegin', toggleLink)
   const toggleSelectAll = () => {
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]')

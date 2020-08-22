@@ -67,6 +67,7 @@ const observeDom = () => {
       View.addCityCheckbox()
       View.addExpandBtn()
       document.getElementById('expandBtn').addEventListener('click', View.toggleExpand)
+      View.addCityQueryBtn()
     }
   }
 

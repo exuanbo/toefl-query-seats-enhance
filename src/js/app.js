@@ -5,14 +5,14 @@ const sleep = ms => {
   return new Promise(res => setTimeout(res, ms))
 }
 
-const query = () => {
+const singleQuery = () => {
   const testCity = View.getSelectedCity()
   if (testCity === '-1') {
     return layer.msg('请选择考点所在城市', { time: 2000 })
   }
-  const testDates = View.getTestDatesArr()
 
   View.clearResult()
+  const testDates = View.getTestDatesArr()
 
   ;(async () => {
     let availableDatesNum = 0
@@ -66,7 +66,7 @@ const observeDom = () => {
       View.addExpandBtn()
       document.getElementById('expandBtn').addEventListener('click', View.toggleExpand)
       View.addNewQueryBtn()
-      document.getElementById('newQueryBtn').addEventListener('click', query)
+      document.getElementById('newQueryBtn').addEventListener('click', singleQuery)
     }
   }
 

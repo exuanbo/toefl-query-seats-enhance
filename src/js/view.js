@@ -131,7 +131,7 @@ const toggleExpand = () => {
 
 const addNewQueryBtn = () => {
   const btnHtml = '&nbsp;<button id="newQueryBtn" class="btn btn-primary">查询全部日期</button>'
-  document.getElementById('btnQuerySeat').insertAdjacentHTML('afterend', btnHtml)
+  document.getElementById('expandBtn').insertAdjacentHTML('afterend', btnHtml)
 }
 
 export {

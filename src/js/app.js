@@ -62,11 +62,11 @@ const observeDom = () => {
   const callback = (_, observer) => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.adjustStyle()
-      View.addNewQueryBtn()
-      document.getElementById('newQueryBtn').addEventListener('click', query)
       View.addCityCheckbox()
       View.addExpandBtn()
       document.getElementById('expandBtn').addEventListener('click', View.toggleExpand)
+      View.addNewQueryBtn()
+      document.getElementById('newQueryBtn').addEventListener('click', query)
     }
   }
 

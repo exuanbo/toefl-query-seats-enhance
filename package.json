@@ -1,6 +1,7 @@
 {
   "name": "toefl-query-seats-enhance",
   "private": "true",
+  "type": "module",
   "scripts": {
     "build": "npx gulp"
   },

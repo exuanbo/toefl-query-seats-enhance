@@ -1,7 +1,10 @@
-const { src, dest, series, parallel, watch } = require('gulp')
-const del = require('del')
-const rollupStream = require('@rollup/stream')
-const source = require('vinyl-source-stream')
+import gulp from 'gulp'
+import del from 'del'
+import rollupStream from '@rollup/stream'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import source from 'vinyl-source-stream'
+
+const { src, dest, series, parallel, watch } = gulp
 
 function clean () {
   return del('dist')
@@ -10,7 +13,10 @@ function clean () {
 function build () {
   const options = {
     input: 'src/js/app.js',
-    output: { format: 'iife' }
+    output: {
+      format: 'iife',
+      plugins: [nodeResolve()]
+    }
   }
   return rollupStream(options)
     .pipe(source('app.js'))
@@ -22,5 +28,9 @@ function mix () {
     .pipe(dest('dist/extension'))
 }
 
-exports.default = series(clean, parallel(build, mix))
-exports.watch = () => { watch('src/js/**', build) }
+function server() {
+  watch('src/js/**', build)
+}
+
+export default series(clean, parallel(build, mix))
+export { server }

@@ -9,10 +9,11 @@ const getSelectedCity = () => {
 
 const getTestDatesArr = () => {
   const testDates = []
-  document.getElementById('testDays').childNodes.forEach(e => {
-    const day = e.value
+  const options = document.getElementById('testDays').childNodes
+  for (const el of options) {
+    const day = el.value
     if (day && day !== '-1') testDates.push(day)
-  })
+  }
   return testDates
 }
 
@@ -21,9 +22,10 @@ const adjustStyle = () => {
   formWrapper.classList.remove('offset1')
   formWrapper.style.textAlign = 'center'
 
-  const select = document.querySelectorAll('.form-inline select').forEach(el => {
-    el.style.width = '12em'
-  })
+  const selects = document.querySelectorAll('.form-inline select')
+  for (const select of selects) {
+    select.style.width = '12em'
+  }
 }
 
 const clearResult = () => {
@@ -118,9 +120,9 @@ const addCityCheckbox = () => {
   checkboxWrapper.insertAdjacentHTML('afterbegin', toggleLink)
   const toggleSelectAll = () => {
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]')
-    allCheckboxes.forEach(el => {
-      el.checked = !el.checked
-    })
+    for (const checkbox of allCheckboxes) {
+      checkbox.checked = !checkbox.checked
+    }
   }
   document.getElementById('toggleLink').addEventListener('click', toggleSelectAll)
 }

@@ -3,6 +3,8 @@ import del from 'del'
 import rollupStream from '@rollup/stream'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import source from 'vinyl-source-stream'
+import buffer from 'vinyl-buffer'
+import terser from 'gulp-terser'
 
 const { src, dest, series, parallel, watch } = gulp
 
@@ -18,6 +20,8 @@ function build () {
   }
   return rollupStream(options)
     .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe(terser({ keep_fnames: true, mangle: false }))
     .pipe(dest('dist/extension'))
 }
 

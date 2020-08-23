@@ -1,5 +1,5 @@
-import * as View from './View'
-import { filterSeats } from './Seats'
+import * as View from './view'
+import { filterSeats } from './seats'
 
 const sleep = ms => {
   return new Promise(res => setTimeout(res, ms))

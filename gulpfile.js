@@ -13,10 +13,8 @@ function clean () {
 function build () {
   const options = {
     input: 'src/js/app.js',
-    output: {
-      format: 'iife',
-      plugins: [nodeResolve()]
-    }
+    output: { format: 'iife' },
+    plugins: [nodeResolve()]
   }
   return rollupStream(options)
     .pipe(source('app.js'))

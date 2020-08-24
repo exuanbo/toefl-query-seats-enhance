@@ -1,5 +1,6 @@
 import * as View from './view'
 import { filterSeats } from './seats'
+import { render } from 'lit-html'
 
 const sleep = ms => {
   return new Promise(res => setTimeout(res, ms))
@@ -12,6 +13,7 @@ const singleQuery = testCity => {
   ;(async () => {
     let availableDatesNum = 0
     let availableSeatsNum = 0
+    const seatsTpl = []
     let errNum = 0
 
     for (const day of testDates) {
@@ -31,11 +33,12 @@ const singleQuery = testCity => {
           testDay: day
         },
         data => {
-          const result = filterSeats(data)
-          if (result) {
+          const filteredData = filterSeats(data)
+          if (filteredData) {
             availableDatesNum++
-            availableSeatsNum += result.availableSeatsNum
-            View.renderResult(result)
+            availableSeatsNum += filteredData.availableSeatsNum
+            seatsTpl.push(View.renderTpl(filteredData))
+            render(seatsTpl, document.getElementById('qrySeatResult'))
           }
         }
       ).fail(() => errNum++)
@@ -70,30 +73,20 @@ const query = () => {
 }
 
 const observeDom = () => {
+  const targetNode = document.getElementById('wg_center')
+  if (!View.isAvailable(targetNode, observeDom)) return
+
   const callback = (_, observer) => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.adjustStyle()
       View.addCityCheckbox()
       View.addExpandBtn()
-      document.getElementById('expandBtn').addEventListener('click', View.toggleExpand)
-      View.addNewQueryBtn()
-      document.getElementById('newQueryBtn').addEventListener('click', query)
+      View.addQueryBtn(query)
     }
   }
-
   const observer = new MutationObserver(callback)
-
-  const addObserverIfNodeAvailable = () => {
-    const targetNode = document.getElementById('wg_center')
-    if (!targetNode) {
-      window.setTimeout(addObserverIfNodeAvailable, 100)
-      return
-    }
-    const config = { childList: true }
-    observer.observe(targetNode, config)
-  }
-
-  addObserverIfNodeAvailable()
+  const config = { childList: true }
+  observer.observe(targetNode, config)
 }
 
 observeDom()

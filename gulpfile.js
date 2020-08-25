@@ -1,21 +1,14 @@
 import gulp from 'gulp'
+import source from 'vinyl-source-stream'
 import gulpIf from 'gulp-if'
+import terser from 'gulp-terser'
 import del from 'del'
 import rollupStream from '@rollup/stream'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import minifyHtml from 'rollup-plugin-minify-html-template-literals'
-import source from 'vinyl-source-stream'
-import buffer from 'vinyl-buffer'
-import terser from 'gulp-terser'
 
 const { src, dest, series, parallel, watch } = gulp
-
-let isDev = false
-function dev () {
-  isDev = true
-  return Promise.resolve()
-}
 
 function clean () {
   return del('dist')
@@ -29,8 +22,12 @@ function build () {
   }
   return rollupStream(options)
     .pipe(source('app.js'))
-    .pipe(buffer())
-    .pipe(gulpIf(!isDev, terser({ keep_fnames: true, mangle: false })))
+    .pipe(dest('dist/extension'))
+}
+
+function minifyJS () {
+  return src('dist/extension/app.js')
+    .pipe(terser())
     .pipe(dest('dist/extension'))
 }
 
@@ -40,8 +37,8 @@ function mix () {
 }
 
 function server () {
-  watch('src/js/**', { ignoreInitial: false }, series(dev, build))
+  watch('src/js/**', { ignoreInitial: false }, build)
 }
 
-export default series(clean, parallel(build, mix))
+export default series(clean, parallel(series(build, minifyJS), mix))
 export { server }

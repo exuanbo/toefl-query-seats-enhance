@@ -1,4 +1,5 @@
 import gulp from 'gulp'
+import gulpIf from 'gulp-if'
 import del from 'del'
 import rollupStream from '@rollup/stream'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
@@ -8,6 +9,12 @@ import buffer from 'vinyl-buffer'
 import terser from 'gulp-terser'
 
 const { src, dest, series, parallel, watch } = gulp
+
+let isDev = false
+function dev () {
+  isDev = true
+  return Promise.resolve()
+}
 
 function clean () {
   return del('dist')
@@ -22,7 +29,7 @@ function build () {
   return rollupStream(options)
     .pipe(source('app.js'))
     .pipe(buffer())
-    .pipe(terser({ keep_fnames: true, mangle: false }))
+    .pipe(gulpIf(!isDev, terser({ keep_fnames: true, mangle: false })))
     .pipe(dest('dist/extension'))
 }
 
@@ -31,8 +38,8 @@ function mix () {
     .pipe(dest('dist/extension'))
 }
 
-function server() {
-  watch('src/js/**', build)
+function server () {
+  watch('src/js/**', { ignoreInitial: false }, series(dev, build))
 }
 
 export default series(clean, parallel(build, mix))

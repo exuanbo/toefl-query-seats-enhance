@@ -1,6 +1,7 @@
 import { html, nothing, render } from 'lit-html'
 
 const helper = {
+  firstKeyOf: obj => Object.keys(obj)[0],
   isAvailable: (con, fn) => {
     if (!con) {
       window.setTimeout(fn, 100)
@@ -8,7 +9,6 @@ const helper = {
     }
     return true
   },
-  firstKeyOf: obj => Object.keys(obj)[0],
   isEmpty: el => {
     for (const childNode of el.childNodes) {
       if (!childNode.nodeValue && childNode.nodeName !== '#comment') return false

@@ -51,7 +51,7 @@ const renderTpl = filteredData => {
     firstKeyOf: obj => Object.keys(obj)[0],
     isEmpty: el => {
       for (const childNode of el.childNodes) {
-        if (childNode.nodeValue.replace(/\s*/g, '') === '' && childNode.nodeName !== '#comment') return false
+        if (!childNode.nodeValue && childNode.nodeName !== '#comment') return false
       }
       return true
     }

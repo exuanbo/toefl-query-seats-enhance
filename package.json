@@ -14,7 +14,7 @@
     "gulp": "4.0.2",
     "gulp-terser": "1.4.0",
     "rollup": "2.26.5",
-    "rollup-plugin-minify-html-template-literals": "^1.0.1",
+    "rollup-plugin-minify-html-template-literals": "1.0.1",
     "vinyl-buffer": "1.0.1",
     "vinyl-source-stream": "2.0.0"
   },

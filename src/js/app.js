@@ -1,6 +1,7 @@
 import * as View from './view'
 import { filterSeats } from './seats'
 import { render } from 'lit-html'
+import axios from 'axios'
 
 const sleep = ms => {
   return new Promise(res => setTimeout(res, ms))
@@ -26,22 +27,26 @@ const singleQuery = testCity => {
         }
       )
 
-      $.getJSON(
-        'testSeat/queryTestSeats',
-        {
-          city: testCity,
-          testDay: day
-        },
-        data => {
-          const filteredData = filterSeats(data)
-          if (filteredData) {
-            availableDatesNum++
-            availableSeatsNum += filteredData.availableSeatsNum
-            seatsTpl.push(View.renderTpl(filteredData))
-            render(seatsTpl, document.getElementById('qrySeatResult'))
+      axios
+        .get('testSeat/queryTestSeats', {
+          params: {
+            city: testCity,
+            testDay: day
           }
-        }
-      ).fail(() => errNum++)
+        })
+        .then(response => {
+          const filteredData = filterSeats(response.data)
+            if (filteredData) {
+              availableDatesNum++
+              availableSeatsNum += filteredData.availableSeatsNum
+              seatsTpl.push(View.renderTpl(filteredData))
+              render(seatsTpl, document.getElementById('qrySeatResult'))
+            }
+        })
+        .catch(error => {
+          console.log(error)
+          errNum++
+        })
 
       if (day !== testDates[testDates.length - 1]) {
         await sleep(1500)

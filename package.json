@@ -3,7 +3,8 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build": "npx gulp"
+    "build": "npx gulp",
+    "dev": "npx gulp server"
   },
   "author": "Exuanbo",
   "license": "MIT",
@@ -12,6 +13,7 @@
     "@rollup/stream": "github:exuanbo/stream#dist",
     "del": "5.1.0",
     "gulp": "4.0.2",
+    "gulp-if": "^3.0.0",
     "gulp-terser": "1.4.0",
     "rollup": "2.26.5",
     "rollup-plugin-minify-html-template-literals": "1.0.1",

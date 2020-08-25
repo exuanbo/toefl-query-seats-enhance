@@ -9,19 +9,19 @@
   "author": "Exuanbo",
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-commonjs": "15.0.0",
     "@rollup/plugin-node-resolve": "9.0.0",
     "@rollup/stream": "github:exuanbo/stream#dist",
     "del": "5.1.0",
     "gulp": "4.0.2",
-    "gulp-if": "^3.0.0",
+    "gulp-if": "3.0.0",
     "gulp-terser": "1.4.0",
     "rollup": "2.26.5",
     "rollup-plugin-minify-html-template-literals": "1.0.1",
     "vinyl-source-stream": "2.0.0"
   },
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "0.20.0",
     "lit-html": "1.3.0"
   }
 }

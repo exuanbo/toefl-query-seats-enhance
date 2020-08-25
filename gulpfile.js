@@ -3,6 +3,7 @@ import gulpIf from 'gulp-if'
 import del from 'del'
 import rollupStream from '@rollup/stream'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import minifyHtml from 'rollup-plugin-minify-html-template-literals'
 import source from 'vinyl-source-stream'
 import buffer from 'vinyl-buffer'
@@ -24,7 +25,7 @@ function build () {
   const options = {
     input: 'src/js/app.js',
     output: { format: 'iife' },
-    plugins: [nodeResolve(), minifyHtml()]
+    plugins: [nodeResolve({ browser: true }), commonjs(), minifyHtml()]
   }
   return rollupStream(options)
     .pipe(source('app.js'))

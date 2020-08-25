@@ -1,11 +1,22 @@
 import { html, nothing, render } from 'lit-html'
 
-const isAvailable = (con, fn) => {
-  if (!con) {
-    window.setTimeout(fn, 100)
-    return false
-  }
-  return true
+const helper = {
+  isAvailable: (con, fn) => {
+    if (!con) {
+      window.setTimeout(fn, 100)
+      return false
+    }
+    return true
+  },
+  firstKeyOf: obj => Object.keys(obj)[0],
+  isEmpty: el => {
+    for (const childNode of el.childNodes) {
+      if (!childNode.nodeValue && childNode.nodeName !== '#comment') return false
+    }
+    return true
+  },
+  formatCurrency: value => 'RMB￥' + value.toFixed(2),
+  isMunicipality: cityName => cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
 }
 
 const getSelectedCity = () => {
@@ -30,7 +41,7 @@ const getTestDatesArr = () => {
 const adjustStyle = () => {
   const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
   const selects = document.querySelectorAll('.form-inline select')
-  if (!isAvailable(formWrapper && selects, adjustStyle)) return
+  if (!helper.isAvailable(formWrapper && selects, adjustStyle)) return
 
   formWrapper.classList.remove('offset1')
   formWrapper.style.textAlign = 'center'
@@ -43,24 +54,11 @@ const clearResult = () => {
   render(html`${nothing}`, document.getElementById('qrySeatResult'))
 }
 
-const isMunicipality = cityName => cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
-
 const renderTpl = filteredData => {
-  const helper = {
-    formatCurrency: value => 'RMB￥' + value.toFixed(2),
-    firstKeyOf: obj => Object.keys(obj)[0],
-    isEmpty: el => {
-      for (const childNode of el.childNodes) {
-        if (!childNode.nodeValue && childNode.nodeName !== '#comment') return false
-      }
-      return true
-    }
-  }
-
   const rowTpl = seat => html`
     <tr>
       <td style="text-align:center;vertical-align:middle;">
-        ${isMunicipality(seat.provinceCn)
+        ${helper.isMunicipality(seat.provinceCn)
           ? html`${seat.cityCn}`
           : html`${seat.provinceCn}&nbsp;${seat.cityCn}`
         }
@@ -117,8 +115,8 @@ const renderTpl = filteredData => {
 
 const addCityCheckbox = () => {
   const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup')
-  if (!isAvailable(provinceGroup.length, addCityCheckbox)) return
-  if (!isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addCityCheckbox)) return
+  if (!helper.isAvailable(provinceGroup.length, addCityCheckbox)) return
+  if (!helper.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addCityCheckbox)) return
 
   const selectCity = document.getElementById('centerProvinceCity')
   const formWrapper = selectCity.parentElement.parentElement.parentElement
@@ -134,10 +132,10 @@ const addCityCheckbox = () => {
 
     for (const city of cities) {
       const template = html`
-        ${isMunicipality(city.label)
+        ${helper.isMunicipality(city.label)
           ? nothing
           : html`${city === cities.item(0) ? html`<span class="muted" style="${provinceName.length === 3 ? nothing : 'margin-right:1em;'}">${provinceName}：</span>` : nothing}`
-        }<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"><input type="checkbox" id="${city.value}" style="margin:0 0 2px;">&nbsp;<label for="${city.value}" style="display:inline;">${city.label}</label>&nbsp;</span>
+        }<span style="${helper.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"><input type="checkbox" id="${city.value}" style="margin:0 0 2px;">&nbsp;<label for="${city.value}" style="display:inline;">${city.label}</label>&nbsp;</span>
       `
       citiesTpl.push(template)
     }
@@ -181,7 +179,7 @@ const addQueryBtn = fn => {
 }
 
 export {
-  isAvailable,
+  helper,
   getSelectedCity,
   getTestDatesArr,
   adjustStyle,

@@ -74,7 +74,7 @@ const query = () => {
 
 const observeDom = () => {
   const targetNode = document.getElementById('wg_center')
-  if (!View.isAvailable(targetNode, observeDom)) return
+  if (!View.helper.isAvailable(targetNode, observeDom)) return
 
   const callback = (_, observer) => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {

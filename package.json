@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "npx gulp",
-    "dev": "npx gulp server"
+    "dev": "npx gulp server",
+    "lint": "npx prettier-standard --lint 'src/**/*.js'"
   },
   "author": "Exuanbo",
   "license": "MIT",

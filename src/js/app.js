@@ -61,8 +61,37 @@ const singleQuery = testCity => {
   })()
 }
 
-const multiQuery = testCity => {
-  console.log(testCity)
+const multiQuery = testCitiesArr => {
+  console.log(testCitiesArr)
+  View.toggleExpand()
+  View.clearResult()
+
+  const testDates = View.getTestDatesArr()
+  const dataArr = []
+
+  ;(async () => {
+    for (const testCity of testCitiesArr) {
+      for (const day of testDates) {
+        axios
+        .get('testSeat/queryTestSeats', {
+          params: {
+            city: testCity,
+            testDay: day
+          }
+        })
+        .then(response => {
+          const filteredData = filterSeats(response.data)
+            if (filteredData) {
+              dataArr.push(filteredData)
+            }
+        })
+        .catch(error => console.log(error))
+        await sleep(1500)
+      }
+      console.log(dataArr)
+      await sleep(1500)
+    }
+  })()
 }
 
 const query = () => {

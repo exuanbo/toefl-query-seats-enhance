@@ -17,8 +17,6 @@
       "js": ["content.js"]
     }
   ],
-  "permissions": [
-    "https://toefl.neea.cn/myHome/*"
-  ],
+  "permissions": ["https://toefl.neea.cn/myHome/*"],
   "web_accessible_resources": ["app.js"]
 }

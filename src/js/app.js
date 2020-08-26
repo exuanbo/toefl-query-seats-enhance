@@ -4,7 +4,7 @@ import { render } from 'lit-html'
 import axios from 'axios'
 
 const sleep = ms => {
-  return new Promise(res => setTimeout(res, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 const singleQuery = testCity => {
@@ -36,12 +36,12 @@ const singleQuery = testCity => {
         })
         .then(response => {
           const filteredData = filterSeats(response.data)
-            if (filteredData) {
-              availableDatesNum++
-              availableSeatsNum += filteredData.availableSeatsNum
-              seatsTpl.push(View.renderTpl(filteredData))
-              render(seatsTpl, document.getElementById('qrySeatResult'))
-            }
+          if (filteredData) {
+            availableDatesNum++
+            availableSeatsNum += filteredData.availableSeatsNum
+            seatsTpl.push(View.renderTpl(filteredData))
+            render(seatsTpl, document.getElementById('qrySeatResult'))
+          }
         })
         .catch(error => {
           console.log(error)
@@ -51,11 +51,16 @@ const singleQuery = testCity => {
       if (day !== testDates[testDates.length - 1]) {
         await sleep(1500)
       } else if (errNum) {
-        layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, { title: '出错啦' })
+        layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, {
+          title: '出错啦'
+        })
       } else if (!availableDatesNum) {
         layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
       } else {
-        layer.msg(`查询完成，共找到${availableSeatsNum}个可预定考位`, { time: 2000, icon: 6 })
+        layer.msg(`查询完成，共找到${availableSeatsNum}个可预定考位`, {
+          time: 2000,
+          icon: 6
+        })
       }
     }
   })()
@@ -73,19 +78,19 @@ const multiQuery = testCitiesArr => {
     for (const testCity of testCitiesArr) {
       for (const day of testDates) {
         axios
-        .get('testSeat/queryTestSeats', {
-          params: {
-            city: testCity,
-            testDay: day
-          }
-        })
-        .then(response => {
-          const filteredData = filterSeats(response.data)
+          .get('testSeat/queryTestSeats', {
+            params: {
+              city: testCity,
+              testDay: day
+            }
+          })
+          .then(response => {
+            const filteredData = filterSeats(response.data)
             if (filteredData) {
               dataArr.push(filteredData)
             }
-        })
-        .catch(error => console.log(error))
+          })
+          .catch(error => console.log(error))
         await sleep(1500)
       }
       console.log(dataArr)
@@ -96,7 +101,7 @@ const multiQuery = testCitiesArr => {
 
 const query = () => {
   const testCity = View.getSelectedCity()
-  if (typeof(testCity) === 'string') {
+  if (typeof testCity === 'string') {
     if (testCity === '-1') {
       return layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     }

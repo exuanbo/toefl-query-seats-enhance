@@ -31,8 +31,11 @@ function minifyJS () {
 }
 
 function mix () {
-  return src(['src/img/icon.png', 'src/js/content.js', 'src/manifest.json'])
-    .pipe(dest('dist/extension'))
+  return src([
+    'src/img/icon.png',
+    'src/js/content.js',
+    'src/manifest.json'
+  ]).pipe(dest('dist/extension'))
 }
 
 function server () {

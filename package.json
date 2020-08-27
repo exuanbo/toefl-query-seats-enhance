@@ -3,9 +3,9 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build": "npx gulp",
-    "dev": "npx gulp server",
-    "lint": "npx prettier-standard --lint 'src/**/*.js'"
+    "build": "gulp",
+    "dev": "gulp server",
+    "lint": "prettier-standard --lint 'src/**/*'"
   },
   "author": "Exuanbo",
   "license": "MIT",

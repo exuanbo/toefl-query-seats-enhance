@@ -3,14 +3,27 @@ import { filterSeats } from './seats'
 import { render } from 'lit-html'
 import axios from 'axios'
 
-const sleep = ms => {
+declare const layer: {
+  msg: typeof layerMethod
+  alert: typeof layerMethod
+}
+
+declare const layerMethod: (text: string, options: LayerOptions) => void
+
+interface LayerOptions {
+  title?: string
+  icon?: number
+  time?: number
+  anim?: number
+}
+
+const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-const singleQuery = testCity => {
+const singleQuery = (testCity: string) => {
   View.clearResult()
   const testDates = View.getTestDatesArr()
-
   ;(async () => {
     let availableDatesNum = 0
     let availableSeatsNum = 0
@@ -66,14 +79,13 @@ const singleQuery = testCity => {
   })()
 }
 
-const multiQuery = testCitiesArr => {
+const multiQuery = (testCitiesArr: string[]) => {
   console.log(testCitiesArr)
   View.toggleExpand()
   View.clearResult()
 
   const testDates = View.getTestDatesArr()
   const dataArr = []
-
   ;(async () => {
     for (const testCity of testCitiesArr) {
       for (const day of testDates) {
@@ -115,7 +127,7 @@ const observeDom = () => {
   const targetNode = document.getElementById('wg_center')
   if (!View.helper.isAvailable(targetNode, observeDom)) return
 
-  const callback = (_, observer) => {
+  const callback = () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.adjustStyle()
       View.addCityCheckbox()

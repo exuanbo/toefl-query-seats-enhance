@@ -28,7 +28,35 @@
   }
  */
 
-const filterSeats = data => {
+interface Data {
+  status: boolean
+  testDate: string
+  testSeats: {
+    date: SeatDetail[]
+  }
+  lateRegFee: number
+  availableSeatsNum: number
+}
+
+interface SeatDetail {
+  provinceCn: string
+  provinceEn: string
+  cityCn: string
+  cityEn: string
+  centerCode: string
+  centerNameCn: string
+  centerNameEn: string
+  testFee: number
+  lateReg: 'N' | 'Y'
+  seatStatus: -1 | 1
+  seatBookStatus: -1 | 1
+  rescheduleDeadline: number
+  cancelDeadline: number
+  testTime: string
+  lateRegFlag: 'N' | 'Y'
+}
+
+const filterSeats = (data: Data) => {
   if (data.status === true) {
     const dataDate = Object.keys(data.testSeats)[0]
     const SeatsArr = data.testSeats[dataDate]
@@ -47,4 +75,4 @@ const filterSeats = data => {
   return null
 }
 
-export { filterSeats }
+export { filterSeats, Data, SeatDetail }

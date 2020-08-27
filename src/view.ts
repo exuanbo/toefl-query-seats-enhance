@@ -1,23 +1,17 @@
 import { html, nothing, render } from 'lit-html'
+import { Data, SeatDetail } from './seats'
 
 const helper = {
-  firstKeyOf: obj => Object.keys(obj)[0],
-  isAvailable: (con, fn) => {
+  firstKeyOf: (obj: object) => Object.keys(obj)[0],
+  isAvailable: (con: any, fn: Function) => {
     if (!con) {
       window.setTimeout(fn, 100)
       return false
     }
     return true
   },
-  isEmpty: el => {
-    for (const childNode of el.childNodes) {
-      if (!childNode.nodeValue && childNode.nodeName !== '#comment')
-        return false
-    }
-    return true
-  },
-  formatCurrency: value => 'RMB￥' + value.toFixed(2),
-  isMunicipality: cityName =>
+  formatCurrency: (value: number) => 'RMB￥' + value.toFixed(2),
+  isMunicipality: (cityName: string) =>
     cityName === '北京' ||
     cityName === '上海' ||
     cityName === '天津' ||
@@ -25,19 +19,25 @@ const helper = {
 }
 
 const getSelectedCity = () => {
-  const checkedCitiesArr = []
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]')
+  const checkedCitiesArr: string[] = []
+  const checkboxes = document.querySelectorAll(
+    'input[type="checkbox"]'
+  ) as NodeListOf<HTMLInputElement>
   for (const box of checkboxes) {
     if (box.checked) checkedCitiesArr.push(box.id)
   }
-  return checkedCitiesArr.length
-    ? checkedCitiesArr
-    : document.getElementById('centerProvinceCity').value
+  if (checkedCitiesArr.length) return checkedCitiesArr
+  const selectedCity = document.getElementById(
+    'centerProvinceCity'
+  ) as HTMLInputElement
+  return selectedCity.value
 }
 
 const getTestDatesArr = () => {
-  const testDates = []
-  const options = document.getElementById('testDays').childNodes
+  const testDates: string[] = []
+  const options = document.getElementById('testDays').childNodes as NodeListOf<
+    HTMLInputElement
+  >
   for (const el of options) {
     const day = el.value
     if (day && day !== '-1') testDates.push(day)
@@ -48,7 +48,9 @@ const getTestDatesArr = () => {
 const adjustStyle = () => {
   const formWrapper = document.getElementById('centerProvinceCity')
     .parentElement.parentElement
-  const selects = document.querySelectorAll('.form-inline select')
+  const selects = document.querySelectorAll(
+    '.form-inline select'
+  ) as NodeListOf<HTMLElement>
   if (!helper.isAvailable(formWrapper && selects, adjustStyle)) return
 
   formWrapper.classList.remove('offset1')
@@ -67,8 +69,8 @@ const clearResult = () => {
   )
 }
 
-const renderTpl = filteredData => {
-  const rowTpl = seat => html`
+const renderTpl = (filteredData: Data) => {
+  const rowTpl = (seat: SeatDetail) => html`
     <tr>
       <td style="text-align:center;vertical-align:middle;">
         ${helper.isMunicipality(seat.provinceCn)
@@ -114,8 +116,8 @@ const renderTpl = filteredData => {
     </tr>
   `
 
-  const seatsTpl = data => html`
-    ${helper.isEmpty(document.getElementById('qrySeatResult'))
+  const seatsTpl = (data: Data) => html`
+    ${!document.getElementById('qrySeatResult').children.length
       ? html`
           <h4>考位查询结果</h4>
           <div>
@@ -156,7 +158,7 @@ const renderTpl = filteredData => {
       </thead>
       <tbody>
         ${data.testSeats[helper.firstKeyOf(data.testSeats)].map(
-          seat =>
+          (seat: SeatDetail) =>
             html`
               ${rowTpl(seat)}
             `
@@ -170,7 +172,7 @@ const renderTpl = filteredData => {
 const addCityCheckbox = () => {
   const provinceGroup = document.querySelectorAll(
     '#centerProvinceCity optgroup'
-  )
+  ) as NodeListOf<HTMLOptGroupElement>
   if (!helper.isAvailable(provinceGroup.length, addCityCheckbox)) return
   if (
     !helper.isAvailable(
@@ -194,7 +196,7 @@ const addCityCheckbox = () => {
   const checkboxWrapperTpl = []
   for (const province of provinceGroup) {
     const provinceName = province.label
-    const cities = province.children
+    const cities = province.childNodes as NodeListOf<HTMLOptionElement>
     const citiesTpl = []
 
     for (const city of cities) {
@@ -235,7 +237,9 @@ const addCityCheckbox = () => {
   render(checkboxWrapperTpl, checkboxWrapper)
 
   const toggleAllCheckboxes = () => {
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]')
+    const allCheckboxes = document.querySelectorAll(
+      'input[type="checkbox"]'
+    ) as NodeListOf<HTMLInputElement>
     for (const checkbox of allCheckboxes) {
       checkbox.checked = !checkbox.checked
     }

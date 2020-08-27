@@ -8,9 +8,9 @@ declare const layer: {
   alert: typeof layerMethod
 }
 
-declare const layerMethod: (text: string, options: LayerOptions) => void
+declare const layerMethod: (text: string, options: typeof LayerOptions) => void
 
-interface LayerOptions {
+declare const LayerOptions: {
   title?: string
   icon?: number
   time?: number

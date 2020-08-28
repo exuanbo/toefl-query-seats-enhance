@@ -22,7 +22,7 @@ function build () {
       nodeResolve({ browser: true }),
       commonjs(),
       minifyHtml(),
-      typescript({ target: 'es6' })
+      typescript()
     ]
   }
   return rollupStream(options)

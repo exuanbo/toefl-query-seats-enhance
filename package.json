@@ -5,7 +5,7 @@
   "scripts": {
     "build": "gulp",
     "dev": "gulp server",
-    "lint": "prettier-standard --lint 'src/**/*'"
+    "format": "prettier-standard --format"
   },
   "author": "Exuanbo",
   "license": "MIT",

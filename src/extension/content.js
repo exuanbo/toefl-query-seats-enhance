@@ -1,11 +1,7 @@
 const loadScript = source => {
   return new Promise((resolve, reject) => {
     const onloadHander = (_, isAbort) => {
-      if (
-        isAbort ||
-        !script.readyState ||
-        /loaded|complete/.test(script.readyState)
-      ) {
+      if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
         script.onload = null
         script.onreadystatechange = null
         script = undefined

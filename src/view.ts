@@ -12,32 +12,25 @@ const helper = {
   },
   formatCurrency: (value: number) => 'RMB￥' + value.toFixed(2),
   isMunicipality: (cityName: string) =>
-    cityName === '北京' ||
-    cityName === '上海' ||
-    cityName === '天津' ||
-    cityName === '重庆'
+    cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
 }
 
 const getSelectedCity = () => {
   const checkedCitiesArr: string[] = []
-  const checkboxes = document.querySelectorAll(
-    'input[type="checkbox"]'
-  ) as NodeListOf<HTMLInputElement>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+    HTMLInputElement
+  >
   for (const box of checkboxes) {
     if (box.checked) checkedCitiesArr.push(box.id)
   }
   if (checkedCitiesArr.length) return checkedCitiesArr
-  const selectedCity = document.getElementById(
-    'centerProvinceCity'
-  ) as HTMLInputElement
+  const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
   return selectedCity.value
 }
 
 const getTestDatesArr = () => {
   const testDates: string[] = []
-  const options = document.getElementById('testDays').childNodes as NodeListOf<
-    HTMLInputElement
-  >
+  const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
   for (const el of options) {
     const day = el.value
     if (day && day !== '-1') testDates.push(day)
@@ -46,12 +39,8 @@ const getTestDatesArr = () => {
 }
 
 const adjustStyle = () => {
-  const formWrapper = (document.getElementById(
-    'centerProvinceCity'
-  ) as HTMLElement).parentElement.parentElement
-  const selects = document.querySelectorAll(
-    '.form-inline select'
-  ) as NodeListOf<HTMLElement>
+  const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
+  const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
   if (!helper.isAvailable(formWrapper && selects, adjustStyle)) return
 
   formWrapper.classList.remove('offset1')
@@ -98,9 +87,7 @@ const renderTpl = (filteredData: Data) => {
               <span style="color:red;">*</span>
             `
           : nothing}
-        <span
-          ><strong>${helper.formatCurrency(seat.testFee / 100)}</strong></span
-        >
+        <span><strong>${helper.formatCurrency(seat.testFee / 100)}</strong></span>
         ${seat.lateRegFlag === 'Y'
           ? html`
               <br />(已包含逾期费附加费)
@@ -108,11 +95,7 @@ const renderTpl = (filteredData: Data) => {
           : nothing}
       </td>
       <td class="ta-center-va-middle">
-        ${seat.seatStatus === -1
-          ? '已截止'
-          : seat.seatBookStatus === 1
-          ? '有名额'
-          : '名额暂满'}
+        ${seat.seatStatus === -1 ? '已截止' : seat.seatBookStatus === 1 ? '有名额' : '名额暂满'}
       </td>
     </tr>
   `
@@ -129,9 +112,7 @@ const renderTpl = (filteredData: Data) => {
           <h4>考位查询结果</h4>
           <div>
             "<span style="color:red;">*</span
-            >"表示为逾期报名，需要缴纳逾期报名附加费${helper.formatCurrency(
-              data.lateRegFee / 100
-            )}
+            >"表示为逾期报名，需要缴纳逾期报名附加费${helper.formatCurrency(data.lateRegFee / 100)}
           </div>
         `
       : nothing}
@@ -145,9 +126,7 @@ const renderTpl = (filteredData: Data) => {
             ><span style="color:#fff;float:right;"
               >考试时间：${helper.firstKeyOf(data.testSeats).split('|')[0]}<span
                 style="padding-left:30px;"
-                >最晚到达时间：${helper
-                  .firstKeyOf(data.testSeats)
-                  .split('|')[2]}</span
+                >最晚到达时间：${helper.firstKeyOf(data.testSeats).split('|')[2]}</span
               ></span
             >
           </th>
@@ -177,23 +156,19 @@ const renderTpl = (filteredData: Data) => {
 }
 
 const addCityCheckbox = () => {
-  const provinceGroup = document.querySelectorAll(
-    '#centerProvinceCity optgroup'
-  ) as NodeListOf<HTMLOptGroupElement>
+  const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
+    HTMLOptGroupElement
+  >
   if (!helper.isAvailable(provinceGroup.length, addCityCheckbox)) return
   if (
-    !helper.isAvailable(
-      provinceGroup[provinceGroup.length - 1].label === '浙江',
-      addCityCheckbox
-    )
+    !helper.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addCityCheckbox)
   )
     return
 
   const selectCity = document.getElementById('centerProvinceCity')
   const formWrapper = selectCity.parentElement.parentElement.parentElement
   const style = `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
-    selectCity.parentElement
-      .offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
+    selectCity.parentElement.offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
   formWrapper.insertAdjacentHTML(
     'beforeend',
     `<div id="checkboxes" class="hide" style="${style}"></div>`
@@ -215,20 +190,15 @@ const addCityCheckbox = () => {
                 ? html`
                     <span
                       class="muted"
-                      style="${provinceName.length === 3
-                        ? nothing
-                        : 'margin-right:1em;'}"
+                      style="${provinceName.length === 3 ? nothing : 'margin-right:1em;'}"
                       >${provinceName}：</span
                     >
                   `
                 : nothing}
-            `}<span
-          style="${helper.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-          ><input
-            type="checkbox"
-            id="${city.value}"
-            style="margin:0 0 2px;"
-          />&nbsp;<label for="${city.value}" style="display:inline;"
+            `}<span style="${helper.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+          ><input type="checkbox" id="${city.value}" style="margin:0 0 2px;" />&nbsp;<label
+            for="${city.value}"
+            style="display:inline;"
             >${city.label}</label
           >&nbsp;</span
         >
@@ -244,9 +214,9 @@ const addCityCheckbox = () => {
   render(checkboxWrapperTpl, checkboxWrapper)
 
   const toggleAllCheckboxes = () => {
-    const allCheckboxes = document.querySelectorAll(
-      'input[type="checkbox"]'
-    ) as NodeListOf<HTMLInputElement>
+    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+      HTMLInputElement
+    >
     for (const checkbox of allCheckboxes) {
       checkbox.checked = !checkbox.checked
     }
@@ -258,10 +228,7 @@ const addCityCheckbox = () => {
   const toggleAllCheckboxesBtnTpl = html`
     <a href="javascript:void(0);" @click=${toggleAllCheckboxes}>全选/反选</a>
   `
-  render(
-    toggleAllCheckboxesBtnTpl,
-    document.getElementById('toggleAllCheckboxesWrapper')
-  )
+  render(toggleAllCheckboxesBtnTpl, document.getElementById('toggleAllCheckboxesWrapper'))
 }
 
 const toggleExpand = () => {
@@ -285,12 +252,7 @@ const addQueryBtn = (fn: Function) => {
     .getElementById('expandBtn')
     .insertAdjacentHTML('afterend', '<span id="queryBtnWrapper"></span>')
   const btnTpl = html`
-    <button
-      id="queryBtn"
-      class="btn btn-primary"
-      @click=${fn}
-      style="margin-left:13px;"
-    >
+    <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
       查询全部日期
     </button>
   `

@@ -25,14 +25,11 @@ const singleQuery = (testCity: string) => {
     let errNum = 0
 
     for (const day of testDates) {
-      layer.msg(
-        `正在查询中，剩余${testDates.length - testDates.indexOf(day)}个日期`,
-        {
-          time: 2000,
-          icon: 3,
-          anim: -1
-        }
-      )
+      layer.msg(`正在查询中，剩余${testDates.length - testDates.indexOf(day)}个日期`, {
+        time: 2000,
+        icon: 3,
+        anim: -1
+      })
 
       axios
         .get('testSeat/queryTestSeats', {
@@ -47,10 +44,7 @@ const singleQuery = (testCity: string) => {
             availableDatesNum++
             availableSeatsNum += filteredData.availableSeatsNum
             seatsTpl.push(View.renderTpl(filteredData))
-            render(
-              seatsTpl,
-              document.getElementById('qrySeatResult') as Element
-            )
+            render(seatsTpl, document.getElementById('qrySeatResult'))
           }
         })
         .catch((err: Error) => {
@@ -121,7 +115,7 @@ const query = () => {
 }
 
 const observeDom = () => {
-  const targetNode = document.getElementById('wg_center') as Node
+  const targetNode = document.getElementById('wg_center')
   if (!View.helper.isAvailable(targetNode, observeDom)) return
 
   const callback = () => {

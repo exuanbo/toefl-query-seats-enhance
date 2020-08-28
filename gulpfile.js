@@ -18,12 +18,7 @@ function build () {
   const options = {
     input: 'src/app.ts',
     output: { format: 'iife' },
-    plugins: [
-      nodeResolve({ browser: true }),
-      commonjs(),
-      minifyHtml(),
-      typescript()
-    ]
+    plugins: [nodeResolve({ browser: true }), commonjs(), minifyHtml(), typescript()]
   }
   return rollupStream(options)
     .pipe(source('app.js'))
@@ -37,11 +32,9 @@ function minifyJS () {
 }
 
 function mix () {
-  return src([
-    'src/img/icon.png',
-    'src/extension/content.js',
-    'src/extension/manifest.json'
-  ]).pipe(dest('dist/extension'))
+  return src(['src/img/icon.png', 'src/extension/content.js', 'src/extension/manifest.json']).pipe(
+    dest('dist/extension')
+  )
 }
 
 function server () {

@@ -35,7 +35,11 @@ interface QueryData {
     [key: string]: SeatDetail[]
   }
   lateRegFee: number
-  availableSeatsNum: number
+  /**
+   * Original data above
+   */
+  availableSeatsNum?: number
+  queryTime?: Date
 }
 
 interface SeatDetail {

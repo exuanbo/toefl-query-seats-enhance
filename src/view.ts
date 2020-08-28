@@ -73,7 +73,7 @@ const clearResult = () => {
 const renderTpl = (filteredData: Data) => {
   const rowTpl = (seat: SeatDetail) => html`
     <tr>
-      <td style="text-align:center;vertical-align:middle;">
+      <td class="ta-center-va-middle">
         ${helper.isMunicipality(seat.provinceCn)
           ? html`
               ${seat.cityCn}
@@ -82,7 +82,7 @@ const renderTpl = (filteredData: Data) => {
               ${seat.provinceCn}&nbsp;${seat.cityCn}
             `}
       </td>
-      <td style="text-align:center;vertical-align:middle;">
+      <td class="ta-center-va-middle">
         <span
           ><a
             href="javascript:void(0);"
@@ -92,7 +92,7 @@ const renderTpl = (filteredData: Data) => {
           ></span
         >&nbsp;<span>${seat.centerNameCn}</span>
       </td>
-      <td style="text-align:center;vertical-align:middle;">
+      <td class="ta-center-va-middle">
         ${seat.lateRegFlag === 'Y'
           ? html`
               <span style="color:red;">*</span>
@@ -107,7 +107,7 @@ const renderTpl = (filteredData: Data) => {
             `
           : nothing}
       </td>
-      <td style="text-align:center;vertical-align:middle;">
+      <td class="ta-center-va-middle">
         ${seat.seatStatus === -1
           ? '已截止'
           : seat.seatBookStatus === 1
@@ -120,6 +120,12 @@ const renderTpl = (filteredData: Data) => {
   const seatsTpl = (data: Data) => html`
     ${!document.getElementById('qrySeatResult').children.length
       ? html`
+          <style>
+            .ta-center-va-middle {
+              text-align: center;
+              vertical-align: middle;
+            }
+          </style>
           <h4>考位查询结果</h4>
           <div>
             "<span style="color:red;">*</span
@@ -147,12 +153,12 @@ const renderTpl = (filteredData: Data) => {
           </th>
         </tr>
         <tr>
-          <th style="text-align:center;vertical-align:middle;" width="20%">
+          <th class="ta-center-va-middle" width="20%">
             城市
           </th>
-          <th style="text-align:center;vertical-align:middle;">考点</th>
+          <th class="ta-center-va-middle">考点</th>
           <th style="text-align:center;" width="20%">费用<br />(RMB￥)</th>
-          <th style="text-align:center;vertical-align:middle;" width="10%">
+          <th class="ta-center-va-middle" width="10%">
             考位
           </th>
         </tr>

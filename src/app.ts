@@ -3,7 +3,7 @@ import { filterSeats, Data } from './seats'
 import { render, TemplateResult } from 'lit-html'
 import axios from 'axios'
 
-declare var layer: {
+declare const layer: {
   msg: (
     text: string,
     options?: { title?: string; time?: number; icon?: number; anim?: number }

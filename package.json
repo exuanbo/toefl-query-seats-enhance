@@ -3,7 +3,7 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build": "gulp",
+    "build": "npm run format && gulp",
     "dev": "gulp server",
     "format": "prettier-standard --format"
   },

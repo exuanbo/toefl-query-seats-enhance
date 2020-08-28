@@ -1,5 +1,5 @@
 import * as View from './view'
-import { filterSeats, Data } from './seats'
+import { QueryData, filterSeats } from './seats'
 import { render, TemplateResult } from 'lit-html'
 import axios from 'axios'
 
@@ -38,7 +38,7 @@ const singleQuery = (testCity: string) => {
             testDay: day
           }
         })
-        .then((response: { data: Data }) => {
+        .then((response: { data: QueryData }) => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
             availableDatesNum++
@@ -76,7 +76,7 @@ const multiQuery = (testCitiesArr: string[]) => {
   View.clearResult()
 
   const testDates = View.getTestDatesArr()
-  const dataArr: Data[] = []
+  const dataArr: QueryData[] = []
   ;(async () => {
     for (const testCity of testCitiesArr) {
       for (const day of testDates) {
@@ -87,7 +87,7 @@ const multiQuery = (testCitiesArr: string[]) => {
               testDay: day
             }
           })
-          .then((response: { data: Data }) => {
+          .then((response: { data: QueryData }) => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
               dataArr.push(filteredData)

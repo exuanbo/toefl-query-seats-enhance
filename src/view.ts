@@ -1,6 +1,6 @@
 import { html, nothing, render, TemplateResult } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
-import { Data, SeatDetail } from './seats'
+import { QueryData, SeatDetail } from './seats'
 
 const helper = {
   firstKeyOf: (obj: object) => Object.keys(obj)[0],
@@ -60,13 +60,13 @@ const clearResult = () => {
   )
 }
 
-const renderTpl = (filteredData: Data) => {
+const renderTpl = (filteredData: QueryData) => {
   const stylesMiddle = {
     textAlign: 'center',
     verticalAlign: 'middle'
   }
 
-  const seatsTpl = (data: Data) => html`
+  const seatsTpl = (data: QueryData) => html`
     ${!document.getElementById('qrySeatResult').children.length
       ? html`
           <style>

@@ -28,7 +28,7 @@
   }
  */
 
-interface Data {
+interface QueryData {
   status: boolean
   testDate: string
   testSeats: {
@@ -56,7 +56,7 @@ interface SeatDetail {
   lateRegFlag: 'N' | 'Y'
 }
 
-const filterSeats = (data: Data) => {
+const filterSeats = (data: QueryData) => {
   if (data.status === true) {
     const dataDate = Object.keys(data.testSeats)[0]
     const SeatsArr: SeatDetail[] = data.testSeats[dataDate]
@@ -75,4 +75,4 @@ const filterSeats = (data: Data) => {
   return null
 }
 
-export { filterSeats, Data, SeatDetail }
+export { QueryData, SeatDetail, filterSeats }

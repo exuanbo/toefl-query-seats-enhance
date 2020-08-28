@@ -1,4 +1,5 @@
 import { html, nothing, render, TemplateResult } from 'lit-html'
+import { styleMap } from 'lit-html/directives/style-map.js'
 import { Data, SeatDetail } from './seats'
 
 const helper = {
@@ -60,45 +61,10 @@ const clearResult = () => {
 }
 
 const renderTpl = (filteredData: Data) => {
-  const rowTpl = (seat: SeatDetail) => html`
-    <tr>
-      <td class="ta-center-va-middle">
-        ${helper.isMunicipality(seat.provinceCn)
-          ? html`
-              ${seat.cityCn}
-            `
-          : html`
-              ${seat.provinceCn}&nbsp;${seat.cityCn}
-            `}
-      </td>
-      <td class="ta-center-va-middle">
-        <span
-          ><a
-            href="javascript:void(0);"
-            onclick="showTestCenterInfo('考场信息', '${seat.centerCode}')"
-            style="text-decoration:underline;"
-            >${seat.centerCode}</a
-          ></span
-        >&nbsp;<span>${seat.centerNameCn}</span>
-      </td>
-      <td class="ta-center-va-middle">
-        ${seat.lateRegFlag === 'Y'
-          ? html`
-              <span style="color:red;">*</span>
-            `
-          : nothing}
-        <span><strong>${helper.formatCurrency(seat.testFee / 100)}</strong></span>
-        ${seat.lateRegFlag === 'Y'
-          ? html`
-              <br />(已包含逾期费附加费)
-            `
-          : nothing}
-      </td>
-      <td class="ta-center-va-middle">
-        ${seat.seatStatus === -1 ? '已截止' : seat.seatBookStatus === 1 ? '有名额' : '名额暂满'}
-      </td>
-    </tr>
-  `
+  const stylesMiddle = {
+    textAlign: 'center',
+    verticalAlign: 'middle'
+  }
 
   const seatsTpl = (data: Data) => html`
     ${!document.getElementById('qrySeatResult').children.length
@@ -132,12 +98,12 @@ const renderTpl = (filteredData: Data) => {
           </th>
         </tr>
         <tr>
-          <th class="ta-center-va-middle" width="20%">
+          <th style=${styleMap(stylesMiddle)} width="20%">
             城市
           </th>
-          <th class="ta-center-va-middle">考点</th>
+          <th style=${styleMap(stylesMiddle)}>考点</th>
           <th style="text-align:center;" width="20%">费用<br />(RMB￥)</th>
-          <th class="ta-center-va-middle" width="10%">
+          <th style=${styleMap(stylesMiddle)} width="10%">
             考位
           </th>
         </tr>
@@ -152,6 +118,47 @@ const renderTpl = (filteredData: Data) => {
       </tbody>
     </table>
   `
+
+  const rowTpl = (seat: SeatDetail) => html`
+    <tr>
+      <td style=${styleMap(stylesMiddle)}>
+        ${helper.isMunicipality(seat.provinceCn)
+          ? html`
+              ${seat.cityCn}
+            `
+          : html`
+              ${seat.provinceCn}&nbsp;${seat.cityCn}
+            `}
+      </td>
+      <td style=${styleMap(stylesMiddle)}>
+        <span
+          ><a
+            href="javascript:void(0);"
+            onclick="showTestCenterInfo('考场信息', '${seat.centerCode}')"
+            style="text-decoration:underline;"
+            >${seat.centerCode}</a
+          ></span
+        >&nbsp;<span>${seat.centerNameCn}</span>
+      </td>
+      <td style=${styleMap(stylesMiddle)}>
+        ${seat.lateRegFlag === 'Y'
+          ? html`
+              <span style="color:red;">*</span>
+            `
+          : nothing}
+        <span><strong>${helper.formatCurrency(seat.testFee / 100)}</strong></span>
+        ${seat.lateRegFlag === 'Y'
+          ? html`
+              <br />(已包含逾期费附加费)
+            `
+          : nothing}
+      </td>
+      <td style=${styleMap(stylesMiddle)}>
+        ${seat.seatStatus === -1 ? '已截止' : seat.seatBookStatus === 1 ? '有名额' : '名额暂满'}
+      </td>
+    </tr>
+  `
+
   return seatsTpl(filteredData)
 }
 

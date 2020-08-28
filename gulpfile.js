@@ -39,8 +39,8 @@ function minifyJS () {
 function mix () {
   return src([
     'src/img/icon.png',
-    'src/chrome/content.js',
-    'src/chrome/manifest.json'
+    'src/extension/content.js',
+    'src/extension/manifest.json'
   ]).pipe(dest('dist/extension'))
 }
 

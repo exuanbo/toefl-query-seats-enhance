@@ -17,13 +17,16 @@ const sleep = (ms: number) => {
 
 const singleQuery = (testCity: string) => {
   View.clearResult()
-  const testDates = View.getTestDatesArr()
-  ;(async () => {
-    let availableDatesNum = 0
-    let availableSeatsNum = 0
-    const seatsTpl: TemplateResult[] = []
-    let errNum = 0
 
+  const testDates = View.getTestDatesArr()
+  const seatsTpl: TemplateResult[] = []
+  const status = {
+    availableDatesNum: 0,
+    availableSeatsNum: 0,
+    errNum: 0
+  }
+
+  ;(async () => {
     for (const day of testDates) {
       layer.msg(`正在查询中，剩余${testDates.length - testDates.indexOf(day)}个日期`, {
         time: 2000,
@@ -41,27 +44,27 @@ const singleQuery = (testCity: string) => {
         .then((response: { data: QueryData }) => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
-            availableDatesNum++
-            availableSeatsNum += filteredData.availableSeatsNum
+            status.availableDatesNum++
+            status.availableSeatsNum += filteredData.availableSeatsNum
             seatsTpl.push(View.renderTpl(filteredData))
             render(seatsTpl, document.getElementById('qrySeatResult'))
           }
         })
         .catch((err: Error) => {
           console.log(err)
-          errNum++
+          status.errNum++
         })
 
       if (day !== testDates[testDates.length - 1]) {
         await sleep(1500)
-      } else if (errNum) {
-        layer.alert(`服务器打了个盹儿，漏掉了${errNum}个结果`, {
+      } else if (status.errNum) {
+        layer.alert(`服务器打了个盹儿，漏掉了${status.errNum}个结果`, {
           title: '出错啦'
         })
-      } else if (!availableDatesNum) {
+      } else if (!status.availableDatesNum) {
         layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
       } else {
-        layer.msg(`查询完成，共找到${availableSeatsNum}个可预定考位`, {
+        layer.msg(`查询完成，共找到${status.availableSeatsNum}个可预定考位`, {
           time: 2000,
           icon: 6
         })

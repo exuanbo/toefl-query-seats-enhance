@@ -1,4 +1,4 @@
-import { html, nothing, render } from 'lit-html'
+import { html, nothing, render, TemplateResult } from 'lit-html'
 import { Data, SeatDetail } from './seats'
 
 const helper = {
@@ -46,8 +46,9 @@ const getTestDatesArr = () => {
 }
 
 const adjustStyle = () => {
-  const formWrapper = document.getElementById('centerProvinceCity')
-    .parentElement.parentElement
+  const formWrapper = (document.getElementById(
+    'centerProvinceCity'
+  ) as HTMLElement).parentElement.parentElement
   const selects = document.querySelectorAll(
     '.form-inline select'
   ) as NodeListOf<HTMLElement>
@@ -109,7 +110,7 @@ const renderTpl = (filteredData: Data) => {
       <td style="text-align:center;vertical-align:middle;">
         ${seat.seatStatus === -1
           ? '已截止'
-          : seat.seatStatus === 1
+          : seat.seatBookStatus === 1
           ? '有名额'
           : '名额暂满'}
       </td>
@@ -158,7 +159,7 @@ const renderTpl = (filteredData: Data) => {
       </thead>
       <tbody>
         ${data.testSeats[helper.firstKeyOf(data.testSeats)].map(
-          (seat: SeatDetail) =>
+          (seat: SeatDetail): TemplateResult =>
             html`
               ${rowTpl(seat)}
             `
@@ -193,11 +194,11 @@ const addCityCheckbox = () => {
   )
   const checkboxWrapper = document.getElementById('checkboxes')
 
-  const checkboxWrapperTpl = []
+  const checkboxWrapperTpl: TemplateResult[] = []
   for (const province of provinceGroup) {
     const provinceName = province.label
     const cities = province.childNodes as NodeListOf<HTMLOptionElement>
-    const citiesTpl = []
+    const citiesTpl: TemplateResult[] = []
 
     for (const city of cities) {
       const template = html`
@@ -273,7 +274,7 @@ const addExpandBtn = () => {
   render(btnTpl, document.getElementById('expandBtnWrapper'))
 }
 
-const addQueryBtn = fn => {
+const addQueryBtn = (fn: Function) => {
   document
     .getElementById('expandBtn')
     .insertAdjacentHTML('afterend', '<span id="queryBtnWrapper"></span>')

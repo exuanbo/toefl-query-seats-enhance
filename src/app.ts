@@ -1,20 +1,14 @@
 import * as View from './view'
-import { filterSeats } from './seats'
-import { render } from 'lit-html'
+import { filterSeats, Data } from './seats'
+import { render, TemplateResult } from 'lit-html'
 import axios from 'axios'
 
-declare const layer: {
-  msg: typeof layerMethod
-  alert: typeof layerMethod
-}
-
-declare const layerMethod: (text: string, options: typeof LayerOptions) => void
-
-declare const LayerOptions: {
-  title?: string
-  icon?: number
-  time?: number
-  anim?: number
+declare var layer: {
+  msg: (
+    text: string,
+    options?: { title?: string; time?: number; icon?: number; anim?: number }
+  ) => void
+  alert: typeof layer.msg
 }
 
 const sleep = (ms: number) => {
@@ -27,7 +21,7 @@ const singleQuery = (testCity: string) => {
   ;(async () => {
     let availableDatesNum = 0
     let availableSeatsNum = 0
-    const seatsTpl = []
+    const seatsTpl: TemplateResult[] = []
     let errNum = 0
 
     for (const day of testDates) {
@@ -47,17 +41,20 @@ const singleQuery = (testCity: string) => {
             testDay: day
           }
         })
-        .then(response => {
+        .then((response: { data: Data }) => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
             availableDatesNum++
             availableSeatsNum += filteredData.availableSeatsNum
             seatsTpl.push(View.renderTpl(filteredData))
-            render(seatsTpl, document.getElementById('qrySeatResult'))
+            render(
+              seatsTpl,
+              document.getElementById('qrySeatResult') as Element
+            )
           }
         })
-        .catch(error => {
-          console.log(error)
+        .catch((err: Error) => {
+          console.log(err)
           errNum++
         })
 
@@ -85,7 +82,7 @@ const multiQuery = (testCitiesArr: string[]) => {
   View.clearResult()
 
   const testDates = View.getTestDatesArr()
-  const dataArr = []
+  const dataArr: Data[] = []
   ;(async () => {
     for (const testCity of testCitiesArr) {
       for (const day of testDates) {
@@ -96,13 +93,13 @@ const multiQuery = (testCitiesArr: string[]) => {
               testDay: day
             }
           })
-          .then(response => {
+          .then((response: { data: Data }) => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
               dataArr.push(filteredData)
             }
           })
-          .catch(error => console.log(error))
+          .catch((err: Error) => console.log(err))
         await sleep(1500)
       }
       console.log(dataArr)
@@ -124,7 +121,7 @@ const query = () => {
 }
 
 const observeDom = () => {
-  const targetNode = document.getElementById('wg_center')
+  const targetNode = document.getElementById('wg_center') as Node
   if (!View.helper.isAvailable(targetNode, observeDom)) return
 
   const callback = () => {

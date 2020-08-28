@@ -32,7 +32,7 @@ interface Data {
   status: boolean
   testDate: string
   testSeats: {
-    date: SeatDetail[]
+    [key: string]: SeatDetail[]
   }
   lateRegFee: number
   availableSeatsNum: number
@@ -59,8 +59,8 @@ interface SeatDetail {
 const filterSeats = (data: Data) => {
   if (data.status === true) {
     const dataDate = Object.keys(data.testSeats)[0]
-    const SeatsArr = data.testSeats[dataDate]
-    const filteredSeatsArr = []
+    const SeatsArr: SeatDetail[] = data.testSeats[dataDate]
+    const filteredSeatsArr: SeatDetail[] = []
     for (const seat of SeatsArr) {
       if (seat.seatStatus) filteredSeatsArr.push(seat)
     }

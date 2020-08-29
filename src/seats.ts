@@ -58,15 +58,15 @@ interface SeatDetail {
 const filterSeats = (data: QueryData) => {
   if (data.status === true) {
     const dataDate = Object.keys(data.testSeats)[0]
-    const SeatDetailArr: SeatDetail[] = data.testSeats[dataDate]
-    const filteredSeatDetailArr: SeatDetail[] = []
-    for (const seat of SeatDetailArr) {
-      if (seat.seatStatus) filteredSeatDetailArr.push(seat)
+    const seatDetails: SeatDetail[] = data.testSeats[dataDate]
+    const filtered: SeatDetail[] = []
+    for (const seatDetail of seatDetails) {
+      if (seatDetail.seatStatus) filtered.push(seatDetail)
     }
 
-    const availableSeatsNum = filteredSeatDetailArr.length
+    const availableSeatsNum = filtered.length
     if (availableSeatsNum) {
-      data.testSeats[dataDate] = filteredSeatDetailArr
+      data.testSeats[dataDate] = filtered
       data.availableSeatsNum = availableSeatsNum
       return data
     }

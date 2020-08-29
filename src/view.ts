@@ -58,7 +58,7 @@ const getData = async (city: string, date: string): Promise<AxiosResponse<QueryD
     })
 }
 
-const renderTpl = (filteredData: QueryData) => {
+const renderTableTpl = (filteredData: QueryData) => {
   const stylesMiddle = {
     textAlign: 'center',
     verticalAlign: 'middle'
@@ -160,108 +160,112 @@ const renderTpl = (filteredData: QueryData) => {
   return seatsTpl(filteredData)
 }
 
-const addCityCheckbox = () => {
-  const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
-    HTMLOptGroupElement
-  >
-  if (!Utils.isAvailable(provinceGroup.length, addCityCheckbox)) return
-  if (
-    !Utils.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addCityCheckbox)
-  )
-    return
-
-  const selectCity = document.getElementById('centerProvinceCity')
-  const formWrapper = selectCity.parentElement.parentElement.parentElement
-  const style = `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
-    selectCity.parentElement.offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
-  formWrapper.insertAdjacentHTML(
-    'beforeend',
-    `<div id="checkboxes" class="hide" style="${style}"></div>`
-  )
-  const checkboxWrapper = document.getElementById('checkboxes')
-
-  const checkboxWrapperTpl: TemplateResult[] = []
-  for (const province of provinceGroup) {
-    const provinceName = province.label
-    const cities = province.childNodes as NodeListOf<HTMLOptionElement>
-    const citiesTpl: TemplateResult[] = []
-
-    for (const city of cities) {
-      const template = html`
-        ${Utils.isMunicipality(city.label)
-          ? nothing
-          : html`
-              ${city === cities.item(0)
-                ? html`
-                    <span
-                      class="muted"
-                      style="${provinceName.length === 3 ? nothing : 'margin-right:1em;'}"
-                      >${provinceName}：</span
-                    >
-                  `
-                : nothing}
-            `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-          ><input type="checkbox" id="${city.value}" style="margin:0 0 2px;" />&nbsp;<label
-            for="${city.value}"
-            style="display:inline;"
-            >${city.label}</label
-          >&nbsp;</span
-        >
-      `
-      citiesTpl.push(template)
-    }
-
-    const provinceBlockTpl = html`
-      <div>${citiesTpl}</div>
-    `
-    checkboxWrapperTpl.push(provinceBlockTpl)
-  }
-  render(checkboxWrapperTpl, checkboxWrapper)
-
-  const toggleAllCheckboxes = () => {
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-      HTMLInputElement
+const addComponent = {
+  checkbox: () => {
+    const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
+      HTMLOptGroupElement
     >
-    for (const checkbox of allCheckboxes) {
-      checkbox.checked = !checkbox.checked
+    if (!Utils.isAvailable(provinceGroup.length, addComponent.checkbox)) return
+    if (
+      !Utils.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addComponent.checkbox)
+    )
+      return
+
+
+    const checkboxWrapperTpl: TemplateResult[] = []
+    for (const province of provinceGroup) {
+      const provinceName = province.label
+      const cities = province.childNodes as NodeListOf<HTMLOptionElement>
+      const citiesTpl: TemplateResult[] = []
+
+      for (const city of cities) {
+        const template = html`
+          ${Utils.isMunicipality(city.label)
+            ? nothing
+            : html`
+                ${city === cities.item(0)
+                  ? html`
+                      <span
+                        class="muted"
+                        style="${provinceName.length === 3 ? nothing : 'margin-right:1em;'}"
+                        >${provinceName}：</span
+                      >
+                    `
+                  : nothing}
+              `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+            ><input type="checkbox" id="${city.value}" style="margin:0 0 2px;" />&nbsp;<label
+              for="${city.value}"
+              style="display:inline;"
+              >${city.label}</label
+            >&nbsp;</span
+          >
+        `
+        citiesTpl.push(template)
+      }
+
+      const provinceBlockTpl = html`
+        <div>${citiesTpl}</div>
+      `
+      checkboxWrapperTpl.push(provinceBlockTpl)
     }
+
+    const selectCity = document.getElementById('centerProvinceCity')
+    const formWrapper = selectCity.parentElement.parentElement.parentElement
+    const style = `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
+      selectCity.parentElement.offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
+    formWrapper.insertAdjacentHTML(
+      'beforeend',
+      `<div id="checkboxes" class="hide" style="${style}"></div>`
+    )
+    const checkboxWrapper = document.getElementById('checkboxes')
+    render(checkboxWrapperTpl, checkboxWrapper)
+
+    checkboxWrapper.insertAdjacentHTML(
+      'afterbegin',
+      '<span id="toggleAllCheckboxesWrapper" style="float:right;font-size:13px;text-decoration:underline;"></span'
+    )
+    const toggleAllCheckboxesBtnTpl = html`
+      <a href="javascript:void(0);" @click=${toggleAllCheckboxes}>全选/反选</a>
+    `
+    render(toggleAllCheckboxesBtnTpl, document.getElementById('toggleAllCheckboxesWrapper'))
+  },
+
+  expandBtn: () => {
+    document
+      .getElementById('centerProvinceCity')
+      .insertAdjacentHTML('afterend', '<span id="expandBtnWrapper"></span>')
+    const btnTpl = html`
+      &nbsp;<button id="expandBtn" class="btn" @click=${toggleExpand}>
+        展开多选
+      </button>
+    `
+    render(btnTpl, document.getElementById('expandBtnWrapper'))
+  },
+
+  queryBtn: (fn: Function) => {
+    document
+      .getElementById('expandBtn')
+      .insertAdjacentHTML('afterend', '<span id="queryBtnWrapper"></span>')
+    const btnTpl = html`
+      <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
+        查询全部日期
+      </button>
+    `
+    render(btnTpl, document.getElementById('queryBtnWrapper'))
   }
-  checkboxWrapper.insertAdjacentHTML(
-    'afterbegin',
-    '<span id="toggleAllCheckboxesWrapper" style="float:right;font-size:13px;text-decoration:underline;"></span'
-  )
-  const toggleAllCheckboxesBtnTpl = html`
-    <a href="javascript:void(0);" @click=${toggleAllCheckboxes}>全选/反选</a>
-  `
-  render(toggleAllCheckboxesBtnTpl, document.getElementById('toggleAllCheckboxesWrapper'))
 }
 
 const toggleExpand = () => {
   document.getElementById('checkboxes').classList.toggle('hide')
 }
 
-const addExpandBtn = () => {
-  document
-    .getElementById('centerProvinceCity')
-    .insertAdjacentHTML('afterend', '<span id="expandBtnWrapper"></span>')
-  const btnTpl = html`
-    &nbsp;<button id="expandBtn" class="btn" @click=${toggleExpand}>
-      展开多选
-    </button>
-  `
-  render(btnTpl, document.getElementById('expandBtnWrapper'))
-}
-
-const addQueryBtn = (fn: Function) => {
-  document
-    .getElementById('expandBtn')
-    .insertAdjacentHTML('afterend', '<span id="queryBtnWrapper"></span>')
-  const btnTpl = html`
-    <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
-      查询全部日期
-    </button>
-  `
-  render(btnTpl, document.getElementById('queryBtnWrapper'))
+const toggleAllCheckboxes = () => {
+  const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+    HTMLInputElement
+  >
+  for (const checkbox of allCheckboxes) {
+    checkbox.checked = !checkbox.checked
+  }
 }
 
 export {
@@ -270,9 +274,7 @@ export {
   getSelectedCity,
   getDates,
   getData,
-  renderTpl,
-  addCityCheckbox,
-  toggleExpand,
-  addExpandBtn,
-  addQueryBtn
+  renderTableTpl,
+  addComponent,
+  toggleExpand
 }

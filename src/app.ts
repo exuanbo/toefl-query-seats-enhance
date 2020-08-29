@@ -12,7 +12,7 @@ declare const layer: {
 }
 
 const singleQuery = ({ city = '', dates = [''] } = {}) => {
-  const seatsTpl: TemplateResult[] = []
+  const tpl: TemplateResult[] = []
   const status = {
     availableDatesNum: 0,
     availableSeatsNum: 0,
@@ -33,8 +33,8 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
           if (filteredData) {
             status.availableDatesNum++
             status.availableSeatsNum += filteredData.availableSeatsNum
-            seatsTpl.push(View.renderTpl(filteredData))
-            render(seatsTpl, document.getElementById('qrySeatResult'))
+            tpl.push(View.renderTableTpl(filteredData))
+            render(tpl, document.getElementById('qrySeatResult'))
           }
         })
         .catch((err: Error) => {
@@ -60,23 +60,23 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
   })()
 }
 
-const multiQuery = ({ citiesArr = [''], dates = [''] } = {}) => {
-  const dataArr: QueryData[] = []
+const multiQuery = ({ cities = [''], dates = [''] } = {}) => {
+  const data: QueryData[] = []
   ;(async () => {
-    for (const city of citiesArr) {
+    for (const city of cities) {
       for (const testDay of dates) {
         View.getData(city, testDay)
           .then(response => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
               addQueryTime(filteredData)
-              dataArr.push(filteredData)
+              data.push(filteredData)
             }
           })
           .catch((err: Error) => console.log(err))
         await Utils.sleep(1500)
       }
-      console.log(dataArr)
+      console.log(data)
       await Utils.sleep(1500)
     }
   })()
@@ -107,9 +107,9 @@ const observeDom = () => {
   const callback = () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.adjustStyle()
-      View.addCityCheckbox()
-      View.addExpandBtn()
-      View.addQueryBtn(query)
+      View.addComponent.checkbox()
+      View.addComponent.expandBtn()
+      View.addComponent.queryBtn(query)
     }
   }
   const observer = new MutationObserver(callback)

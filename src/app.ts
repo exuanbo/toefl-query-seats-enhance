@@ -26,7 +26,8 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
         anim: -1
       })
 
-      View.getData(city, testDay)
+      View.grab
+        .data(city, testDay)
         .then(response => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
@@ -64,7 +65,8 @@ const multiQuery = ({ cities = [''], dates = [''] } = {}) => {
   ;(async () => {
     for (const city of cities) {
       for (const testDay of dates) {
-        View.getData(city, testDay)
+        View.grab
+          .data(city, testDay)
           .then(response => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
@@ -84,8 +86,8 @@ const multiQuery = ({ cities = [''], dates = [''] } = {}) => {
 const query = () => {
   View.clearResult()
   const queryCondition = {
-    city: View.getSelectedCity(),
-    dates: View.getDates()
+    city: View.grab.selectedCity(),
+    dates: View.grab.dates()
   }
 
   if (typeof queryCondition.city === 'string') {
@@ -99,21 +101,15 @@ const query = () => {
   }
 }
 
-const observeDom = () => {
-  const targetNode = document.getElementById('wg_center')
-  if (!Utils.isAvailable(targetNode, observeDom)) return
-
-  const callback = () => {
+View.observeMutation(
+  document.getElementById('wg_center'),
+  () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.adjustStyle()
       View.addComponent.checkbox()
       View.addComponent.expandBtn()
       View.addComponent.queryBtn(query)
     }
-  }
-  const observer = new MutationObserver(callback)
-  const config = { childList: true }
-  observer.observe(targetNode, config)
-}
-
-observeDom()
+  },
+  { childList: true }
+)

@@ -1,6 +1,6 @@
 import * as Utils from './utils'
 import * as View from './view'
-import { QueryData, filterSeats, addQueryTime } from './seats'
+import { QueryData, filterSeats, addQueryTime } from './seat'
 import { TemplateResult, render } from 'lit-html'
 
 declare const layer: {

@@ -1,5 +1,5 @@
 import * as Utils from './utils'
-import { QueryData, SeatDetail } from './seats'
+import { QueryData, SeatDetail } from './seat'
 import axios, { AxiosResponse } from 'axios'
 import { html, nothing, render, TemplateResult } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'

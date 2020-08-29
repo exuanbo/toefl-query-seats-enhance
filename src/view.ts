@@ -1,30 +1,8 @@
 import * as Utils from './utils'
 import { QueryData, SeatDetail } from './seats'
+import axios, { AxiosResponse } from 'axios'
 import { html, nothing, render, TemplateResult } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
-
-const getSelectedCity = () => {
-  const checkedCitiesArr: string[] = []
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-    HTMLInputElement
-  >
-  for (const box of checkboxes) {
-    if (box.checked) checkedCitiesArr.push(box.id)
-  }
-  if (checkedCitiesArr.length) return checkedCitiesArr
-  const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
-  return selectedCity.value
-}
-
-const getTestDatesArr = () => {
-  const testDates: string[] = []
-  const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
-  for (const el of options) {
-    const day = el.value
-    if (day && day !== '-1') testDates.push(day)
-  }
-  return testDates
-}
 
 const adjustStyle = () => {
   const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
@@ -45,6 +23,39 @@ const clearResult = () => {
     `,
     document.getElementById('qrySeatResult')
   )
+}
+
+const getSelectedCity = () => {
+  const checkedCities: string[] = []
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+    HTMLInputElement
+  >
+  for (const box of checkboxes) {
+    if (box.checked) checkedCities.push(box.id)
+  }
+  if (checkedCities.length) return checkedCities
+  const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
+  return selectedCity.value
+}
+
+const getDates = () => {
+  const dates: string[] = []
+  const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
+  for (const el of options) {
+    const day = el.value
+    if (day && day !== '-1') dates.push(day)
+  }
+  return dates
+}
+
+const getData = async (city: string, date: string): Promise<AxiosResponse<QueryData>> => {
+  return axios
+    .get('testSeat/queryTestSeats', {
+      params: {
+        city: city,
+        testDay: date
+      }
+    })
 }
 
 const renderTpl = (filteredData: QueryData) => {
@@ -254,11 +265,11 @@ const addQueryBtn = (fn: Function) => {
 }
 
 export {
-  Utils,
-  getSelectedCity,
-  getTestDatesArr,
   adjustStyle,
   clearResult,
+  getSelectedCity,
+  getDates,
+  getData,
   renderTpl,
   addCityCheckbox,
   toggleExpand,

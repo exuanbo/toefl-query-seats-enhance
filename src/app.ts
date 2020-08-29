@@ -2,7 +2,6 @@ import * as Utils from './utils'
 import * as View from './view'
 import { QueryData, filterSeats, addQueryTime } from './seats'
 import { TemplateResult, render } from 'lit-html'
-import axios, { AxiosResponse } from 'axios'
 
 declare const layer: {
   msg: (
@@ -10,16 +9,6 @@ declare const layer: {
     options?: { title?: string; time?: number; icon?: number; anim?: number }
   ) => void
   alert: typeof layer.msg
-}
-
-const getData = async (city: string, date: string): Promise<AxiosResponse<QueryData>> => {
-  return axios
-    .get('testSeat/queryTestSeats', {
-      params: {
-        city: city,
-        testDay: date
-      }
-    })
 }
 
 const singleQuery = ({ city = '', dates = [''] } = {}) => {
@@ -38,7 +27,7 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
         anim: -1
       })
 
-      getData(city, testDay)
+      View.getData(city, testDay)
         .then(response => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
@@ -76,7 +65,7 @@ const multiQuery = ({ citiesArr = [''], dates = [''] } = {}) => {
   ;(async () => {
     for (const city of citiesArr) {
       for (const testDay of dates) {
-        getData(city, testDay)
+        View.getData(city, testDay)
           .then(response => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
@@ -97,7 +86,7 @@ const query = () => {
   View.clearResult()
   const queryCondition = {
     city: View.getSelectedCity(),
-    dates: View.getTestDatesArr()
+    dates: View.getDates()
   }
 
   if (typeof queryCondition.city === 'string') {

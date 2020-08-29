@@ -1,7 +1,7 @@
 import * as View from './view'
 import { QueryData, filterSeats, addQueryTime } from './seats'
-import { render, TemplateResult } from 'lit-html'
-import axios from 'axios'
+import { TemplateResult, render } from 'lit-html'
+import axios, { AxiosResponse } from 'axios'
 
 declare const layer: {
   msg: (
@@ -15,10 +15,17 @@ const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-const singleQuery = (testCity: string) => {
-  View.clearResult()
+const getData = async (city: string, date: string): Promise<AxiosResponse<QueryData>> => {
+  return axios
+    .get('testSeat/queryTestSeats', {
+      params: {
+        city: city,
+        testDay: date
+      }
+    })
+}
 
-  const testDates = View.getTestDatesArr()
+const singleQuery = ({ city = '', dates = [''] } = {}) => {
   const seatsTpl: TemplateResult[] = []
   const status = {
     availableDatesNum: 0,
@@ -27,21 +34,15 @@ const singleQuery = (testCity: string) => {
   }
 
   ;(async () => {
-    for (const day of testDates) {
-      layer.msg(`正在查询中，剩余${testDates.length - testDates.indexOf(day)}个日期`, {
+    for (const testDay of dates) {
+      layer.msg(`正在查询中，剩余${dates.length - dates.indexOf(testDay)}个日期`, {
         time: 2000,
         icon: 3,
         anim: -1
       })
 
-      axios
-        .get('testSeat/queryTestSeats', {
-          params: {
-            city: testCity,
-            testDay: day
-          }
-        })
-        .then((response: { data: QueryData }) => {
+      getData(city, testDay)
+        .then(response => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
             status.availableDatesNum++
@@ -55,7 +56,7 @@ const singleQuery = (testCity: string) => {
           status.errNum++
         })
 
-      if (day !== testDates[testDates.length - 1]) {
+      if (testDay !== dates[dates.length - 1]) {
         await sleep(1500)
       } else if (status.errNum) {
         layer.alert(`服务器打了个盹儿，漏掉了${status.errNum}个结果`, {
@@ -73,24 +74,13 @@ const singleQuery = (testCity: string) => {
   })()
 }
 
-const multiQuery = (testCitiesArr: string[]) => {
-  console.log(testCitiesArr)
-  View.toggleExpand()
-  View.clearResult()
-
-  const testDates = View.getTestDatesArr()
+const multiQuery = ({ citiesArr = [''], dates = [''] } = {}) => {
   const dataArr: QueryData[] = []
   ;(async () => {
-    for (const testCity of testCitiesArr) {
-      for (const day of testDates) {
-        axios
-          .get('testSeat/queryTestSeats', {
-            params: {
-              city: testCity,
-              testDay: day
-            }
-          })
-          .then((response: { data: QueryData }) => {
+    for (const city of citiesArr) {
+      for (const testDay of dates) {
+        getData(city, testDay)
+          .then(response => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
               addQueryTime(filteredData)
@@ -107,14 +97,20 @@ const multiQuery = (testCitiesArr: string[]) => {
 }
 
 const query = () => {
-  const testCity = View.getSelectedCity()
-  if (typeof testCity === 'string') {
-    if (testCity === '-1') {
+  View.clearResult()
+  const queryCondition = {
+    city: View.getSelectedCity(),
+    dates: View.getTestDatesArr()
+  }
+
+  if (typeof queryCondition.city === 'string') {
+    if (queryCondition.city === '-1') {
       return layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     }
-    singleQuery(testCity)
+    singleQuery(queryCondition as { city: string, dates: string[] })
   } else {
-    multiQuery(testCity)
+    View.toggleExpand()
+    multiQuery(queryCondition)
   }
 }
 

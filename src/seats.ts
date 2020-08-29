@@ -44,18 +44,13 @@ interface QueryData {
 
 interface SeatDetail {
   provinceCn: string
-  provinceEn: string
   cityCn: string
-  cityEn: string
   centerCode: string
   centerNameCn: string
-  centerNameEn: string
   testFee: number
   lateReg: 'N' | 'Y'
   seatStatus: -1 | 1
   seatBookStatus: -1 | 1
-  rescheduleDeadline: number
-  cancelDeadline: number
   testTime: string
   lateRegFlag: 'N' | 'Y'
 }

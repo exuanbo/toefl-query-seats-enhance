@@ -74,4 +74,8 @@ const filterSeats = (data: QueryData) => {
   return null
 }
 
-export { QueryData, SeatDetail, filterSeats }
+const addQueryTime = (data: QueryData) => {
+  data.queryTime = new Date()
+}
+
+export { QueryData, SeatDetail, filterSeats, addQueryTime }

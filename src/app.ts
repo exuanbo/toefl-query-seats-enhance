@@ -1,5 +1,5 @@
 import * as View from './view'
-import { QueryData, filterSeats } from './seats'
+import { QueryData, filterSeats, addQueryTime } from './seats'
 import { render, TemplateResult } from 'lit-html'
 import axios from 'axios'
 
@@ -93,6 +93,7 @@ const multiQuery = (testCitiesArr: string[]) => {
           .then((response: { data: QueryData }) => {
             const filteredData = filterSeats(response.data)
             if (filteredData) {
+              addQueryTime(filteredData)
               dataArr.push(filteredData)
             }
           })

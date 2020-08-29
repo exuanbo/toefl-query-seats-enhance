@@ -1,3 +1,4 @@
+import * as Utils from './utils'
 import * as View from './view'
 import { QueryData, filterSeats, addQueryTime } from './seats'
 import { TemplateResult, render } from 'lit-html'
@@ -9,10 +10,6 @@ declare const layer: {
     options?: { title?: string; time?: number; icon?: number; anim?: number }
   ) => void
   alert: typeof layer.msg
-}
-
-const sleep = (ms: number) => {
-  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 const getData = async (city: string, date: string): Promise<AxiosResponse<QueryData>> => {
@@ -57,7 +54,7 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
         })
 
       if (testDay !== dates[dates.length - 1]) {
-        await sleep(1500)
+        await Utils.sleep(1500)
       } else if (status.errNum) {
         layer.alert(`服务器打了个盹儿，漏掉了${status.errNum}个结果`, {
           title: '出错啦'
@@ -88,10 +85,10 @@ const multiQuery = ({ citiesArr = [''], dates = [''] } = {}) => {
             }
           })
           .catch((err: Error) => console.log(err))
-        await sleep(1500)
+        await Utils.sleep(1500)
       }
       console.log(dataArr)
-      await sleep(1500)
+      await Utils.sleep(1500)
     }
   })()
 }
@@ -116,7 +113,7 @@ const query = () => {
 
 const observeDom = () => {
   const targetNode = document.getElementById('wg_center')
-  if (!View.helper.isAvailable(targetNode, observeDom)) return
+  if (!Utils.isAvailable(targetNode, observeDom)) return
 
   const callback = () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {

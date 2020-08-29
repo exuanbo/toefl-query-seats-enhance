@@ -1,20 +1,7 @@
+import * as Utils from './utils'
+import { QueryData, SeatDetail } from './seats'
 import { html, nothing, render, TemplateResult } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
-import { QueryData, SeatDetail } from './seats'
-
-const helper = {
-  firstKeyOf: (obj: object) => Object.keys(obj)[0],
-  isAvailable: (con: any, fn: Function) => {
-    if (!con) {
-      window.setTimeout(fn, 100)
-      return false
-    }
-    return true
-  },
-  formatCurrency: (value: number) => 'RMB￥' + value.toFixed(2),
-  isMunicipality: (cityName: string) =>
-    cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
-}
 
 const getSelectedCity = () => {
   const checkedCitiesArr: string[] = []
@@ -42,7 +29,7 @@ const getTestDatesArr = () => {
 const adjustStyle = () => {
   const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
   const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
-  if (!helper.isAvailable(formWrapper && selects, adjustStyle)) return
+  if (!Utils.isAvailable(formWrapper && selects, adjustStyle)) return
 
   formWrapper.classList.remove('offset1')
   formWrapper.style.textAlign = 'center'
@@ -78,7 +65,7 @@ const renderTpl = (filteredData: QueryData) => {
           <h4>考位查询结果</h4>
           <div>
             "<span style="color:red;">*</span
-            >"表示为逾期报名，需要缴纳逾期报名附加费${helper.formatCurrency(data.lateRegFee / 100)}
+            >"表示为逾期报名，需要缴纳逾期报名附加费${Utils.formatCurrency(data.lateRegFee / 100)}
           </div>
         `
       : nothing}
@@ -90,9 +77,9 @@ const renderTpl = (filteredData: QueryData) => {
             ><span style="margin-left:.5em;color:#fff;"
               ><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span
             ><span style="color:#fff;float:right;"
-              >考试时间：${helper.firstKeyOf(data.testSeats).split('|')[0]}<span
+              >考试时间：${Utils.firstKeyOf(data.testSeats).split('|')[0]}<span
                 style="padding-left:30px;"
-                >最晚到达时间：${helper.firstKeyOf(data.testSeats).split('|')[2]}</span
+                >最晚到达时间：${Utils.firstKeyOf(data.testSeats).split('|')[2]}</span
               ></span
             >
           </th>
@@ -109,7 +96,7 @@ const renderTpl = (filteredData: QueryData) => {
         </tr>
       </thead>
       <tbody>
-        ${data.testSeats[helper.firstKeyOf(data.testSeats)].map(
+        ${data.testSeats[Utils.firstKeyOf(data.testSeats)].map(
           (seat: SeatDetail): TemplateResult =>
             html`
               ${rowTpl(seat)}
@@ -122,7 +109,7 @@ const renderTpl = (filteredData: QueryData) => {
   const rowTpl = (seat: SeatDetail) => html`
     <tr>
       <td style=${styleMap(stylesMiddle)}>
-        ${helper.isMunicipality(seat.provinceCn)
+        ${Utils.isMunicipality(seat.provinceCn)
           ? html`
               ${seat.cityCn}
             `
@@ -146,7 +133,7 @@ const renderTpl = (filteredData: QueryData) => {
               <span style="color:red;">*</span>
             `
           : nothing}
-        <span><strong>${helper.formatCurrency(seat.testFee / 100)}</strong></span>
+        <span><strong>${Utils.formatCurrency(seat.testFee / 100)}</strong></span>
         ${seat.lateRegFlag === 'Y'
           ? html`
               <br />(已包含逾期费附加费)
@@ -166,9 +153,9 @@ const addCityCheckbox = () => {
   const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
     HTMLOptGroupElement
   >
-  if (!helper.isAvailable(provinceGroup.length, addCityCheckbox)) return
+  if (!Utils.isAvailable(provinceGroup.length, addCityCheckbox)) return
   if (
-    !helper.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addCityCheckbox)
+    !Utils.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addCityCheckbox)
   )
     return
 
@@ -190,7 +177,7 @@ const addCityCheckbox = () => {
 
     for (const city of cities) {
       const template = html`
-        ${helper.isMunicipality(city.label)
+        ${Utils.isMunicipality(city.label)
           ? nothing
           : html`
               ${city === cities.item(0)
@@ -202,7 +189,7 @@ const addCityCheckbox = () => {
                     >
                   `
                 : nothing}
-            `}<span style="${helper.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+            `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
           ><input type="checkbox" id="${city.value}" style="margin:0 0 2px;" />&nbsp;<label
             for="${city.value}"
             style="display:inline;"
@@ -267,7 +254,7 @@ const addQueryBtn = (fn: Function) => {
 }
 
 export {
-  helper,
+  Utils,
   getSelectedCity,
   getTestDatesArr,
   adjustStyle,

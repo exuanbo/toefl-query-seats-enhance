@@ -4,18 +4,6 @@ import axios, { AxiosResponse } from 'axios'
 import { html, nothing, render, TemplateResult } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 
-const adjustStyle = () => {
-  const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
-  const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
-  if (!Utils.isAvailable(formWrapper && selects, adjustStyle)) return
-
-  formWrapper.classList.remove('offset1')
-  formWrapper.style.textAlign = 'center'
-  for (const select of selects) {
-    select.style.width = '12em'
-  }
-}
-
 const clearResult = () => {
   render(
     html`
@@ -23,6 +11,19 @@ const clearResult = () => {
     `,
     document.getElementById('qrySeatResult')
   )
+}
+
+const toggleExpand = () => {
+  document.getElementById('checkboxes').classList.toggle('hide')
+}
+
+const toggleAllCheckboxes = () => {
+  const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+    HTMLInputElement
+  >
+  for (const checkbox of allCheckboxes) {
+    checkbox.checked = !checkbox.checked
+  }
 }
 
 const getSelectedCity = () => {
@@ -49,13 +50,12 @@ const getDates = () => {
 }
 
 const getData = async (city: string, date: string): Promise<AxiosResponse<QueryData>> => {
-  return axios
-    .get('testSeat/queryTestSeats', {
-      params: {
-        city: city,
-        testDay: date
-      }
-    })
+  return axios.get('testSeat/queryTestSeats', {
+    params: {
+      city: city,
+      testDay: date
+    }
+  })
 }
 
 const renderTableTpl = (filteredData: QueryData) => {
@@ -160,6 +160,18 @@ const renderTableTpl = (filteredData: QueryData) => {
   return seatsTpl(filteredData)
 }
 
+const adjustStyle = () => {
+  const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
+  const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
+  if (!Utils.isAvailable(formWrapper && selects, adjustStyle)) return
+
+  formWrapper.classList.remove('offset1')
+  formWrapper.style.textAlign = 'center'
+  for (const select of selects) {
+    select.style.width = '12em'
+  }
+}
+
 const addComponent = {
   checkbox: () => {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
@@ -167,10 +179,12 @@ const addComponent = {
     >
     if (!Utils.isAvailable(provinceGroup.length, addComponent.checkbox)) return
     if (
-      !Utils.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', addComponent.checkbox)
+      !Utils.isAvailable(
+        provinceGroup[provinceGroup.length - 1].label === '浙江',
+        addComponent.checkbox
+      )
     )
       return
-
 
     const checkboxWrapperTpl: TemplateResult[] = []
     for (const province of provinceGroup) {
@@ -255,26 +269,13 @@ const addComponent = {
   }
 }
 
-const toggleExpand = () => {
-  document.getElementById('checkboxes').classList.toggle('hide')
-}
-
-const toggleAllCheckboxes = () => {
-  const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-    HTMLInputElement
-  >
-  for (const checkbox of allCheckboxes) {
-    checkbox.checked = !checkbox.checked
-  }
-}
-
 export {
-  adjustStyle,
   clearResult,
+  toggleExpand,
   getSelectedCity,
   getDates,
   getData,
   renderTableTpl,
-  addComponent,
-  toggleExpand
+  adjustStyle,
+  addComponent
 }

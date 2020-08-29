@@ -18,7 +18,6 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
     availableSeatsNum: 0,
     errNum: 0
   }
-
   ;(async () => {
     for (const testDay of dates) {
       layer.msg(`正在查询中，剩余${dates.length - dates.indexOf(testDay)}个日期`, {
@@ -93,7 +92,7 @@ const query = () => {
     if (queryCondition.city === '-1') {
       return layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     }
-    singleQuery(queryCondition as { city: string, dates: string[] })
+    singleQuery(queryCondition as { city: string; dates: string[] })
   } else {
     View.toggleExpand()
     multiQuery(queryCondition)

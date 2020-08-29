@@ -10,49 +10,54 @@ declare const layer: {
   alert: typeof layer.msg
 }
 
-class Query {
-  constructor (
-    private queryCondition = { city: View.grab.selectedCity(), dates: View.grab.dates() },
-    private result = new View.Result(),
-    private status = {
-      availableDatesNum: 0,
-      availableSeatsNum: 0,
-      errNum: 0
-    }
-  ) {
-    View.Result.prototype.refresh({ clear: true })
-    this.start()
+const query = () => {
+  const queryCondition = { city: View.grab.selectedCity(), dates: View.grab.dates() }
+  const result = new View.Result()
+  const status = {
+    availableDatesNum: 0,
+    availableSeatsNum: 0,
+    errNum: 0
   }
+  start()
 
-  start () {
-    if (typeof this.queryCondition.city === 'string') {
-      if (this.queryCondition.city === '-1') {
+  async function start () {
+    View.Result.prototype.refresh({ clear: true })
+    if (typeof queryCondition.city === 'string') {
+      if (queryCondition.city === '-1') {
         layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
         return
       }
-      this.single()
+      await single()
     } else {
       View.toggleExpand()
-      this.multi()
+      await multi()
     }
 
-    if (this.status.errNum) {
-      layer.alert(`服务器打了个盹儿，漏掉了${this.status.errNum}个结果`, {
+    if (status.errNum) {
+      layer.alert(`服务器打了个盹儿，漏掉了${status.errNum}个结果`, {
         title: '出错啦'
       })
-    } else if (!this.status.availableDatesNum) {
+    } else if (!status.availableDatesNum) {
       layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
     } else {
-      layer.msg(`查询完成，共找到${this.status.availableSeatsNum}个可预定考位`, {
+      layer.msg(`查询完成，共找到${status.availableSeatsNum}个可预定考位`, {
         time: 2000,
         icon: 6
       })
     }
   }
 
-  async single ({
-    city = this.queryCondition.city as string,
-    dates = this.queryCondition.dates
+  async function multi () {
+    const cities = queryCondition.city as string[]
+    const { dates } = queryCondition
+    for (const city of cities) {
+      await single({ city, dates })
+    }
+  }
+
+  async function single ({
+    city = queryCondition.city as string,
+    dates = queryCondition.dates
   } = {}) {
     for (const testDay of dates) {
       layer.msg(`正在查询中，剩余${dates.length - dates.indexOf(testDay)}个日期`, {
@@ -66,29 +71,20 @@ class Query {
         .then(response => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
-            this.status.availableDatesNum++
-            this.status.availableSeatsNum += filteredData.availableSeatsNum
+            status.availableDatesNum++
+            status.availableSeatsNum += filteredData.availableSeatsNum
 
-            if (this.status.availableDatesNum === 1)
-              this.result.add(View.renderTitleTpl(filteredData))
-            this.result.add(View.renderTableTpl(filteredData))
-            this.result.refresh()
+            if (status.availableDatesNum === 1) result.add(View.renderTitleTpl(filteredData))
+            result.add(View.renderTableTpl(filteredData))
+            result.refresh()
           }
         })
         .catch((err: Error) => {
           console.log(err)
-          this.status.errNum++
+          status.errNum++
         })
 
       if (testDay !== dates[dates.length - 1]) await Utils.sleep(1500)
-    }
-  }
-
-  async multi () {
-    const cities = this.queryCondition.city as string[]
-    const { dates } = this.queryCondition
-    for (const city of cities) {
-      await this.single({ city, dates })
     }
   }
 }
@@ -100,7 +96,7 @@ View.observeMutation(
       View.adjustStyle()
       View.addComponent.checkbox()
       View.addComponent.expandBtn()
-      View.addComponent.queryBtn(() => new Query())
+      View.addComponent.queryBtn(query)
     }
   },
   { childList: true }

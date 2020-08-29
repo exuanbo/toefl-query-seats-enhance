@@ -68,14 +68,11 @@ const filterSeats = (data: QueryData) => {
     if (availableSeatsNum) {
       data.testSeats[dataDate] = filtered
       data.availableSeatsNum = availableSeatsNum
+      data.queryTime = new Date()
       return data
     }
   }
   return null
 }
 
-const addQueryTime = (data: QueryData) => {
-  data.queryTime = new Date()
-}
-
-export { QueryData, SeatDetail, filterSeats, addQueryTime }
+export { QueryData, SeatDetail, filterSeats }

@@ -1,8 +1,33 @@
 import * as Utils from './utils'
 import { QueryData, SeatDetail } from './seat'
 import axios, { AxiosResponse } from 'axios'
-import { html, nothing, render, TemplateResult } from 'lit-html'
+import { TemplateResult, html, nothing, render } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
+
+class Result {
+  constructor (
+    private content: TemplateResult[] = [
+      html`
+        ${nothing}
+      `
+    ]
+  ) {}
+
+  add (tpl: TemplateResult) {
+    this.content.push(tpl)
+  }
+
+  refresh ({ clear = false } = {}) {
+    render(
+      clear
+        ? html`
+            ${nothing}
+          `
+        : this.content,
+      document.getElementById('qrySeatResult')
+    )
+  }
+}
 
 const observeMutation = (
   target: HTMLElement,
@@ -13,15 +38,6 @@ const observeMutation = (
   if (!Utils.isAvailable(target, observeThis)) return
   const observer = new MutationObserver(callback)
   observer.observe(target, config)
-}
-
-const clearResult = () => {
-  render(
-    html`
-      ${nothing}
-    `,
-    document.getElementById('qrySeatResult')
-  )
 }
 
 const toggleExpand = () => {
@@ -180,6 +196,15 @@ const grab = {
   }
 }
 
+const renderTitleTpl = (data: QueryData) => html`
+  <h4>考位查询结果</h4>
+  <div>
+    "<span style="color:red;">*</span>"表示为逾期报名，需要缴纳逾期报名附加费${Utils.formatCurrency(
+      data.lateRegFee / 100
+    )}
+  </div>
+`
+
 const renderTableTpl = (filteredData: QueryData) => {
   const stylesMiddle = {
     textAlign: 'center',
@@ -187,21 +212,6 @@ const renderTableTpl = (filteredData: QueryData) => {
   }
 
   const seatsTpl = (data: QueryData) => html`
-    ${!document.getElementById('qrySeatResult').children.length
-      ? html`
-          <style>
-            .ta-center-va-middle {
-              text-align: center;
-              vertical-align: middle;
-            }
-          </style>
-          <h4>考位查询结果</h4>
-          <div>
-            "<span style="color:red;">*</span
-            >"表示为逾期报名，需要缴纳逾期报名附加费${Utils.formatCurrency(data.lateRegFee / 100)}
-          </div>
-        `
-      : nothing}
     <table class="table table-bordered" style="margin-top:12px;font-size:16px;">
       <thead>
         <tr style="background-color:#993333;">
@@ -274,7 +284,7 @@ const renderTableTpl = (filteredData: QueryData) => {
           : nothing}
       </td>
       <td style=${styleMap(stylesMiddle)}>
-        ${seat.seatStatus === -1 ? '已截止' : seat.seatBookStatus === 1 ? '有名额' : '名额暂满'}
+        ${seat.seatStatus === -1 ? '已截止' : seat.seatStatus === 1 ? '有名额' : '名额暂满'}
       </td>
     </tr>
   `
@@ -283,11 +293,12 @@ const renderTableTpl = (filteredData: QueryData) => {
 }
 
 export {
+  Result,
   observeMutation,
-  clearResult,
   toggleExpand,
   adjustStyle,
   addComponent,
   grab,
+  renderTitleTpl,
   renderTableTpl
 }

@@ -1,7 +1,6 @@
 import * as Utils from './utils'
 import * as View from './view'
-import { QueryData, filterSeats, addQueryTime } from './seat'
-import { TemplateResult, render } from 'lit-html'
+import { filterSeats } from './seat'
 
 declare const layer: {
   msg: (
@@ -11,14 +10,50 @@ declare const layer: {
   alert: typeof layer.msg
 }
 
-const singleQuery = ({ city = '', dates = [''] } = {}) => {
-  const tpl: TemplateResult[] = []
-  const status = {
-    availableDatesNum: 0,
-    availableSeatsNum: 0,
-    errNum: 0
+class Query {
+  constructor (
+    private queryCondition = { city: View.grab.selectedCity(), dates: View.grab.dates() },
+    private result = new View.Result(),
+    private status = {
+      availableDatesNum: 0,
+      availableSeatsNum: 0,
+      errNum: 0
+    }
+  ) {
+    View.Result.prototype.refresh({ clear: true })
+    this.start()
   }
-  ;(async () => {
+
+  start () {
+    if (typeof this.queryCondition.city === 'string') {
+      if (this.queryCondition.city === '-1') {
+        layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
+        return
+      }
+      this.single()
+    } else {
+      View.toggleExpand()
+      this.multi()
+    }
+
+    if (this.status.errNum) {
+      layer.alert(`服务器打了个盹儿，漏掉了${this.status.errNum}个结果`, {
+        title: '出错啦'
+      })
+    } else if (!this.status.availableDatesNum) {
+      layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
+    } else {
+      layer.msg(`查询完成，共找到${this.status.availableSeatsNum}个可预定考位`, {
+        time: 2000,
+        icon: 6
+      })
+    }
+  }
+
+  async single ({
+    city = this.queryCondition.city as string,
+    dates = this.queryCondition.dates
+  } = {}) {
     for (const testDay of dates) {
       layer.msg(`正在查询中，剩余${dates.length - dates.indexOf(testDay)}个日期`, {
         time: 2000,
@@ -31,73 +66,30 @@ const singleQuery = ({ city = '', dates = [''] } = {}) => {
         .then(response => {
           const filteredData = filterSeats(response.data)
           if (filteredData) {
-            status.availableDatesNum++
-            status.availableSeatsNum += filteredData.availableSeatsNum
-            tpl.push(View.renderTableTpl(filteredData))
-            render(tpl, document.getElementById('qrySeatResult'))
+            this.status.availableDatesNum++
+            this.status.availableSeatsNum += filteredData.availableSeatsNum
+
+            if (this.status.availableDatesNum === 1)
+              this.result.add(View.renderTitleTpl(filteredData))
+            this.result.add(View.renderTableTpl(filteredData))
+            this.result.refresh()
           }
         })
         .catch((err: Error) => {
           console.log(err)
-          status.errNum++
+          this.status.errNum++
         })
 
-      if (testDay !== dates[dates.length - 1]) {
-        await Utils.sleep(1500)
-      } else if (status.errNum) {
-        layer.alert(`服务器打了个盹儿，漏掉了${status.errNum}个结果`, {
-          title: '出错啦'
-        })
-      } else if (!status.availableDatesNum) {
-        layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
-      } else {
-        layer.msg(`查询完成，共找到${status.availableSeatsNum}个可预定考位`, {
-          time: 2000,
-          icon: 6
-        })
-      }
+      if (testDay !== dates[dates.length - 1]) await Utils.sleep(1500)
     }
-  })()
-}
-
-const multiQuery = ({ cities = [''], dates = [''] } = {}) => {
-  const data: QueryData[] = []
-  ;(async () => {
-    for (const city of cities) {
-      for (const testDay of dates) {
-        View.grab
-          .data(city, testDay)
-          .then(response => {
-            const filteredData = filterSeats(response.data)
-            if (filteredData) {
-              addQueryTime(filteredData)
-              data.push(filteredData)
-            }
-          })
-          .catch((err: Error) => console.log(err))
-        await Utils.sleep(1500)
-      }
-      console.log(data)
-      await Utils.sleep(1500)
-    }
-  })()
-}
-
-const query = () => {
-  View.clearResult()
-  const queryCondition = {
-    city: View.grab.selectedCity(),
-    dates: View.grab.dates()
   }
 
-  if (typeof queryCondition.city === 'string') {
-    if (queryCondition.city === '-1') {
-      return layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
+  async multi () {
+    const cities = this.queryCondition.city as string[]
+    const { dates } = this.queryCondition
+    for (const city of cities) {
+      await this.single({ city, dates })
     }
-    singleQuery(queryCondition as { city: string; dates: string[] })
-  } else {
-    View.toggleExpand()
-    multiQuery(queryCondition)
   }
 }
 
@@ -108,7 +100,7 @@ View.observeMutation(
       View.adjustStyle()
       View.addComponent.checkbox()
       View.addComponent.expandBtn()
-      View.addComponent.queryBtn(query)
+      View.addComponent.queryBtn(() => new Query())
     }
   },
   { childList: true }

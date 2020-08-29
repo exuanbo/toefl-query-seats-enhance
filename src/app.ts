@@ -1,14 +1,6 @@
 import * as Utils from './utils'
 import * as View from './view'
-import { filterSeats } from './seat'
-
-declare const layer: {
-  msg: (
-    text: string,
-    options?: { title?: string; time?: number; icon?: number; anim?: number }
-  ) => void
-  alert: typeof layer.msg
-}
+import { QueryData, filterSeats } from './seat'
 
 const query = () => {
   const queryCondition = { city: View.grab.selectedCity(), dates: View.grab.dates() }
@@ -68,8 +60,8 @@ const query = () => {
 
       View.grab
         .data(city, testDay)
-        .then(response => {
-          const filteredData = filterSeats(response.data)
+        .then((data: QueryData) => {
+          const filteredData = filterSeats(data)
           if (filteredData) {
             status.availableDatesNum++
             status.availableSeatsNum += filteredData.availableSeatsNum

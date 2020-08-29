@@ -1,6 +1,5 @@
 import * as Utils from './utils'
 import { QueryData, SeatDetail } from './seat'
-import axios, { AxiosResponse } from 'axios'
 import { TemplateResult, html, nothing, render } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 
@@ -186,12 +185,10 @@ const grab = {
     return dates
   },
 
-  data: async (city: string, date: string): Promise<AxiosResponse<QueryData>> => {
-    return axios.get('testSeat/queryTestSeats', {
-      params: {
-        city: city,
-        testDay: date
-      }
+  data: async (city: string, date: string) => {
+    return $.getJSON('testSeat/queryTestSeats', {
+      city: city,
+      testDay: date
     })
   }
 }

@@ -19,7 +19,7 @@
     "gulp-terser": "1.4.0",
     "prettier-standard": "16.4.1",
     "rollup": "2.26.8",
-    "rollup-plugin-minify-html-template-literals": "1.0.3",
+    "rollup-plugin-minify-html-template-literals": "1.1.0",
     "typescript": "4.0.2",
     "vinyl-source-stream": "2.0.0"
   },

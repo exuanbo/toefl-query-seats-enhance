@@ -1,5 +1,6 @@
 import * as Utils from './utils'
 import * as View from './view'
+import * as Templates from './templates'
 import { QueryData, filterSeats } from './seat'
 
 const query = () => {
@@ -66,8 +67,8 @@ const query = () => {
             status.availableDatesNum++
             status.availableSeatsNum += filteredData.availableSeatsNum
 
-            if (status.availableDatesNum === 1) result.add(View.renderTitleTpl(filteredData))
-            result.add(View.renderTableTpl(filteredData))
+            if (status.availableDatesNum === 1) result.add(Templates.tableTitle(filteredData))
+            result.add(Templates.table(filteredData))
             result.refresh()
           }
         })

@@ -69,21 +69,17 @@ const checkboxWrapper = (provinceGroup: NodeListOf<HTMLOptGroupElement>) => {
   return template
 }
 
-const expandBtn = (fn: Function) => {
-  return html`
-    &nbsp;<button id="expandBtn" class="btn" @click=${fn}>
-      展开多选
-    </button>
-  `
-}
+const expandBtn = (fn: Function) => html`
+  &nbsp;<button id="expandBtn" class="btn" @click=${fn}>
+    展开多选
+  </button>
+`
 
-const queryBtn = (fn: Function) => {
-  return html`
-    <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
-      查询全部日期
-    </button>
-  `
-}
+const queryBtn = (fn: Function) => html`
+  <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
+    查询全部日期
+  </button>
+`
 
 const tableTitle = (data: QueryData) => html`
   <h4>考位查询结果</h4>
@@ -94,91 +90,95 @@ const tableTitle = (data: QueryData) => html`
   </div>
 `
 
-const table = (filteredData: QueryData) => {
+const table = (data: QueryData) => {
   const stylesMiddle = {
     textAlign: 'center',
     verticalAlign: 'middle'
   }
 
-  const tableTpl = (data: QueryData) => html`
-    <table class="table table-bordered" style="margin-top:12px;font-size:16px;">
-      <thead>
-        <tr style="background-color:#993333;">
-          <th colspan="4">
-            <span style="color:#fff;">考试日期：${data.testDate}</span
-            ><span style="margin-left:.5em;color:#fff;"
-              ><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span
-            ><span style="color:#fff;float:right;"
-              >考试时间：${Utils.firstKeyOf(data.testSeats).split('|')[0]}<span
-                style="padding-left:30px;"
-                >最晚到达时间：${Utils.firstKeyOf(data.testSeats).split('|')[2]}</span
-              ></span
-            >
-          </th>
-        </tr>
-        <tr>
-          <th style=${styleMap(stylesMiddle)} width="20%">
-            城市
-          </th>
-          <th style=${styleMap(stylesMiddle)}>考点</th>
-          <th style="text-align:center;" width="20%">费用<br />(RMB￥)</th>
-          <th style=${styleMap(stylesMiddle)} width="10%">
-            考位
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.testSeats[Utils.firstKeyOf(data.testSeats)].map(
-          (seat: SeatDetail): TemplateResult =>
-            html`
-              ${rowTpl(seat)}
-            `
-        )}
-      </tbody>
-    </table>
-  `
+  return tableTpl(data)
 
-  const rowTpl = (seat: SeatDetail) => html`
-    <tr>
-      <td style=${styleMap(stylesMiddle)}>
-        ${Utils.isMunicipality(seat.provinceCn)
-          ? html`
-              ${seat.cityCn}
-            `
-          : html`
-              ${seat.provinceCn}&nbsp;${seat.cityCn}
-            `}
-      </td>
-      <td style=${styleMap(stylesMiddle)}>
-        <span
-          ><a
-            href="javascript:void(0);"
-            onclick="showTestCenterInfo('考场信息', '${seat.centerCode}')"
-            style="text-decoration:underline;"
-            >${seat.centerCode}</a
-          ></span
-        >&nbsp;<span>${seat.centerNameCn}</span>
-      </td>
-      <td style=${styleMap(stylesMiddle)}>
-        ${seat.lateRegFlag === 'Y'
-          ? html`
-              <span style="color:red;">*</span>
-            `
-          : nothing}
-        <span><strong>${Utils.formatCurrency(seat.testFee / 100)}</strong></span>
-        ${seat.lateRegFlag === 'Y'
-          ? html`
-              <br />(已包含逾期费附加费)
-            `
-          : nothing}
-      </td>
-      <td style=${styleMap(stylesMiddle)}>
-        ${seat.seatStatus === -1 ? '已截止' : seat.seatStatus === 1 ? '有名额' : '名额暂满'}
-      </td>
-    </tr>
-  `
+  function tableTpl (data: QueryData) {
+    return html`
+      <table class="table table-bordered" style="margin-top:12px;font-size:16px;">
+        <thead>
+          <tr style="background-color:#993333;">
+            <th colspan="4">
+              <span style="color:#fff;">考试日期：${data.testDate}</span
+              ><span style="margin-left:.5em;color:#fff;"
+                ><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span
+              ><span style="color:#fff;float:right;"
+                >考试时间：${Utils.firstKeyOf(data.testSeats).split('|')[0]}<span
+                  style="padding-left:30px;"
+                  >最晚到达时间：${Utils.firstKeyOf(data.testSeats).split('|')[2]}</span
+                ></span
+              >
+            </th>
+          </tr>
+          <tr>
+            <th style=${styleMap(stylesMiddle)} width="20%">
+              城市
+            </th>
+            <th style=${styleMap(stylesMiddle)}>考点</th>
+            <th style="text-align:center;" width="20%">费用<br />(RMB￥)</th>
+            <th style=${styleMap(stylesMiddle)} width="10%">
+              考位
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.testSeats[Utils.firstKeyOf(data.testSeats)].map(
+            (seat: SeatDetail): TemplateResult =>
+              html`
+                ${rowTpl(seat)}
+              `
+          )}
+        </tbody>
+      </table>
+    `
+  }
 
-  return tableTpl(filteredData)
+  function rowTpl (seat: SeatDetail) {
+    return html`
+      <tr>
+        <td style=${styleMap(stylesMiddle)}>
+          ${Utils.isMunicipality(seat.provinceCn)
+            ? html`
+                ${seat.cityCn}
+              `
+            : html`
+                ${seat.provinceCn}&nbsp;${seat.cityCn}
+              `}
+        </td>
+        <td style=${styleMap(stylesMiddle)}>
+          <span
+            ><a
+              href="javascript:void(0);"
+              onclick="showTestCenterInfo('考场信息', '${seat.centerCode}')"
+              style="text-decoration:underline;"
+              >${seat.centerCode}</a
+            ></span
+          >&nbsp;<span>${seat.centerNameCn}</span>
+        </td>
+        <td style=${styleMap(stylesMiddle)}>
+          ${seat.lateRegFlag === 'Y'
+            ? html`
+                <span style="color:red;">*</span>
+              `
+            : nothing}
+          <span><strong>${Utils.formatCurrency(seat.testFee / 100)}</strong></span>
+          ${seat.lateRegFlag === 'Y'
+            ? html`
+                <br />(已包含逾期费附加费)
+              `
+            : nothing}
+        </td>
+        <td style=${styleMap(stylesMiddle)}>
+          ${seat.seatStatus === -1 ? '已截止' : seat.seatStatus === 1 ? '有名额' : '名额暂满'}
+        </td>
+      </tr>
+    `
+  }
 }
 
 export { checkboxWrapper, expandBtn, queryBtn, tableTitle, table }

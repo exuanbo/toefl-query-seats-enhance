@@ -71,7 +71,7 @@ const setProgress = (num: number) => {
 }
 
 const stopProgress = () => {
-  document.querySelector('#progress .bar').classList.remove('active')
+  document.getElementById('progress').classList.remove('active')
 }
 
 const adjustStyle = () => {

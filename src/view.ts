@@ -19,37 +19,35 @@ const createWrapper = ({
 }
 
 class Result {
-  constructor (
-    private content: TemplateResult[] = [
-      html`
-        ${nothing}
-      `
-    ],
-    private tab: { [key: string]: TemplateResult[] } = {}
-  ) {}
+  private content: TemplateResult[] = []
+  private tab: { [key: string]: TemplateResult[] } = {}
+  private getWrapper () {
+    return document.getElementById('qrySeatResult')
+  }
+  private refresh (tabName?: string) {
+    tabName
+      ? render(this.tab[tabName], document.getElementById(`tab-${tabName}`))
+      : render(this.content, this.getWrapper())
+  }
 
   add (tpl: TemplateResult, target?: string) {
     if (target) {
       if (!this.tab[target]) this.tab[target] = []
       this.tab[target].push(tpl)
+      this.refresh(target)
     } else {
       this.content.push(tpl)
+      this.refresh()
     }
   }
 
-  refresh ({ clear = false, tabName = '' } = {}) {
-    if (tabName) {
-      render(this.tab[tabName], document.getElementById(`tab-${tabName}`))
-    } else {
-      render(
-        clear
-          ? html`
-              ${nothing}
-            `
-          : this.content,
-        document.getElementById('qrySeatResult')
-      )
-    }
+  clear () {
+    render(
+      html`
+        ${nothing}
+      `,
+      this.getWrapper()
+    )
   }
 }
 
@@ -89,7 +87,7 @@ const adjustStyle = () => {
 }
 
 const addComponent = {
-  checkbox: () => {
+  checkbox () {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
@@ -122,7 +120,7 @@ const addComponent = {
     render(Templates.checkboxWrapper(provinceGroup), wrapper)
   },
 
-  expandBtn: () => {
+  expandBtn () {
     render(
       Templates.expandBtn(toggleExpand),
       createWrapper({
@@ -132,7 +130,7 @@ const addComponent = {
     )
   },
 
-  queryBtn: (fn: Function) => {
+  queryBtn (fn: Function) {
     render(
       Templates.queryBtn(fn),
       createWrapper({
@@ -144,7 +142,7 @@ const addComponent = {
 }
 
 const grab = {
-  selectedCity: () => {
+  selectedCity () {
     const checkedCities: string[] = []
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
@@ -157,7 +155,7 @@ const grab = {
     return selectedCity.value
   },
 
-  dates: () => {
+  dates () {
     const dates: string[] = []
     const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
     for (const el of options) {
@@ -167,7 +165,7 @@ const grab = {
     return dates
   },
 
-  data: async (city: string, date: string) => {
+  async data (city: string, date: string) {
     return $.getJSON('testSeat/queryTestSeats', {
       city: city,
       testDay: date

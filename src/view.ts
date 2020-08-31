@@ -2,38 +2,22 @@ import * as Utils from './utils'
 import * as Templates from './templates'
 import { TemplateResult, html, nothing, render } from 'lit-html'
 
-const createWrapper = ({
-  target,
-  position = 'afterend',
-  id,
-  tag = 'span'
-}: {
-  target: HTMLElement
-  position?: string
-  id: string
-  tag?: string
-}) => {
-  const html = `<${tag} id="${id}"></${tag}>`
-  target.insertAdjacentHTML(position as InsertPosition, html)
-  return document.getElementById(id)
-}
-
 class Result {
   private content: TemplateResult[] = []
-  private tab: { [key: string]: TemplateResult[] } = {}
+  private tabs: { [key: string]: TemplateResult[] } = {}
   private getWrapper () {
     return document.getElementById('qrySeatResult')
   }
   private refresh (tabName?: string) {
     tabName
-      ? render(this.tab[tabName], document.getElementById(`tab-${tabName}`))
+      ? render(this.tabs[tabName], document.getElementById(`tab-${tabName}`))
       : render(this.content, this.getWrapper())
   }
 
   add (tpl: TemplateResult, target?: string) {
     if (target) {
-      if (!this.tab[target]) this.tab[target] = []
-      this.tab[target].push(tpl)
+      if (!this.tabs[target]) this.tabs[target] = []
+      this.tabs[target].push(tpl)
       this.refresh(target)
     } else {
       this.content.push(tpl)
@@ -171,6 +155,22 @@ const grab = {
       testDay: date
     })
   }
+}
+
+function createWrapper ({
+  target,
+  position = 'afterend',
+  id,
+  tag = 'span'
+}: {
+  target: HTMLElement
+  position?: string
+  id: string
+  tag?: string
+}) {
+  const html = `<${tag} id="${id}"></${tag}>`
+  target.insertAdjacentHTML(position as InsertPosition, html)
+  return document.getElementById(id)
 }
 
 export {

@@ -2,28 +2,54 @@ import * as Utils from './utils'
 import * as Templates from './templates'
 import { TemplateResult, html, nothing, render } from 'lit-html'
 
+const createWrapper = ({
+  target,
+  position = 'afterend',
+  id,
+  tag = 'span'
+}: {
+  target: HTMLElement
+  position?: string
+  id: string
+  tag?: string
+}) => {
+  const html = `<${tag} id="${id}"></${tag}>`
+  target.insertAdjacentHTML(position as InsertPosition, html)
+  return document.getElementById(id)
+}
+
 class Result {
   constructor (
     private content: TemplateResult[] = [
       html`
         ${nothing}
       `
-    ]
+    ],
+    private tab: { [key: string]: TemplateResult[] } = {}
   ) {}
 
-  add (tpl: TemplateResult) {
-    this.content.push(tpl)
+  add (tpl: TemplateResult, target?: string) {
+    if (target) {
+      if (!this.tab[target]) this.tab[target] = []
+      this.tab[target].push(tpl)
+    } else {
+      this.content.push(tpl)
+    }
   }
 
-  refresh ({ clear = false } = {}) {
-    render(
-      clear
-        ? html`
-            ${nothing}
-          `
-        : this.content,
-      document.getElementById('qrySeatResult')
-    )
+  refresh ({ clear = false, tabName = '' } = {}) {
+    if (tabName) {
+      render(this.tab[tabName], document.getElementById(`tab-${tabName}`))
+    } else {
+      render(
+        clear
+          ? html`
+              ${nothing}
+            `
+          : this.content,
+        document.getElementById('qrySeatResult')
+      )
+    }
   }
 }
 
@@ -68,36 +94,44 @@ const addComponent = {
     )
       return
 
-    const checkboxWrapperTpl = Templates.checkboxWrapper(provinceGroup)
-
     const selectCity = document.getElementById('centerProvinceCity')
     const formWrapper = selectCity.parentElement.parentElement.parentElement
 
-    formWrapper.insertAdjacentHTML(
-      'beforeend',
-      `<div id="checkboxes" class="hide" style="max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
+    const wrapper = createWrapper({
+      target: formWrapper,
+      position: 'beforeend',
+      id: 'checkboxes',
+      tag: 'div'
+    })
+    wrapper.classList.add('hide')
+    wrapper.setAttribute(
+      'style',
+      `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
         selectCity.parentElement
-          .offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;"></div>`
+          .offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
     )
-    const checkboxWrapper = document.getElementById('checkboxes')
 
-    render(checkboxWrapperTpl, checkboxWrapper)
+    render(Templates.checkboxWrapper(provinceGroup), wrapper)
   },
 
   expandBtn: () => {
-    document
-      .getElementById('centerProvinceCity')
-      .insertAdjacentHTML('afterend', '<span id="expandBtnWrapper"></span>')
-    const btnTpl = Templates.expandBtn(toggleExpand)
-    render(btnTpl, document.getElementById('expandBtnWrapper'))
+    render(
+      Templates.expandBtn(toggleExpand),
+      createWrapper({
+        target: document.getElementById('centerProvinceCity'),
+        id: 'expandBtnWrapper'
+      })
+    )
   },
 
   queryBtn: (fn: Function) => {
-    document
-      .getElementById('expandBtn')
-      .insertAdjacentHTML('afterend', '<span id="queryBtnWrapper"></span>')
-    const btnTpl = Templates.queryBtn(fn)
-    render(btnTpl, document.getElementById('queryBtnWrapper'))
+    render(
+      Templates.queryBtn(fn),
+      createWrapper({
+        target: document.getElementById('expandBtn'),
+        id: 'queryBtnWrapper'
+      })
+    )
   }
 }
 

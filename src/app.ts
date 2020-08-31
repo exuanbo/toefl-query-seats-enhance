@@ -43,21 +43,32 @@ const query = () => {
   async function multi () {
     const cities = queryCondition.city as string[]
     const { dates } = queryCondition
-    for (const city of cities) {
-      await single({ city, dates })
+
+    result.add(Templates.tabbale(cities))
+    result.refresh()
+
+    for (const [index, city] of cities.entries()) {
+      await single({ city, dates, isMulti: true, citiesLeft: cities.length - index - 1 })
+      if (index !== cities.length - 1) await Utils.sleep(1500)
     }
   }
 
   async function single ({
     city = queryCondition.city as string,
-    dates = queryCondition.dates
+    dates = queryCondition.dates,
+    isMulti = false,
+    citiesLeft = null as number
   } = {}) {
     for (const testDay of dates) {
-      layer.msg(`正在查询中，剩余${dates.length - dates.indexOf(testDay)}个日期`, {
-        time: 2000,
-        icon: 3,
-        anim: -1
-      })
+      layer.msg(
+        `正在查询中，剩余 ${isMulti ? `${citiesLeft}个城市 ` : ''}${dates.length -
+          dates.indexOf(testDay)}个日期`,
+        {
+          time: 2000,
+          icon: 3,
+          anim: -1
+        }
+      )
 
       View.grab
         .data(city, testDay)
@@ -67,9 +78,8 @@ const query = () => {
             status.availableDatesNum++
             status.availableSeatsNum += filteredData.availableSeatsNum
 
-            if (status.availableDatesNum === 1) result.add(Templates.tableTitle(filteredData))
-            result.add(Templates.table(filteredData))
-            result.refresh()
+            result.add(Templates.table(filteredData), isMulti ? city : '')
+            result.refresh({ tabName: isMulti ? city : '' })
           }
         })
         .catch((err: Error) => {

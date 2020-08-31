@@ -10,24 +10,18 @@ const checkboxWrapper = (provinceGroup: NodeListOf<HTMLOptGroupElement>) => {
         id="toggleAllCheckboxesBtnWrapper"
         style="float:right;font-size:13px;text-decoration:underline;"
       >
-        ${toggleAllCheckboxesBtn()}
+        <a href="javascript:void(0);" @click=${toggle}>全选/反选</a>
       </span>
     `
   ]
 
-  function toggleAllCheckboxesBtn () {
-    const toggle = () => {
-      const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-        HTMLInputElement
-      >
-      for (const checkbox of allCheckboxes) {
-        checkbox.checked = !checkbox.checked
-      }
+  function toggle () {
+    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+      HTMLInputElement
+    >
+    for (const checkbox of allCheckboxes) {
+      checkbox.checked = !checkbox.checked
     }
-
-    return html`
-      <a href="javascript:void(0);" @click=${toggle}>全选/反选</a>
-    `
   }
 
   for (const province of provinceGroup) {
@@ -36,7 +30,7 @@ const checkboxWrapper = (provinceGroup: NodeListOf<HTMLOptGroupElement>) => {
     const citiesTpl: TemplateResult[] = []
 
     for (const city of cities) {
-      const template = html`
+      const tpl = html`
         ${Utils.isMunicipality(city.label)
           ? nothing
           : html`
@@ -57,13 +51,13 @@ const checkboxWrapper = (provinceGroup: NodeListOf<HTMLOptGroupElement>) => {
           >&nbsp;</span
         >
       `
-      citiesTpl.push(template)
+      citiesTpl.push(tpl)
     }
 
-    const provinceBlockTpl = html`
+    const provinceBlock = html`
       <div>${citiesTpl}</div>
     `
-    template.push(provinceBlockTpl)
+    template.push(provinceBlock)
   }
 
   return template
@@ -79,15 +73,6 @@ const queryBtn = (fn: Function) => html`
   <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
     查询全部日期
   </button>
-`
-
-const tableTitle = (data: QueryData) => html`
-  <h4>考位查询结果</h4>
-  <div>
-    "<span style="color:red;">*</span>"表示为逾期报名，需要缴纳逾期报名附加费${Utils.formatCurrency(
-      data.lateRegFee / 100
-    )}
-  </div>
 `
 
 const table = (data: QueryData) => {
@@ -181,4 +166,30 @@ const table = (data: QueryData) => {
   }
 }
 
-export { checkboxWrapper, expandBtn, queryBtn, tableTitle, table }
+const tabbale = (cities: string[]) => {
+  return html`
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        ${cities.map(
+          city => html`
+            <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">
+              <a href="#tab-${city}" data-toggle="tab">${city}</a>
+            </li>
+          `
+        )}
+      </ul>
+      <div class="tab-content">
+        ${cities.map(
+          city => html`
+            <div
+              class="tab-pane ${cities.indexOf(city) === 0 ? 'active' : ''}"
+              id="tab-${city}"
+            ></div>
+          `
+        )}
+      </div>
+    </div>
+  `
+}
+
+export { checkboxWrapper, expandBtn, queryBtn, table, tabbale }

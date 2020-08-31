@@ -68,6 +68,14 @@ const toggleExpand = () => {
   document.getElementById('checkboxes').classList.toggle('hide')
 }
 
+const setProgress = (num: number) => {
+  document.querySelector('#progress .bar').setAttribute('style', `width:${num}%`)
+}
+
+const stopProgress = () => {
+  document.querySelector('#progress .bar').classList.remove('active')
+}
+
 const adjustStyle = () => {
   const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
   const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
@@ -167,4 +175,13 @@ const grab = {
   }
 }
 
-export { Result, observeMutation, toggleExpand, adjustStyle, addComponent, grab }
+export {
+  Result,
+  observeMutation,
+  toggleExpand,
+  setProgress,
+  stopProgress,
+  adjustStyle,
+  addComponent,
+  grab
+}

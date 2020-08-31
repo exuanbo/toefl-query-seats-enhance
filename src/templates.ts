@@ -75,6 +75,36 @@ const queryBtn = (fn: Function) => html`
   </button>
 `
 
+const progress = () => html`
+  <div id="progress" class="progress progress-striped active">
+    <div class="bar" style="width:0;"></div>
+  </div>
+`
+
+const tabbale = (cities: string[]) => html`
+  <div class="tabbable">
+    <ul class="nav nav-tabs">
+      ${cities.map(
+        city => html`
+          <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">
+            <a href="#tab-${city}" data-toggle="tab">${city}</a>
+          </li>
+        `
+      )}
+    </ul>
+    <div class="tab-content">
+      ${cities.map(
+        city => html`
+          <div
+            class="tab-pane ${cities.indexOf(city) === 0 ? 'active' : ''}"
+            id="tab-${city}"
+          ></div>
+        `
+      )}
+    </div>
+  </div>
+`
+
 const table = (data: QueryData) => {
   const stylesMiddle = {
     textAlign: 'center',
@@ -166,30 +196,4 @@ const table = (data: QueryData) => {
   }
 }
 
-const tabbale = (cities: string[]) => {
-  return html`
-    <div class="tabbable">
-      <ul class="nav nav-tabs">
-        ${cities.map(
-          city => html`
-            <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">
-              <a href="#tab-${city}" data-toggle="tab">${city}</a>
-            </li>
-          `
-        )}
-      </ul>
-      <div class="tab-content">
-        ${cities.map(
-          city => html`
-            <div
-              class="tab-pane ${cities.indexOf(city) === 0 ? 'active' : ''}"
-              id="tab-${city}"
-            ></div>
-          `
-        )}
-      </div>
-    </div>
-  `
-}
-
-export { checkboxWrapper, expandBtn, queryBtn, table, tabbale }
+export { checkboxWrapper, expandBtn, queryBtn, progress, tabbale, table }

@@ -10,7 +10,10 @@ const query = () => {
     return { city: city, dates: View.grab.dates(), type: type }
   })()
 
-  if (!queryCondition.type) return layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
+  if (!queryCondition.type) {
+    layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
+    return
+  }
 
   const status = {
     availableDatesNum: 0,

@@ -1,6 +1,6 @@
 const firstKeyOf = (obj: object) => Object.keys(obj)[0]
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+const sleep = (ms: number): Promise<void> => new Promise(res => setTimeout(res, ms))
 
 const isAvailable = (con: any, fn: Function) => {
   if (!con) {

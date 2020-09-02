@@ -92,11 +92,11 @@ const progress = () => {
 
 const tabbale = (cities: string[]) => html`
   <div class="tabbable">
-    <ul class="nav nav-tabs" style="margin:1em auto 0;">
+    <ul class="nav nav-tabs" style="margin:1em auto 0;width:fit-content;">
       ${cities.map(
         city => html`
           <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">
-            <a href="#tab-${city}" data-toggle="tab">${city}</a>
+            <a href="#tab-${city}" data-toggle="tab">${Utils.translateCityName(city)}</a>
           </li>
         `
       )}

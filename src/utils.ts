@@ -15,4 +15,7 @@ const formatCurrency = (value: number) => 'RMB￥' + value.toFixed(2)
 const isMunicipality = (cityName: string) =>
   cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
 
-export { firstKeyOf, sleep, isAvailable, formatCurrency, isMunicipality }
+const translateCityName = (cityName: string) =>
+  document.querySelector(`option[value="${cityName}"]`).innerHTML
+
+export { firstKeyOf, sleep, isAvailable, formatCurrency, isMunicipality, translateCityName }

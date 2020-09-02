@@ -59,6 +59,8 @@ const query = () => {
     sum = null as number,
     citiesLeft = null as number
   } = {}) {
+    if (!isMulti) sum = dates.length
+
     for (const [index, testDay] of dates.entries()) {
       layer.msg(
         `正在查询中，剩余 ${isMulti ? `${citiesLeft}个城市 ` : ''}${dates.length - index}个日期`,

@@ -75,15 +75,24 @@ const queryBtn = (fn: Function) => html`
   </button>
 `
 
-const progress = () => html`
-  <div id="progress" class="progress progress-striped active">
-    <div class="bar" style="width:0;"></div>
-  </div>
-`
+const progress = () => {
+  const btn = document.getElementById('btnQuerySeat')
+  const label = document.querySelector('label[for="centerProvinceCity"]') as HTMLElement
+  const style = {
+    margin: '1em auto 0',
+    width: `${btn.offsetLeft - label.offsetLeft + label.offsetWidth}px`
+  }
+
+  return html`
+    <div id="progress" class="progress progress-striped active" style=${styleMap(style)}>
+      <div class="bar" style="width:0;"></div>
+    </div>
+  `
+}
 
 const tabbale = (cities: string[]) => html`
   <div class="tabbable">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" style="margin:1em auto 0;">
       ${cities.map(
         city => html`
           <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">

@@ -88,10 +88,10 @@ const addComponent = {
     const formWrapper = selectCity.parentElement.parentElement.parentElement
 
     const wrapper = createWrapper({
-      target: formWrapper,
-      position: 'beforeend',
+      tag: 'div',
       id: 'checkboxes',
-      tag: 'div'
+      target: formWrapper,
+      position: 'beforeend'
     })
     wrapper.classList.add('hide')
     wrapper.setAttribute(
@@ -108,8 +108,8 @@ const addComponent = {
     render(
       Templates.expandBtn(toggleExpand),
       createWrapper({
-        target: document.getElementById('centerProvinceCity'),
-        id: 'expandBtnWrapper'
+        id: 'expandBtnWrapper',
+        target: document.getElementById('centerProvinceCity')
       })
     )
   },
@@ -118,8 +118,8 @@ const addComponent = {
     render(
       Templates.queryBtn(fn),
       createWrapper({
-        target: document.getElementById('expandBtn'),
-        id: 'queryBtnWrapper'
+        id: 'queryBtnWrapper',
+        target: document.getElementById('expandBtn')
       })
     )
   }
@@ -158,15 +158,15 @@ const grab = {
 }
 
 function createWrapper ({
-  target,
-  position = 'afterend',
+  tag = 'span',
   id,
-  tag = 'span'
+  target,
+  position = 'afterend'
 }: {
+  tag?: string
+  id: string
   target: HTMLElement
   position?: string
-  id: string
-  tag?: string
 }) {
   const html = `<${tag} id="${id}"></${tag}>`
   target.insertAdjacentHTML(position as InsertPosition, html)

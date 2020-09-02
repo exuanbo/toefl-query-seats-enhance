@@ -3,26 +3,33 @@ import * as Templates from './templates'
 import { TemplateResult, html, nothing, render } from 'lit-html'
 
 class Result {
-  private content: TemplateResult[] = []
-  private tabs: { [key: string]: TemplateResult[] } = {}
+  private content: {
+    templates: TemplateResult[]
+    tabs: { [tabName: string]: TemplateResult[] }
+  } = {
+    templates: [],
+    tabs: {}
+  }
+
   private getWrapper () {
     return document.getElementById('qrySeatResult')
   }
-  private refresh (tabName?: string) {
+
+  private refresh (tabName: string) {
     tabName
-      ? render(this.tabs[tabName], document.getElementById(`tab-${tabName}`))
-      : render(this.content, this.getWrapper())
+      ? render(this.content.tabs[tabName], document.getElementById(`tab-${tabName}`))
+      : render(this.content.templates, this.getWrapper())
   }
 
-  add (tpl: TemplateResult, target?: string) {
-    if (target) {
-      if (!this.tabs[target]) this.tabs[target] = []
-      this.tabs[target].push(tpl)
-      this.refresh(target)
+  add (tpl: TemplateResult, tabName: string = '') {
+    if (tabName) {
+      if (!this.content.tabs[tabName]) this.content.tabs[tabName] = []
+      this.content.tabs[tabName].push(tpl)
     } else {
-      this.content.push(tpl)
-      this.refresh()
+      this.content.templates.push(tpl)
     }
+
+    this.refresh(tabName)
   }
 
   clear () {
@@ -51,7 +58,7 @@ const toggleExpand = () => {
 }
 
 const setProgress = (num: number) => {
-  document.querySelector('#progress .bar').setAttribute('style', `width:${num}%`)
+  document.querySelector('#progress div').setAttribute('style', `width:${num}%`)
 }
 
 const stopProgress = () => {
@@ -70,58 +77,51 @@ const adjustStyle = () => {
   }
 }
 
-const addComponent = {
+const add = {
   checkbox () {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
-    if (!Utils.isAvailable(provinceGroup.length, addComponent.checkbox)) return
-    if (
-      !Utils.isAvailable(
-        provinceGroup[provinceGroup.length - 1].label === '浙江',
-        addComponent.checkbox
-      )
-    )
+    if (!Utils.isAvailable(provinceGroup.length, add.checkbox)) return
+    if (!Utils.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', add.checkbox))
       return
 
     const selectCity = document.getElementById('centerProvinceCity')
     const formWrapper = selectCity.parentElement.parentElement.parentElement
 
-    const wrapper = createWrapper({
-      tag: 'div',
-      id: 'checkboxes',
+    createComponent({
+      template: Templates.checkboxWrapper(provinceGroup),
+      wrapperTag: 'div',
+      wrapperAttr: {
+        id: 'checkboxes',
+        class: 'hide',
+        style: `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
+          selectCity.parentElement
+            .offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
+      },
       target: formWrapper,
       position: 'beforeend'
     })
-    wrapper.classList.add('hide')
-    wrapper.setAttribute(
-      'style',
-      `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
-        selectCity.parentElement
-          .offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
-    )
-
-    render(Templates.checkboxWrapper(provinceGroup), wrapper)
   },
 
   expandBtn () {
-    render(
-      Templates.expandBtn(toggleExpand),
-      createWrapper({
-        id: 'expandBtnWrapper',
-        target: document.getElementById('centerProvinceCity')
-      })
-    )
+    createComponent({
+      template: Templates.expandBtn(toggleExpand),
+      wrapperAttr: { id: 'expandBtnWrapper' },
+      target: document.getElementById('centerProvinceCity')
+    })
   },
 
   queryBtn (fn: Function) {
-    render(
-      Templates.queryBtn(fn),
-      createWrapper({
-        id: 'queryBtnWrapper',
-        target: document.getElementById('expandBtn')
-      })
-    )
+    createComponent({
+      template: Templates.queryBtn(fn),
+      wrapperAttr: { id: 'queryBtnWrapper' },
+      target: document.getElementById('expandBtn')
+    })
+  },
+
+  progress (result: Result) {
+    result.add(Templates.progress())
   }
 }
 
@@ -157,29 +157,34 @@ const grab = {
   }
 }
 
-function createWrapper ({
-  tag = 'span',
-  id,
+function createComponent ({
+  template,
+  wrapperTag = 'span',
+  wrapperAttr,
   target,
   position = 'afterend'
 }: {
-  tag?: string
-  id: string
+  template: TemplateResult | TemplateResult[]
+  wrapperTag?: string
+  wrapperAttr: {
+    id: string
+    [Attr: string]: string
+  }
   target: HTMLElement
   position?: string
 }) {
-  const html = `<${tag} id="${id}"></${tag}>`
+  const html = `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`
   target.insertAdjacentHTML(position as InsertPosition, html)
-  return document.getElementById(id)
+  render(template, document.getElementById(wrapperAttr.id))
+
+  function loopAttr (attrs: typeof wrapperAttr) {
+    const result: string[] = []
+    for (const attr in attrs) {
+      const html = `${attr}="${attrs[attr]}"`
+      result.push(html)
+    }
+    return result.join(' ')
+  }
 }
 
-export {
-  Result,
-  observeMutation,
-  toggleExpand,
-  setProgress,
-  stopProgress,
-  adjustStyle,
-  addComponent,
-  grab
-}
+export { Result, observeMutation, toggleExpand, setProgress, stopProgress, adjustStyle, add, grab }

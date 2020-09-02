@@ -24,6 +24,7 @@ const query = () => {
   start()
 
   async function start () {
+    View.add.progress(result)
     queryCondition.type === 'single' ? await single() : await multi()
 
     View.stopProgress()
@@ -42,7 +43,6 @@ const query = () => {
     const { dates } = queryCondition
     const sum = dates.length * cities.length
 
-    result.add(Templates.progress())
     result.add(Templates.tabbale(cities))
 
     for (const [index, city] of cities.entries()) {
@@ -59,8 +59,6 @@ const query = () => {
     sum = null as number,
     citiesLeft = null as number
   } = {}) {
-    if (!isMulti) result.add(Templates.progress())
-
     for (const [index, testDay] of dates.entries()) {
       layer.msg(
         `正在查询中，剩余 ${isMulti ? `${citiesLeft}个城市 ` : ''}${dates.length - index}个日期`,
@@ -99,9 +97,9 @@ View.observeMutation(
   () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.adjustStyle()
-      View.addComponent.checkbox()
-      View.addComponent.expandBtn()
-      View.addComponent.queryBtn(query)
+      View.add.checkbox()
+      View.add.expandBtn()
+      View.add.queryBtn(query)
     }
   },
   { childList: true }

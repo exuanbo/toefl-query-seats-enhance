@@ -94,10 +94,9 @@ const add = {
       wrapperTag: 'div',
       wrapperAttr: {
         id: 'checkboxes',
-        class: 'hide',
+        class: 'hide well',
         style: `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
-          selectCity.parentElement
-            .offsetLeft}px;padding:.5em;border:1px solid #ccc;border-radius:4px;`
+          selectCity.parentElement.offsetLeft}px;padding:1em;`
       },
       target: formWrapper,
       position: 'beforeend'

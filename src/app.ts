@@ -42,7 +42,7 @@ const query = () => {
       state.currentCity = city
       await single()
       if (state.isComplete) break
-      if (state.citiesLeft) await Utils.sleep(1500)
+      if (state.citiesLeft) await Utils.sleep(2000)
     }
   }
 
@@ -54,23 +54,25 @@ const query = () => {
       if (state.city) result.add(Templates.statusWrapper())
       result.refreshStatus()
 
-      View.grab
-        .data(state.currentCity, state.currentDate)
-        .then((data: QueryData) => {
-          const filteredData = filterSeats(data)
-          if (filteredData) {
-            state.availableDatesNum++
-            state.availableSeatsNum += filteredData.availableSeatsNum
-            result.add(Templates.table(filteredData), state.cities ? state.currentCity : '')
-          }
-        })
-        .catch((err: Error) => {
-          console.log(err)
+      try {
+        const response = await View.grab.response(state.currentCity, state.currentDate)
+        const filteredData = filterSeats(response.data)
+        if (filteredData) {
+          state.availableDatesNum++
+          state.availableSeatsNum += filteredData.availableSeatsNum
+          result.add(Templates.table(filteredData), state.cities ? state.currentCity : '')
+        }
+      } catch (err) {
+        if (err instanceof Error) {
           state.errNum++
-        })
+        } else {
+          console.log(err)
+          throw err
+        }
+      }
 
       if (state.isComplete) break
-      if (state.datesLeft) await Utils.sleep(1500)
+      if (state.datesLeft) await Utils.sleep(2000)
     }
   }
 }

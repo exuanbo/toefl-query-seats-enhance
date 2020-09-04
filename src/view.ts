@@ -1,6 +1,7 @@
 import * as Utils from './utils'
 import * as Templates from './templates'
 import { TemplateResult, render } from 'lit-html'
+import axios from 'axios'
 
 const observeMutation = (
   target: HTMLElement,
@@ -111,11 +112,8 @@ const grab = {
     return dates
   },
 
-  async data (city: string, date: string) {
-    return $.getJSON('testSeat/queryTestSeats', {
-      city: city,
-      testDay: date
-    })
+  async response (city: string, date: string) {
+    return axios.get('testSeat/queryTestSeats', { params: { city: city, testDay: date } })
   }
 }
 

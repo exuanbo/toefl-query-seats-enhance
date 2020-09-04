@@ -38,29 +38,23 @@ const query = () => {
     for (const city of state.cities) {
       state.currentCity.val = city
       await single()
-      if (state.isComplete.val as boolean) break
+      if (state.isComplete.val) break
       if (state.citiesLeft) await Utils.sleep(2000)
     }
   }
 
   async function single () {
-    const initialSeatsNum = state.availableSeatsNum.val as number
+    const initialSeatsNum = state.availableSeatsNum.val
 
     for (const testDay of state.dates) {
       state.currentDate.val = testDay
 
       try {
-        const response = await View.grab.response(
-          state.currentCity.val as string,
-          state.currentDate.val as string
-        )
+        const response = await View.grab.response(state.currentCity.val, state.currentDate.val)
         const filteredData = filterSeats(response.data)
         if (filteredData) {
           state.availableSeatsNum.val += filteredData.availableSeatsNum
-          result.add(
-            Templates.table(filteredData),
-            state.cities ? (state.currentCity.val as string) : ''
-          )
+          result.add(Templates.table(filteredData), state.cities ? state.currentCity.val : '')
         }
       } catch (err) {
         if (err instanceof Error) {
@@ -71,12 +65,12 @@ const query = () => {
         }
       }
 
-      if (state.isComplete.val as boolean) break
+      if (state.isComplete.val) break
       if (state.datesLeft) await Utils.sleep(2000)
     }
 
-    if (state.cities && (state.availableSeatsNum.val as number) === initialSeatsNum)
-      result.add(Templates.pityMsg(), state.currentCity.val as string)
+    if (state.cities && state.availableSeatsNum.val === initialSeatsNum)
+      result.add(Templates.pityMsg(), state.currentCity.val)
   }
 }
 

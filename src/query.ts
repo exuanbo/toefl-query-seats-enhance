@@ -28,16 +28,16 @@ class Prop {
 class State {
   city?: string
   cities?: string[]
-  currentCity = new Prop(this, null)
+  currentCity: { val: string } = new Prop(this, null)
   citiesLeft?: number
   dates: string[] = View.grab.dates()
-  currentDate = new Prop(this, null)
+  currentDate: { val: string } = new Prop(this, null)
   datesLeft: number
   sum: number
   progress: number
-  availableSeatsNum = new Prop(this, 0)
-  errNum = new Prop(this, 0)
-  isComplete = new Prop(this, false)
+  availableSeatsNum: { val: number } = new Prop(this, 0)
+  errNum: { val: number } = new Prop(this, 0)
+  isComplete: { val: boolean } = new Prop(this, false)
 
   constructor () {
     const city = View.grab.selectedCity()
@@ -60,8 +60,8 @@ class State {
   }
 
   update () {
-    if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val as string, this.cities)
-    this.datesLeft = Utils.calcLeft(this.currentDate.val as string, this.dates)
+    if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val, this.cities)
+    this.datesLeft = Utils.calcLeft(this.currentDate.val, this.dates)
     this.calcProgress()
     const statusWrapper = document.getElementById('statusWrapper')
     if (statusWrapper) render(Templates.status(this), statusWrapper)

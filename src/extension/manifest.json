@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "description": "一键查询所选地点所有时间的可预定考位",
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "browser_action": {
     "default_icon": "icon.png"

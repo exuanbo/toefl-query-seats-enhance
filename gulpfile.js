@@ -32,9 +32,7 @@ function minifyJS () {
 }
 
 function mix () {
-  return src(['src/img/icon.png', 'src/extension/content.js', 'src/extension/manifest.json']).pipe(
-    dest('dist/extension')
-  )
+  return src(['src/extension/*', 'src/img/*']).pipe(dest('dist/extension'))
 }
 
 function server () {

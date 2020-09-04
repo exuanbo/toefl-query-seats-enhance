@@ -7,6 +7,7 @@ import typescript from '@rollup/plugin-typescript'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import minifyHtml from 'rollup-plugin-minify-html-template-literals'
+import { exec } from 'child_process'
 
 const { src, dest, series, parallel, watch } = gulp
 
@@ -35,9 +36,14 @@ function mix () {
   return src(['src/extension/*', 'src/img/*']).pipe(dest('dist/extension'))
 }
 
+function pack () {
+  const name = 'extension'
+  return exec(`cd dist/${name} && zip -r ${name}.zip . && mv ${name}.zip ../${name}.zip`)
+}
+
 function server () {
   watch('src/**/*', { ignoreInitial: false }, build)
 }
 
-export default series(clean, parallel(series(build, minifyJS), mix))
+export default series(clean, parallel(series(build, minifyJS), mix), pack)
 export { server }

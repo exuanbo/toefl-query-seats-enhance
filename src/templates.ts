@@ -83,7 +83,11 @@ const statusWrapper = () => html`
 const statusMsg = (state: State) =>
   state.isComplete
     ? html`
-        查询完成，找到${state.availableSeatsNum}个可预定考位
+        查询完成，找到&nbsp;${state.availableSeatsNum}个可预定考位。${state.errNum
+          ? html`
+              请求失败&nbsp;${state.errNum}次
+            `
+          : nothing}
       `
     : html`
         正在查询中，剩余&nbsp;${state.cities

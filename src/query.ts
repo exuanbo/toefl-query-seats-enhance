@@ -23,31 +23,31 @@ class State {
       return
     } else if (typeof city === 'string') {
       this.city = city
-      this.setValue('currentCity', city, true)
+      this.setVal('currentCity', city, true)
     } else {
       this.cities = city
     }
     this.sum = this.dates.length * (this.city ? 1 : this.cities.length)
-    this.refresh(true)
+    this.update(true)
   }
 
-  getValue (propertyName: string): any {
+  getVal (propertyName: string): any {
     return this[`_${propertyName}` as keyof this]
   }
 
-  setValue (propertyName: string, value: any, init: boolean = false) {
+  setVal (propertyName: string, value: any, init: boolean = false) {
     this[`_${propertyName}` as keyof this] = value
-    this.refresh(init)
+    this.update(init)
   }
 
-  increaseValue (propertyName: string, value: number) {
+  increaseVal (propertyName: string, value: number) {
     ;(this[`_${propertyName}` as keyof this] as any) += value
   }
 
-  private refresh (init?: boolean) {
+  private update (init?: boolean) {
     if (this.cities)
-      this.citiesLeft = Utils.calcLeft(this.getValue('currentCity') as string, this.cities)
-    this.datesLeft = Utils.calcLeft(this.getValue('currentDate') as string, this.dates)
+      this.citiesLeft = Utils.calcLeft(this.getVal('currentCity') as string, this.cities)
+    this.datesLeft = Utils.calcLeft(this.getVal('currentDate') as string, this.dates)
     this.calcProgress()
     if (!init) render(Templates.status(this), document.getElementById('statusWrapper'))
   }
@@ -74,7 +74,7 @@ class Result {
     return document.getElementById('qrySeatResult')
   }
 
-  private refresh (tabName: string) {
+  private update (tabName: string) {
     tabName
       ? render(this.content.tabs[tabName], document.getElementById(`tab-${tabName}`))
       : render(this.content.templates, this.getWrapper())
@@ -88,7 +88,7 @@ class Result {
       this.content.templates.push(tpl)
     }
 
-    this.refresh(tabName)
+    this.update(tabName)
   }
 
   clear () {

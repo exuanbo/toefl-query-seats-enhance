@@ -24,7 +24,7 @@ const query = () => {
   }
 
   function end () {
-    state.setValue('isComplete', true)
+    state.setVal('isComplete', true)
     View.setProgress(100)
     View.stopProgress()
     View.queryBtn.getEl().innerText = '查询全部日期'
@@ -36,47 +36,47 @@ const query = () => {
     result.add(Templates.tabbale(state.cities))
 
     for (const city of state.cities) {
-      state.setValue('currentCity', city)
+      state.setVal('currentCity', city)
       await single()
-      if (state.getValue('isComplete') as boolean) break
+      if (state.getVal('isComplete') as boolean) break
       if (state.citiesLeft) await Utils.sleep(2000)
     }
   }
 
   async function single () {
-    const initialSeatsNum = state.getValue('availableSeatsNum')
+    const initialSeatsNum = state.getVal('availableSeatsNum')
 
     for (const testDay of state.dates) {
-      state.setValue('currentDate', testDay)
+      state.setVal('currentDate', testDay)
 
       try {
         const response = await View.grab.response(
-          state.getValue('currentCity') as string,
-          state.getValue('currentDate') as string
+          state.getVal('currentCity') as string,
+          state.getVal('currentDate') as string
         )
         const filteredData = filterSeats(response.data)
         if (filteredData) {
-          state.increaseValue('availableSeatsNum', filteredData.availableSeatsNum)
+          state.increaseVal('availableSeatsNum', filteredData.availableSeatsNum)
           result.add(
             Templates.table(filteredData),
-            state.cities ? (state.getValue('currentCity') as string) : ''
+            state.cities ? (state.getVal('currentCity') as string) : ''
           )
         }
       } catch (err) {
         if (err instanceof Error) {
-          state.increaseValue('errNum', 1)
+          state.increaseVal('errNum', 1)
         } else {
           console.log(err)
           throw err
         }
       }
 
-      if (state.getValue('isComplete') as boolean) break
+      if (state.getVal('isComplete') as boolean) break
       if (state.datesLeft) await Utils.sleep(2000)
     }
 
-    if (state.cities && state.getValue('availableSeatsNum') === initialSeatsNum)
-      result.add(Templates.pityMsg(), state.getValue('currentCity') as string)
+    if (state.cities && state.getVal('availableSeatsNum') === initialSeatsNum)
+      result.add(Templates.pityMsg(), state.getVal('currentCity') as string)
   }
 }
 

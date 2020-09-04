@@ -13,7 +13,6 @@ class State {
   datesLeft: number
   sum: number
   progress: number
-  private _availableDatesNum = 0
   private _availableSeatsNum = 0
   private _errNum = 0
   private _isComplete = false

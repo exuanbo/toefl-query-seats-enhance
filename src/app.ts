@@ -54,7 +54,6 @@ const query = () => {
         )
         const filteredData = filterSeats(response.data)
         if (filteredData) {
-          state.increaseValue('availableDatesNum', 1)
           state.increaseValue('availableSeatsNum', filteredData.availableSeatsNum)
           result.add(
             Templates.table(filteredData),

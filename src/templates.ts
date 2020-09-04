@@ -81,11 +81,11 @@ const statusWrapper = () => html`
 `
 
 const statusMsg = (state: State) =>
-  (state.getVal('isComplete') as boolean)
+  (state.isComplete.val as boolean)
     ? html`
-        查询完成，找到&nbsp;${state.getVal('availableSeatsNum')}个可预定考位${state.getVal('errNum')
+        查询完成，找到&nbsp;${state.availableSeatsNum.val}个可预定考位${state.errNum.val
           ? html`
-              。请求失败&nbsp;${state.getVal('errNum')}次
+              。请求失败&nbsp;${state.errNum.val}次
             `
           : nothing}
       `

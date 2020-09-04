@@ -3,19 +3,41 @@ import * as View from './view'
 import * as Templates from './templates'
 import { TemplateResult, html, nothing, render } from 'lit-html'
 
+class Prop {
+  private _val: any
+  private state: State
+
+  constructor (state: State, value: any) {
+    this.state = state
+    this._val = value
+  }
+
+  get val (): any {
+    return this._val
+  }
+  set val (value: any) {
+    this._val = value
+    this.update(this.state)
+  }
+
+  private update (state: State) {
+    state.update()
+  }
+}
+
 class State {
   city?: string
   cities?: string[]
-  private _currentCity: string
+  currentCity = new Prop(this, null)
   citiesLeft?: number
   dates: string[] = View.grab.dates()
-  private _currentDate: string
+  currentDate = new Prop(this, null)
   datesLeft: number
   sum: number
   progress: number
-  private _availableSeatsNum = 0
-  private _errNum = 0
-  private _isComplete = false
+  availableSeatsNum = new Prop(this, 0)
+  errNum = new Prop(this, 0)
+  isComplete = new Prop(this, false)
 
   constructor () {
     const city = View.grab.selectedCity()
@@ -23,39 +45,26 @@ class State {
       return
     } else if (typeof city === 'string') {
       this.city = city
-      this.setVal('currentCity', city, true)
+      this.currentCity.val = city
     } else {
       this.cities = city
     }
     this.sum = this.dates.length * (this.city ? 1 : this.cities.length)
-    this.update(true)
-  }
-
-  getVal (propertyName: string): any {
-    return this[`_${propertyName}` as keyof this]
-  }
-
-  setVal (propertyName: string, value: any, init: boolean = false) {
-    this[`_${propertyName}` as keyof this] = value
-    this.update(init)
-  }
-
-  increaseVal (propertyName: string, value: number) {
-    ;(this[`_${propertyName}` as keyof this] as any) += value
-  }
-
-  private update (init?: boolean) {
-    if (this.cities)
-      this.citiesLeft = Utils.calcLeft(this.getVal('currentCity') as string, this.cities)
-    this.datesLeft = Utils.calcLeft(this.getVal('currentDate') as string, this.dates)
-    this.calcProgress()
-    if (!init) render(Templates.status(this), document.getElementById('statusWrapper'))
+    this.update()
   }
 
   private calcProgress () {
     this.progress =
       100 -
       (((this.cities ? this.citiesLeft * this.dates.length : 0) + this.datesLeft) / this.sum) * 100
+  }
+
+  update () {
+    if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val as string, this.cities)
+    this.datesLeft = Utils.calcLeft(this.currentDate.val as string, this.dates)
+    this.calcProgress()
+    const statusWrapper = document.getElementById('statusWrapper')
+    if (statusWrapper) render(Templates.status(this), statusWrapper)
   }
 }
 

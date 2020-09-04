@@ -83,18 +83,20 @@ const statusWrapper = () => html`
 const statusMsg = (state: State) =>
   (state.getValue('isComplete') as boolean)
     ? html`
-        查询完成，找到&nbsp;${state.getValue('availableSeatsNum')}个可预定考位。${state.getValue(
+        查询完成，找到&nbsp;${state.getValue('availableSeatsNum')}个可预定考位${state.getValue(
           'errNum'
         )
           ? html`
-              请求失败&nbsp;${state.getValue('errNum')}次
+              。请求失败&nbsp;${state.getValue('errNum')}次
             `
           : nothing}
       `
     : html`
         正在查询中，剩余&nbsp;${state.cities
-          ? `${state.citiesLeft}个城市`
-          : nothing}&nbsp;${state.datesLeft}个日期
+          ? html`
+              ${state.citiesLeft}个城市&nbsp;
+            `
+          : nothing}${state.datesLeft}个日期
       `
 
 const status = (state: State) => {

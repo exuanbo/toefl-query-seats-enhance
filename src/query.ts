@@ -35,6 +35,7 @@ class State {
       this.cities = city
     }
     this.sum = this.dates.length * (this.city ? 1 : this.cities.length)
+    this.refresh()
   }
 
   refresh () {

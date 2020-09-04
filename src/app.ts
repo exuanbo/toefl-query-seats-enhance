@@ -44,6 +44,8 @@ const query = () => {
   }
 
   async function single () {
+    const initialSeatsNum = state.getValue('availableSeatsNum')
+
     for (const testDay of state.dates) {
       state.setValue('currentDate', testDay)
 
@@ -72,6 +74,9 @@ const query = () => {
       if (state.getValue('isComplete') as boolean) break
       if (state.datesLeft) await Utils.sleep(2000)
     }
+
+    if (state.cities && state.getValue('availableSeatsNum') === initialSeatsNum)
+      result.add(Templates.pityMsg(), state.getValue('currentCity') as string)
   }
 }
 

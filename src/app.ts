@@ -21,14 +21,14 @@ const query = () => {
     View.add.status(result)
     state.city ? await single() : await multi()
     end()
-    View.queryBtn.getEl().innerText = '查询全部日期'
-    View.queryBtn.listen(query)
   }
 
   function end () {
     state.setValue('isComplete', true)
     View.setProgress(100)
     View.stopProgress()
+    View.queryBtn.getEl().innerText = '查询全部日期'
+    View.queryBtn.listen(query)
   }
 
   async function multi () {

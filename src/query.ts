@@ -24,7 +24,7 @@ class State {
       return
     } else if (typeof city === 'string') {
       this.city = city
-      this.setValue('currentCity', city)
+      this.setValue('currentCity', city, true)
     } else {
       this.cities = city
     }
@@ -36,16 +36,16 @@ class State {
     return this[`_${propertyName}` as keyof this]
   }
 
-  setValue (propertyName: string, value: any) {
+  setValue (propertyName: string, value: any, init: boolean = false) {
     this[`_${propertyName}` as keyof this] = value
-    this.refresh()
+    this.refresh(init)
   }
 
   increaseValue (propertyName: string, value: number) {
     ;(this[`_${propertyName}` as keyof this] as any) += value
   }
 
-  private refresh (init: boolean = false) {
+  private refresh (init?: boolean) {
     if (this.cities)
       this.citiesLeft = Utils.calcLeft(this.getValue('currentCity') as string, this.cities)
     this.datesLeft = Utils.calcLeft(this.getValue('currentDate') as string, this.dates)

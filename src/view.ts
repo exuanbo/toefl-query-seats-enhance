@@ -1,46 +1,6 @@
 import * as Utils from './utils'
 import * as Templates from './templates'
-import { TemplateResult, html, nothing, render } from 'lit-html'
-
-class Result {
-  private content: {
-    templates: TemplateResult[]
-    tabs: { [tabName: string]: TemplateResult[] }
-  } = {
-    templates: [],
-    tabs: {}
-  }
-
-  private getWrapper () {
-    return document.getElementById('qrySeatResult')
-  }
-
-  private refresh (tabName: string) {
-    tabName
-      ? render(this.content.tabs[tabName], document.getElementById(`tab-${tabName}`))
-      : render(this.content.templates, this.getWrapper())
-  }
-
-  add (tpl: TemplateResult, tabName: string = '') {
-    if (tabName) {
-      if (!this.content.tabs[tabName]) this.content.tabs[tabName] = []
-      this.content.tabs[tabName].push(tpl)
-    } else {
-      this.content.templates.push(tpl)
-    }
-
-    this.refresh(tabName)
-  }
-
-  clear () {
-    render(
-      html`
-        ${nothing}
-      `,
-      this.getWrapper()
-    )
-  }
-}
+import { TemplateResult, render } from 'lit-html'
 
 const observeMutation = (
   target: HTMLElement,
@@ -53,8 +13,8 @@ const observeMutation = (
   observer.observe(target, config)
 }
 
-const toggleExpand = () => {
-  document.getElementById('checkboxes').classList.toggle('hide')
+const hideExpand = () => {
+  document.getElementById('checkboxes').classList.add('hide')
 }
 
 const setProgress = (num: number) => {
@@ -109,18 +69,21 @@ const add = {
       wrapperAttr: { id: 'expandBtnWrapper' },
       target: document.getElementById('centerProvinceCity')
     })
+
+    function toggleExpand () {
+      document.getElementById('checkboxes').classList.toggle('hide')
+    }
   },
 
   queryBtn (fn: Function) {
     createComponent({
-      template: Templates.queryBtn(fn),
+      template: Templates.queryBtn(),
       wrapperAttr: { id: 'queryBtnWrapper' },
       target: document.getElementById('expandBtn')
     })
-  },
-
-  progress (result: Result) {
-    result.add(Templates.progress())
+    document
+      .getElementById('queryBtn')
+      .addEventListener('click', fn as EventHandlerNonNull, { once: true })
   }
 }
 
@@ -156,6 +119,16 @@ const grab = {
   }
 }
 
+const queryBtn = {
+  getEl () {
+    return document.getElementById('queryBtn')
+  },
+
+  listen (fn: EventHandlerNonNull) {
+    this.getEl().addEventListener('click', fn, { once: true })
+  }
+}
+
 function createComponent ({
   template,
   wrapperTag = 'span',
@@ -186,4 +159,4 @@ function createComponent ({
   }
 }
 
-export { Result, observeMutation, toggleExpand, setProgress, stopProgress, adjustStyle, add, grab }
+export { observeMutation, hideExpand, setProgress, stopProgress, adjustStyle, add, grab, queryBtn }

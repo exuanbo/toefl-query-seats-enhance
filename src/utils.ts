@@ -1,5 +1,7 @@
 const firstKeyOf = (obj: object) => Object.keys(obj)[0]
 
+const calcLeft = (cur: string, arr: string[]) => arr.length - arr.indexOf(cur) - 1
+
 const sleep = (ms: number): Promise<void> => new Promise(res => setTimeout(res, ms))
 
 const isAvailable = (con: any, fn: Function) => {
@@ -18,4 +20,12 @@ const isMunicipality = (cityName: string) =>
 const translateCityName = (cityName: string) =>
   document.querySelector(`option[value="${cityName}"]`).innerHTML
 
-export { firstKeyOf, sleep, isAvailable, formatCurrency, isMunicipality, translateCityName }
+export {
+  firstKeyOf,
+  calcLeft,
+  sleep,
+  isAvailable,
+  formatCurrency,
+  isMunicipality,
+  translateCityName
+}

@@ -1,4 +1,5 @@
 import * as Utils from './utils'
+import { State } from './query'
 import { QueryData, SeatDetail } from './seat'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
@@ -44,8 +45,8 @@ const checkboxWrapper = (provinceGroup: NodeListOf<HTMLOptGroupElement>) => {
                   `
                 : nothing}
             `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-          ><input type="checkbox" id="${city.value}" style="margin:0 0 2px;" />&nbsp;<label
-            for="${city.value}"
+          ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" />&nbsp;<label
+            for=${city.value}
             style="display:inline;"
             >${city.label}</label
           >&nbsp;</span
@@ -69,23 +70,50 @@ const expandBtn = (fn: Function) => html`
   </button>
 `
 
-const queryBtn = (fn: Function) => html`
-  <button id="queryBtn" class="btn btn-primary" @click=${fn} style="margin-left:13px;">
+const queryBtn = () => html`
+  <button id="queryBtn" class="btn btn-primary" style="margin-left:13px;">
     查询全部日期
   </button>
 `
 
-const progress = () => {
+const statusWrapper = () => html`
+  <div id="statusWrapper"></div>
+`
+
+const statusMsg = (state: State) =>
+  state.isComplete
+    ? html`
+        查询完成，找到${state.availableSeatsNum}个可预定考位
+      `
+    : html`
+        正在查询中，剩余&nbsp;${state.cities
+          ? `${state.citiesLeft}个城市`
+          : nothing}&nbsp;${state.datesLeft}个日期
+      `
+
+const status = (state: State) => {
   const btn = document.getElementById('btnQuerySeat')
   const label = document.querySelector('label[for="centerProvinceCity"]') as HTMLElement
-  const style = {
+  const barStyle = {
     margin: '1em auto 0',
     width: `${btn.offsetLeft - label.offsetLeft + label.offsetWidth}px`
   }
+  const wellStyle = {
+    ...barStyle,
+    textAlign: 'center'
+  }
+  const progressWidth = {
+    width: `${state.progress}%`
+  }
 
   return html`
-    <div id="progress" class="progress progress-striped active" style=${styleMap(style)}>
-      <div class="bar" style="width:0;"></div>
+    <div class="well" style=${styleMap(wellStyle)}>
+      <div id="statusMsg">
+        ${statusMsg(state)}
+      </div>
+      <div id="progress" class="progress progress-striped active" style=${styleMap(barStyle)}>
+        <div class="bar" style=${styleMap(progressWidth)}></div>
+      </div>
     </div>
   `
 }
@@ -205,4 +233,4 @@ const table = (data: QueryData) => {
   }
 }
 
-export { checkboxWrapper, expandBtn, queryBtn, progress, tabbale, table }
+export { checkboxWrapper, expandBtn, queryBtn, statusWrapper, status, tabbale, table }

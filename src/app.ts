@@ -1,95 +1,76 @@
 import * as Utils from './utils'
+import * as Query from './query'
 import * as View from './view'
 import * as Templates from './templates'
 import { QueryData, filterSeats } from './seat'
 
 const query = () => {
-  const queryCondition = (() => {
-    const city = View.grab.selectedCity()
-    const type = city === '-1' ? null : typeof city === 'string' ? 'single' : 'multi'
-    return { city: city, dates: View.grab.dates(), type: type }
-  })()
+  const result = new Query.Result()
+  const state = result.state
 
-  if (!queryCondition.type) {
+  if (!state.city && !state.cities) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     return
   }
 
-  const status = {
-    availableDatesNum: 0,
-    availableSeatsNum: 0,
-    errNum: 0
-  }
-  const result = new View.Result()
   start()
 
   async function start () {
-    View.add.progress(result)
-    queryCondition.type === 'single' ? await single() : await multi()
+    View.queryBtn.getEl().innerText = '停止当前查询'
+    View.queryBtn.listen(end)
+    state.city ? await single() : await multi()
+    end()
+    View.queryBtn.getEl().innerText = '查询全部日期'
+    View.queryBtn.listen(query)
+  }
 
+  function end () {
+    state.isComplete = true
+    result.refreshStatus()
+    View.setProgress(100)
     View.stopProgress()
-    status.availableDatesNum
-      ? layer.msg(`查询完成，共找到${status.availableSeatsNum}个可预定考位`, {
-          time: 2000,
-          icon: 6
-        })
-      : layer.msg('暂无可预定考位', { time: 2000, icon: 5 })
   }
 
   async function multi () {
-    View.toggleExpand()
+    View.hideExpand()
 
-    const cities = queryCondition.city as string[]
-    const { dates } = queryCondition
-    const sum = dates.length * cities.length
+    result.add(Templates.statusWrapper())
+    result.refreshStatus()
+    result.add(Templates.tabbale(state.cities))
 
-    result.add(Templates.tabbale(cities))
-
-    for (const [index, city] of cities.entries()) {
-      const citiesLeft = cities.length - index - 1
-      await single({ city, dates, isMulti: true, sum: sum, citiesLeft: citiesLeft })
-      if (index !== cities.length - 1) await Utils.sleep(1500)
+    for (const city of state.cities) {
+      state.currentCity = city
+      await single()
+      if (state.isComplete) break
+      if (state.citiesLeft) await Utils.sleep(1500)
     }
   }
 
-  async function single ({
-    city = queryCondition.city as string,
-    dates = queryCondition.dates,
-    isMulti = false,
-    sum = null as number,
-    citiesLeft = null as number
-  } = {}) {
-    if (!isMulti) sum = dates.length
+  async function single () {
+    for (const testDay of state.dates) {
+      state.currentDate = testDay
+      state.refresh()
 
-    for (const [index, testDay] of dates.entries()) {
-      layer.msg(
-        `正在查询中，剩余 ${isMulti ? `${citiesLeft}个城市 ` : ''}${dates.length - index}个日期`,
-        {
-          time: 2000,
-          icon: 3,
-          anim: -1
-        }
-      )
+      if (state.city) result.add(Templates.statusWrapper())
+      result.refreshStatus()
 
       View.grab
-        .data(city, testDay)
+        .data(state.currentCity, state.currentDate)
         .then((data: QueryData) => {
           const filteredData = filterSeats(data)
           if (filteredData) {
-            status.availableDatesNum++
-            status.availableSeatsNum += filteredData.availableSeatsNum
-            result.add(Templates.table(filteredData), isMulti ? city : '')
+            state.availableDatesNum++
+            state.availableSeatsNum += filteredData.availableSeatsNum
+            result.add(Templates.table(filteredData), state.cities ? state.currentCity : '')
           }
         })
         .catch((err: Error) => {
           console.log(err)
-          status.errNum++
+          state.errNum++
         })
 
-      View.setProgress(
-        100 - (((isMulti ? citiesLeft * dates.length : 0) + dates.length - index - 1) / sum) * 100
-      )
-      if (index !== dates.length - 1) await Utils.sleep(1500)
+      if (state.isComplete) break
+      if (state.datesLeft) await Utils.sleep(1500)
     }
   }
 }

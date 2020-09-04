@@ -2,7 +2,7 @@ import * as Utils from './utils'
 import * as Query from './query'
 import * as View from './view'
 import * as Templates from './templates'
-import { QueryData, filterSeats } from './seat'
+import { filterSeats } from './seat'
 
 const query = () => {
   const result = new Query.Result()

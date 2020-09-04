@@ -83,7 +83,7 @@ const query = () => {
 View.observeMutation(
   document.getElementById('wg_center'),
   () => {
-    if (window.location.href.toString().split('#!')[1] === '/testSeat') {
+    if (String(window.location.href).split('#!')[1] === '/testSeat') {
       View.adjustStyle()
       View.add.checkbox()
       View.add.expandBtn()

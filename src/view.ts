@@ -11,7 +11,7 @@ const observeMutation = (
   config: MutationObserverInit
 ) => {
   const observeThis = () => observeMutation(target, callback, config)
-  if (!Utils.isAvailable(target, observeThis)) return
+  if (!Utils.untilAvailable(target, observeThis)) return
   const observer = new MutationObserver(callback)
   observer.observe(target, config)
 }
@@ -31,7 +31,7 @@ const stopProgress = () => {
 const adjustStyle = () => {
   const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
   const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
-  if (!Utils.isAvailable(formWrapper && selects, adjustStyle)) return
+  if (!Utils.untilAvailable(formWrapper && selects, adjustStyle)) return
 
   formWrapper.classList.remove('offset1')
   formWrapper.style.textAlign = 'center'
@@ -45,8 +45,10 @@ const add = {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
-    if (!Utils.isAvailable(provinceGroup.length, add.checkbox)) return
-    if (!Utils.isAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', add.checkbox))
+    if (!Utils.untilAvailable(provinceGroup.length, add.checkbox)) return
+    if (
+      !Utils.untilAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', add.checkbox)
+    )
       return
 
     const selectCity = document.getElementById('centerProvinceCity')

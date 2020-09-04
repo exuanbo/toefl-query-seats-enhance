@@ -4,7 +4,7 @@ const calcLeft = (cur: string, arr: string[]) => arr.length - arr.indexOf(cur) -
 
 const sleep = (ms: number): Promise<void> => new Promise(res => setTimeout(res, ms))
 
-const isAvailable = (con: any, fn: Function) => {
+const untilAvailable = (con: any, fn: Function) => {
   if (!con) {
     window.setTimeout(fn, 100)
     return false
@@ -24,7 +24,7 @@ export {
   firstKeyOf,
   calcLeft,
   sleep,
-  isAvailable,
+  untilAvailable,
   formatCurrency,
   isMunicipality,
   translateCityName

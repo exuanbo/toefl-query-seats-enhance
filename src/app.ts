@@ -18,6 +18,7 @@ const query = () => {
   async function start () {
     View.queryBtn.getEl().innerText = '停止当前查询'
     View.queryBtn.listen(end)
+    View.add.status(result)
     state.city ? await single() : await multi()
     end()
     View.queryBtn.getEl().innerText = '查询全部日期'
@@ -25,53 +26,51 @@ const query = () => {
   }
 
   function end () {
-    state.isComplete = true
-    result.refreshStatus()
+    state.setValue('isComplete', true)
     View.setProgress(100)
     View.stopProgress()
   }
 
   async function multi () {
     View.hideExpand()
-
-    result.add(Templates.statusWrapper())
-    result.refreshStatus()
     result.add(Templates.tabbale(state.cities))
 
     for (const city of state.cities) {
-      state.currentCity = city
+      state.setValue('currentCity', city)
       await single()
-      if (state.isComplete) break
+      if (state.getValue('isComplete') as boolean) break
       if (state.citiesLeft) await Utils.sleep(2000)
     }
   }
 
   async function single () {
     for (const testDay of state.dates) {
-      state.currentDate = testDay
-      state.refresh()
-
-      if (state.city) result.add(Templates.statusWrapper())
-      result.refreshStatus()
+      state.setValue('currentDate', testDay)
 
       try {
-        const response = await View.grab.response(state.currentCity, state.currentDate)
+        const response = await View.grab.response(
+          state.getValue('currentCity') as string,
+          state.getValue('currentDate') as string
+        )
         const filteredData = filterSeats(response.data)
         if (filteredData) {
-          state.availableDatesNum++
-          state.availableSeatsNum += filteredData.availableSeatsNum
-          result.add(Templates.table(filteredData), state.cities ? state.currentCity : '')
+          state.increaseValue('availableDatesNum', 1)
+          state.increaseValue('availableSeatsNum', filteredData.availableSeatsNum)
+          result.add(
+            Templates.table(filteredData),
+            state.cities ? (state.getValue('currentCity') as string) : ''
+          )
         }
       } catch (err) {
         if (err instanceof Error) {
-          state.errNum++
+          state.increaseValue('errNum', 1)
         } else {
           console.log(err)
           throw err
         }
       }
 
-      if (state.isComplete) break
+      if (state.getValue('isComplete') as boolean) break
       if (state.datesLeft) await Utils.sleep(2000)
     }
   }

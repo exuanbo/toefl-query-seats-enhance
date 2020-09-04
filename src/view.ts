@@ -1,6 +1,7 @@
 import * as Utils from './utils'
 import * as Templates from './templates'
 import { QueryData } from './seat'
+import { Result } from './query'
 import { TemplateResult, render } from 'lit-html'
 import axios, { AxiosResponse } from 'axios'
 
@@ -86,6 +87,12 @@ const add = {
     document
       .getElementById('queryBtn')
       .addEventListener('click', fn as EventHandlerNonNull, { once: true })
+  },
+
+  status (result: Result) {
+    result.add(Templates.statusWrapper())
+    const state = result.state
+    render(Templates.status(state), document.getElementById('statusWrapper'))
   }
 }
 

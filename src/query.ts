@@ -6,23 +6,17 @@ import { TemplateResult, html, nothing, render } from 'lit-html'
 class State {
   city?: string
   cities?: string[]
-  currentCity: string
+  private _currentCity: string
   citiesLeft?: number
   dates: string[] = View.grab.dates()
-  currentDate: string
+  private _currentDate: string
   datesLeft: number
   sum: number
   progress: number
-  availableDatesNum = 0
-  availableSeatsNum = 0
-  errNum = 0
-  isComplete = false
-
-  private calcProgress () {
-    this.progress =
-      100 -
-      (((this.cities ? this.citiesLeft * this.dates.length : 0) + this.datesLeft) / this.sum) * 100
-  }
+  private _availableDatesNum = 0
+  private _availableSeatsNum = 0
+  private _errNum = 0
+  private _isComplete = false
 
   constructor () {
     const city = View.grab.selectedCity()
@@ -30,18 +24,39 @@ class State {
       return
     } else if (typeof city === 'string') {
       this.city = city
-      this.currentCity = city
+      this.setValue('currentCity', city)
     } else {
       this.cities = city
     }
     this.sum = this.dates.length * (this.city ? 1 : this.cities.length)
+    this.refresh(true)
+  }
+
+  getValue (propertyName: string): any {
+    return this[`_${propertyName}` as keyof this]
+  }
+
+  setValue (propertyName: string, value: any) {
+    this[`_${propertyName}` as keyof this] = value
     this.refresh()
   }
 
-  refresh () {
-    if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity, this.cities)
-    this.datesLeft = Utils.calcLeft(this.currentDate, this.dates)
+  increaseValue (propertyName: string, value: number) {
+    ;(this[`_${propertyName}` as keyof this] as any) += value
+  }
+
+  private refresh (init: boolean = false) {
+    if (this.cities)
+      this.citiesLeft = Utils.calcLeft(this.getValue('currentCity') as string, this.cities)
+    this.datesLeft = Utils.calcLeft(this.getValue('currentDate') as string, this.dates)
     this.calcProgress()
+    if (!init) render(Templates.status(this), document.getElementById('statusWrapper'))
+  }
+
+  private calcProgress () {
+    this.progress =
+      100 -
+      (((this.cities ? this.citiesLeft * this.dates.length : 0) + this.datesLeft) / this.sum) * 100
   }
 }
 
@@ -54,6 +69,8 @@ class Result {
     tabs: {}
   }
 
+  state = new State()
+
   private getWrapper () {
     return document.getElementById('qrySeatResult')
   }
@@ -62,12 +79,6 @@ class Result {
     tabName
       ? render(this.content.tabs[tabName], document.getElementById(`tab-${tabName}`))
       : render(this.content.templates, this.getWrapper())
-  }
-
-  state = new State()
-
-  refreshStatus () {
-    render(Templates.status(this.state), document.getElementById('statusWrapper'))
   }
 
   add (tpl: TemplateResult, tabName: string = '') {

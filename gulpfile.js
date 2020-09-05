@@ -17,7 +17,7 @@ function clean () {
 
 function build () {
   const options = {
-    input: 'src/app.ts',
+    input: 'src/index.ts',
     output: { format: 'iife' },
     plugins: [nodeResolve({ browser: true }), commonjs(), minifyHtml(), typescript()]
   }

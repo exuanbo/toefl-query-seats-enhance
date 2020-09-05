@@ -1,12 +1,13 @@
-import * as Utils from './utils'
-import * as Query from './query'
-import * as View from './view'
-import * as Templates from './templates'
-import { filterSeats } from './seat'
+import * as Utils from './lib/utils'
+import * as View from './lib/view'
+import { State } from './lib/state'
+import { QueryData, filterSeats } from './lib/seat'
+import { App } from './components/app'
+import { Tables } from './components/tables'
+import { render } from 'lit-html'
 
 const query = () => {
-  const result = new Query.Result()
-  const state = result.state
+  const state = new State()
 
   if (!state.city && !state.cities) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
@@ -18,7 +19,7 @@ const query = () => {
   async function start () {
     View.queryBtn.getEl().innerText = '停止当前查询'
     View.queryBtn.listen(end)
-    View.add.status(result)
+    render(App(state), document.getElementById('qrySeatResult'))
     state.city ? await single() : await multi()
     end()
   }
@@ -33,7 +34,6 @@ const query = () => {
 
   async function multi () {
     View.hideExpand()
-    result.add(Templates.tabbale(state.cities))
 
     for (const city of state.cities) {
       state.currentCity.val = city
@@ -45,6 +45,7 @@ const query = () => {
 
   async function single () {
     const initialSeatsNum = state.availableSeats.val
+    const dataArr: QueryData[] = []
 
     for (const testDay of state.dates) {
       state.currentDate.val = testDay
@@ -53,8 +54,12 @@ const query = () => {
         const response = await View.grab.response(state.currentCity.val, state.currentDate.val)
         const filteredData = filterSeats(response.data)
         if (filteredData) {
+          dataArr.push(filteredData)
+          render(
+            Tables(dataArr),
+            document.getElementById(state.city ? 'tables' : `tab-${state.currentCity.val}`)
+          )
           state.availableSeats.val += filteredData.availableSeats
-          result.add(Templates.table(filteredData), state.cities ? state.currentCity.val : '')
         }
       } catch (err) {
         if (err instanceof Error) {
@@ -69,8 +74,7 @@ const query = () => {
       if (state.datesLeft) await Utils.sleep(2000)
     }
 
-    if (state.cities && state.availableSeats.val === initialSeatsNum)
-      result.add(Templates.pityMsg(), state.currentCity.val)
+    if (state.cities && state.availableSeats.val === initialSeatsNum) View.insert.pityMsg(state)
   }
 }
 
@@ -79,9 +83,9 @@ View.observeMutation(
   () => {
     if (String(window.location.href).split('#!')[1] === '/testSeat') {
       View.adjustStyle()
-      View.add.checkbox()
-      View.add.expandBtn()
-      View.add.queryBtn(query)
+      View.insert.checkbox()
+      View.insert.expandBtn()
+      View.insert.queryBtn(query)
     }
   },
   { childList: true }

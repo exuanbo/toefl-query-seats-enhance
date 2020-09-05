@@ -1,7 +1,7 @@
 import * as Utils from './utils'
 import * as View from './view'
-import * as Templates from './templates'
-import { TemplateResult, html, nothing, render } from 'lit-html'
+import { Progress } from '../components/progress'
+import { render } from 'lit-html'
 
 class Prop {
   private _val: any
@@ -65,53 +65,11 @@ class State {
   update () {
     if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val, this.cities)
     this.datesLeft = Utils.calcLeft(this.currentDate.val, this.dates)
-
     this.calcProgress()
 
     const progressWrapper = document.getElementById('progressWrapper')
-    if (progressWrapper) render(Templates.progress(this), progressWrapper)
+    if (progressWrapper) render(Progress(this), progressWrapper)
   }
 }
 
-class Result {
-  private content: {
-    templates: TemplateResult[]
-    tabs: { [tabName: string]: TemplateResult[] }
-  } = {
-    templates: [],
-    tabs: {}
-  }
-
-  state = new State()
-
-  private getWrapper () {
-    return document.getElementById('qrySeatResult')
-  }
-
-  private update (tabName: string) {
-    tabName
-      ? render(this.content.tabs[tabName], document.getElementById(`tab-${tabName}`))
-      : render(this.content.templates, this.getWrapper())
-  }
-
-  add (tpl: TemplateResult, tabName: string = '') {
-    if (tabName) {
-      if (!this.content.tabs[tabName]) this.content.tabs[tabName] = []
-      this.content.tabs[tabName].push(tpl)
-    } else {
-      this.content.templates.push(tpl)
-    }
-    this.update(tabName)
-  }
-
-  clear () {
-    render(
-      html`
-        ${nothing}
-      `,
-      this.getWrapper()
-    )
-  }
-}
-
-export { State, Result }
+export { State }

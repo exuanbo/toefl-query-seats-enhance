@@ -1,7 +1,9 @@
 import * as Utils from './utils'
-import * as Templates from './templates'
+import * as Btn from '../components/btn'
+import { Checkbox } from '../components/checkbox'
+import { PityMsg } from '../components/pityMsg'
 import { QueryData } from './seat'
-import { Result } from './query'
+import { State } from './state'
 import { TemplateResult, render } from 'lit-html'
 import axios, { AxiosResponse } from 'axios'
 
@@ -40,22 +42,25 @@ const adjustStyle = () => {
   }
 }
 
-const add = {
+const insert = {
   checkbox () {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
-    if (!Utils.untilAvailable(provinceGroup.length, add.checkbox)) return
+    if (!Utils.untilAvailable(provinceGroup.length, insert.checkbox)) return
     if (
-      !Utils.untilAvailable(provinceGroup[provinceGroup.length - 1].label === '浙江', add.checkbox)
+      !Utils.untilAvailable(
+        provinceGroup[provinceGroup.length - 1].label === '浙江',
+        insert.checkbox
+      )
     )
       return
 
     const selectCity = document.getElementById('centerProvinceCity')
     const formWrapper = selectCity.parentElement.parentElement.parentElement
 
-    createComponent({
-      template: Templates.checkboxWrapper(provinceGroup),
+    insertComponent({
+      component: Checkbox(),
       wrapperTag: 'div',
       wrapperAttr: {
         id: 'checkboxes',
@@ -69,20 +74,16 @@ const add = {
   },
 
   expandBtn () {
-    createComponent({
-      template: Templates.expandBtn(toggleExpand),
+    insertComponent({
+      component: Btn.expandBtn(),
       wrapperAttr: { id: 'expandBtnWrapper' },
       target: document.getElementById('centerProvinceCity')
     })
-
-    function toggleExpand () {
-      document.getElementById('checkboxes').classList.toggle('hide')
-    }
   },
 
   queryBtn (fn: Function) {
-    createComponent({
-      template: Templates.queryBtn(),
+    insertComponent({
+      component: Btn.queryBtn(),
       wrapperAttr: { id: 'queryBtnWrapper' },
       target: document.getElementById('expandBtn')
     })
@@ -91,10 +92,40 @@ const add = {
       .addEventListener('click', fn as EventHandlerNonNull, { once: true })
   },
 
-  status (result: Result) {
-    result.add(Templates.progressWrapper())
-    const state = result.state
-    render(Templates.progress(state), document.getElementById('progressWrapper'))
+  pityMsg (state: State) {
+    render(PityMsg(), document.getElementById(`tab-${state.currentCity.val}`))
+  }
+}
+
+function insertComponent ({
+  component,
+  wrapperTag = 'span',
+  wrapperAttr,
+  target,
+  position = 'afterend'
+}: {
+  component: TemplateResult
+  wrapperTag?: string
+  wrapperAttr: {
+    id: string
+    [Attr: string]: string
+  }
+  target: HTMLElement
+  position?: string
+}) {
+  target.insertAdjacentHTML(
+    position as InsertPosition,
+    `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`
+  )
+  render(component, document.getElementById(wrapperAttr.id))
+
+  function loopAttr (attrs: typeof wrapperAttr) {
+    const result: string[] = []
+    for (const attr in attrs) {
+      const html = `${attr}="${attrs[attr]}"`
+      result.push(html)
+    }
+    return result.join(' ')
   }
 }
 
@@ -137,34 +168,13 @@ const queryBtn = {
   }
 }
 
-function createComponent ({
-  template,
-  wrapperTag = 'span',
-  wrapperAttr,
-  target,
-  position = 'afterend'
-}: {
-  template: TemplateResult | TemplateResult[]
-  wrapperTag?: string
-  wrapperAttr: {
-    id: string
-    [Attr: string]: string
-  }
-  target: HTMLElement
-  position?: string
-}) {
-  const html = `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`
-  target.insertAdjacentHTML(position as InsertPosition, html)
-  render(template, document.getElementById(wrapperAttr.id))
-
-  function loopAttr (attrs: typeof wrapperAttr) {
-    const result: string[] = []
-    for (const attr in attrs) {
-      const html = `${attr}="${attrs[attr]}"`
-      result.push(html)
-    }
-    return result.join(' ')
-  }
+export {
+  observeMutation,
+  hideExpand,
+  setProgress,
+  stopProgress,
+  adjustStyle,
+  insert,
+  grab,
+  queryBtn
 }
-
-export { observeMutation, hideExpand, setProgress, stopProgress, adjustStyle, add, grab, queryBtn }

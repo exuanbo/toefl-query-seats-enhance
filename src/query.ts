@@ -68,8 +68,8 @@ class State {
 
     this.calcProgress()
 
-    const statusWrapper = document.getElementById('statusWrapper')
-    if (statusWrapper) render(Templates.status(this), statusWrapper)
+    const progressWrapper = document.getElementById('progressWrapper')
+    if (progressWrapper) render(Templates.progress(this), progressWrapper)
   }
 }
 

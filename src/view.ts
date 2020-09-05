@@ -92,9 +92,9 @@ const add = {
   },
 
   status (result: Result) {
-    result.add(Templates.statusWrapper())
+    result.add(Templates.progressWrapper())
     const state = result.state
-    render(Templates.status(state), document.getElementById('statusWrapper'))
+    render(Templates.progress(state), document.getElementById('progressWrapper'))
   }
 }
 

@@ -76,11 +76,11 @@ const queryBtn = () => html`
   </button>
 `
 
-const statusWrapper = () => html`
+const progressWrapper = () => html`
   <div id="statusWrapper"></div>
 `
 
-const statusMsg = (state: State) =>
+const progressMsg = (state: State) =>
   state.isComplete.val
     ? html`
         查询完成，找到&nbsp;${state.availableSeats.val}个可预定考位${state.err.val
@@ -97,7 +97,7 @@ const statusMsg = (state: State) =>
           : nothing}${state.datesLeft}个日期
       `
 
-const status = (state: State) => {
+const progress = (state: State) => {
   const btn = document.getElementById('btnQuerySeat')
   const label = document.querySelector('label[for="centerProvinceCity"]') as HTMLElement
   const barStyle = {
@@ -108,17 +108,17 @@ const status = (state: State) => {
     ...barStyle,
     textAlign: 'center'
   }
-  const progressWidth = {
+  const barWidth = {
     width: `${state.progress}%`
   }
 
   return html`
     <div class="well" style=${styleMap(wellStyle)}>
       <div id="statusMsg">
-        ${statusMsg(state)}
+        ${progressMsg(state)}
       </div>
       <div id="progress" class="progress progress-striped active" style=${styleMap(barStyle)}>
-        <div class="bar" style=${styleMap(progressWidth)}></div>
+        <div class="bar" style=${styleMap(barWidth)}></div>
       </div>
     </div>
   `
@@ -253,4 +253,4 @@ const pityMsg = () => {
   `
 }
 
-export { checkboxWrapper, expandBtn, queryBtn, statusWrapper, status, tabbale, table, pityMsg }
+export { checkboxWrapper, expandBtn, queryBtn, progressWrapper, progress, tabbale, table, pityMsg }

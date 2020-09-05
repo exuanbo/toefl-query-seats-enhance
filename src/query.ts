@@ -17,11 +17,11 @@ class Prop {
   }
   set val (value: any) {
     this._val = value
-    this.update(this.state)
+    this.update()
   }
 
-  private update (state: State) {
-    state.update()
+  private update () {
+    this.state.update()
   }
 }
 

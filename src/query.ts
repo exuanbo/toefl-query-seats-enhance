@@ -30,13 +30,16 @@ class State {
   cities?: string[]
   currentCity: { val: string } = new Prop(this, null)
   citiesLeft?: number
+
   dates: string[] = View.grab.dates()
   currentDate: { val: string } = new Prop(this, null)
   datesLeft: number
+
   sum: number
   progress: number
-  availableSeatsNum: { val: number } = new Prop(this, 0)
-  errNum: { val: number } = new Prop(this, 0)
+
+  availableSeats: { val: number } = new Prop(this, 0)
+  err: { val: number } = new Prop(this, 0)
   isComplete: { val: boolean } = new Prop(this, false)
 
   constructor () {
@@ -62,7 +65,9 @@ class State {
   update () {
     if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val, this.cities)
     this.datesLeft = Utils.calcLeft(this.currentDate.val, this.dates)
+
     this.calcProgress()
+
     const statusWrapper = document.getElementById('statusWrapper')
     if (statusWrapper) render(Templates.status(this), statusWrapper)
   }
@@ -96,7 +101,6 @@ class Result {
     } else {
       this.content.templates.push(tpl)
     }
-
     this.update(tabName)
   }
 

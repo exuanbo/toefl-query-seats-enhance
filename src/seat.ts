@@ -38,8 +38,7 @@ interface QueryData {
   /**
    * Original data above
    */
-  availableSeatsNum?: number
-  queryTime?: Date
+  availableSeats?: number
 }
 
 interface SeatDetail {
@@ -64,11 +63,10 @@ const filterSeats = (data: QueryData) => {
       if (seatDetail.seatStatus) filtered.push(seatDetail)
     }
 
-    const availableSeatsNum = filtered.length
-    if (availableSeatsNum) {
+    const availableSeats = filtered.length
+    if (availableSeats) {
       data.testSeats[dataDate] = filtered
-      data.availableSeatsNum = availableSeatsNum
-      data.queryTime = new Date()
+      data.availableSeats = availableSeats
       return data
     }
   }

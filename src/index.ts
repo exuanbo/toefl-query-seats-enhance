@@ -2,9 +2,6 @@ import * as Utils from './lib/utils'
 import * as View from './lib/view'
 import { State } from './lib/state'
 import { QueryData, filterSeats } from './lib/seat'
-import { App } from './components/app'
-import { Tables } from './components/tables'
-import { render } from 'lit-html'
 
 const query = () => {
   const state = new State()
@@ -19,21 +16,21 @@ const query = () => {
   async function start () {
     View.queryBtn.getEl().innerText = '停止当前查询'
     View.queryBtn.listen(end)
-    render(App(state), document.getElementById('qrySeatResult'))
+    View.init(state)
     state.city ? await single() : await multi()
     end()
   }
 
   function end () {
     state.isComplete.val = true
-    View.setProgress(100)
-    View.stopProgress()
+    View.utils.setProgress(100)
+    View.utils.stopProgress()
     View.queryBtn.getEl().innerText = '查询全部日期'
     View.queryBtn.listen(query)
   }
 
   async function multi () {
-    View.hideExpand()
+    View.utils.hideExpand()
 
     for (const city of state.cities) {
       state.currentCity.val = city
@@ -45,7 +42,6 @@ const query = () => {
 
   async function single () {
     const initialSeatsNum = state.availableSeats.val
-    const dataArr: QueryData[] = []
 
     for (const testDay of state.dates) {
       state.currentDate.val = testDay
@@ -54,11 +50,7 @@ const query = () => {
         const response = await View.grab.response(state.currentCity.val, state.currentDate.val)
         const filteredData = filterSeats(response.data)
         if (filteredData) {
-          dataArr.push(filteredData)
-          render(
-            Tables(dataArr),
-            document.getElementById(state.city ? 'tables' : `tab-${state.currentCity.val}`)
-          )
+          View.renderTable(filteredData, state)
           state.availableSeats.val += filteredData.availableSeats
         }
       } catch (err) {
@@ -78,11 +70,11 @@ const query = () => {
   }
 }
 
-View.observeMutation(
+View.utils.observeMutation(
   document.getElementById('wg_center'),
   () => {
     if (String(window.location.href).split('#!')[1] === '/testSeat') {
-      View.adjustStyle()
+      View.utils.adjustStyle()
       View.insert.checkbox()
       View.insert.expandBtn()
       View.insert.queryBtn(query)

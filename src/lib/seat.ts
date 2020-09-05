@@ -35,9 +35,6 @@ interface QueryData {
     [key: string]: SeatDetail[]
   }
   lateRegFee: number
-  /**
-   * Original data above
-   */
   availableSeats?: number
 }
 

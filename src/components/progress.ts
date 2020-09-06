@@ -14,7 +14,7 @@ export const Progress = (state: State) => {
     textAlign: 'center'
   }
   const barWidth = {
-    width: `${state.progress}%`
+    width: `${state.isComplete.val ? 100 : state.progress}%`
   }
 
   return html`
@@ -36,7 +36,11 @@ export const Progress = (state: State) => {
                 : nothing}${state.datesLeft}个日期
             `}
       </div>
-      <div id="progress" class="progress progress-striped active" style=${styleMap(barStyle)}>
+      <div
+        id="progress"
+        class="progress progress-striped ${state.isComplete.val ? '' : 'active'}"
+        style=${styleMap(barStyle)}
+      >
         <div class="bar" style=${styleMap(barWidth)}></div>
       </div>
     </div>

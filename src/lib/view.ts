@@ -45,14 +45,6 @@ export const utils = {
     document.getElementById('checkboxes').classList.add('hide')
   },
 
-  setProgress (num: number) {
-    document.querySelector('#progress div').setAttribute('style', `width:${num}%`)
-  },
-
-  stopProgress () {
-    document.getElementById('progress').classList.remove('active')
-  },
-
   adjustStyle () {
     const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
     const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>

@@ -36,8 +36,6 @@ const query = () => {
 
   function end () {
     state.isComplete.val = true
-    View.utils.setProgress(100)
-    View.utils.stopProgress()
     View.queryBtn.getEl().innerText = '查询全部日期'
     View.queryBtn.listen(query)
   }

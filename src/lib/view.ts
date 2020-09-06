@@ -6,10 +6,12 @@ import { Table } from '../components/table'
 import { PityMsg } from '../components/pityMsg'
 import { QueryData } from './query'
 import { State } from './state'
-import { TemplateResult, render } from 'lit-html'
+import { TemplateResult, render, nothing } from 'lit-html'
 
 const init = (state: State) => {
-  render(App(state), document.getElementById('qrySeatResult'))
+  const wrapper = document.getElementById('qrySeatResult')
+  render(nothing, wrapper)
+  render(App(state), wrapper)
 }
 
 const renderTable = (data: QueryData, state: State) => {

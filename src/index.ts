@@ -16,7 +16,7 @@ View.utils.observeMutation(
   { childList: true }
 )
 
-function query () {
+const query = () => {
   const state = new State()
 
   if (!state.city && !state.cities) {

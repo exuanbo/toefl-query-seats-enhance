@@ -41,7 +41,7 @@ const query = () => {
   }
 
   async function single () {
-    const initialSeatsNum = state.availableSeats.val
+    const initialSeatsNum = state.availableSeats
 
     for (const testDay of state.dates) {
       state.currentDate.val = testDay
@@ -51,11 +51,11 @@ const query = () => {
         const filteredData = filterSeats(response.data)
         if (filteredData) {
           View.renderTable(filteredData, state)
-          state.availableSeats.val += filteredData.availableSeats
+          state.availableSeats += filteredData.availableSeats
         }
       } catch (err) {
         if (err instanceof Error) {
-          state.err.val++
+          state.err++
         } else {
           console.log(err)
           throw err
@@ -66,7 +66,7 @@ const query = () => {
       if (state.datesLeft) await Utils.sleep(2000)
     }
 
-    if (state.cities && state.availableSeats.val === initialSeatsNum) View.insert.pityMsg(state)
+    if (state.cities && state.availableSeats === initialSeatsNum) View.insert.pityMsg(state)
   }
 }
 

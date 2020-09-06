@@ -22,9 +22,9 @@ const Progress = (state: State) => {
       <div id="statusMsg">
         ${state.isComplete.val
           ? html`
-              查询完成，找到&nbsp;${state.availableSeats.val}个可预定考位${state.err.val
+              查询完成，找到&nbsp;${state.availableSeats}个可预定考位${state.err
                 ? html`
-                    。请求失败&nbsp;${state.err.val}次
+                    。请求失败&nbsp;${state.err}次
                   `
                 : nothing}
             `

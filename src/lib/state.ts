@@ -38,8 +38,8 @@ class State {
   sum: number
   progress: number
 
-  availableSeats: { val: number } = new Prop(this, 0)
-  err: { val: number } = new Prop(this, 0)
+  availableSeats = 0
+  err = 0
   isComplete: { val: boolean } = new Prop(this, false)
 
   constructor () {

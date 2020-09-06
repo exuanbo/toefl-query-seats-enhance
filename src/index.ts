@@ -41,8 +41,6 @@ const query = () => {
   }
 
   async function multi () {
-    View.utils.hideExpand()
-
     for (const city of state.cities) {
       state.currentCity.val = city
       await single()

@@ -7,11 +7,12 @@ import { Progress } from '../components/progress'
 import { PityMsg } from '../components/pityMsg'
 import { QueryData } from './query'
 import { State } from './state'
-import { TemplateResult, render, nothing } from 'lit-html'
+import { TemplateResult, render } from 'lit-html'
 
 export const init = (state: State) => {
+  document.getElementById('checkboxes').classList.add('hide')
   const wrapper = document.getElementById('qrySeatResult')
-  render(nothing, wrapper)
+  render('', wrapper)
   render(App(state), wrapper)
 }
 
@@ -39,10 +40,6 @@ export const utils = {
     if (!Utils.untilAvailable(target, observeThis)) return
     const observer = new MutationObserver(callback)
     observer.observe(target, config)
-  },
-
-  hideExpand () {
-    document.getElementById('checkboxes').classList.add('hide')
   },
 
   adjustStyle () {

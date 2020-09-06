@@ -41,7 +41,7 @@ export const Checkbox = () => {
                   ? html`
                       <span
                         class="muted"
-                        style="${provinceName.length === 3 ? nothing : 'margin-right:1em;'}"
+                        style="${provinceName.length === 3 ? '' : 'margin-right:1em;'}"
                         >${provinceName}：</span
                       >
                     `

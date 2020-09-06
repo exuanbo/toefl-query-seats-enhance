@@ -49,9 +49,9 @@ export const utils = {
 
     formWrapper.classList.remove('offset1')
     formWrapper.style.textAlign = 'center'
-    for (const select of selects) {
-      select.style.width = '12em'
-    }
+    selects.forEach(function (this: typeof selects, _, index) {
+      this[index].style.width = '12em'
+    }, selects)
   }
 }
 
@@ -133,37 +133,39 @@ function insertComponent ({
   render(component, document.getElementById(wrapperAttr.id))
 
   function loopAttr (attrs: typeof wrapperAttr) {
-    const result: string[] = []
-    for (const attr in attrs) {
-      const html = `${attr}="${attrs[attr]}"`
-      result.push(html)
-    }
-    return result.join(' ')
+    return Object.keys(attrs)
+      .map(attr => `${attr}="${attrs[attr]}"`)
+      .join('')
   }
 }
 
 export const grab = {
   selectedCity () {
-    const checkedCities: string[] = []
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
-    for (const box of checkboxes) {
-      if (box.checked) checkedCities.push(box.id)
+    const checkedCities = Array.from(checkboxes)
+      .map(checkbox => {
+        if (checkbox.checked) return checkbox.id
+      })
+      .filter(Boolean)
+
+    if (checkedCities.length) {
+      return checkedCities
+    } else {
+      const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
+      return selectedCity.value
     }
-    if (checkedCities.length) return checkedCities
-    const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
-    return selectedCity.value
   },
 
   dates () {
-    const dates: string[] = []
     const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
-    for (const el of options) {
-      const day = el.value
-      if (day && day !== '-1') dates.push(day)
-    }
-    return dates
+    return Array.from(options)
+      .map(option => {
+        const day = option.value
+        if (day && day !== '-1') return day
+      })
+      .filter(Boolean)
   }
 }
 

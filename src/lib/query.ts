@@ -67,12 +67,10 @@ export const getData = async (state: State) => {
     if (data.status === true) {
       const dataDate = Object.keys(data.testSeats)[0]
       const seatDetails: SeatDetail[] = data.testSeats[dataDate]
-      const filtered: SeatDetail[] = []
-      for (const seatDetail of seatDetails) {
-        if (seatDetail.seatStatus) filtered.push(seatDetail)
-      }
 
+      const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
       const availableSeats = filtered.length
+
       if (availableSeats) {
         data.testSeats[dataDate] = filtered
         data.availableSeats = availableSeats

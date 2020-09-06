@@ -16,24 +16,21 @@ export const Checkbox = () => {
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
-    for (const checkbox of allCheckboxes) {
-      checkbox.checked = !checkbox.checked
-    }
+    allCheckboxes.forEach(function (this: typeof allCheckboxes, _, index) {
+      this[index].checked = !this[index].checked
+    }, allCheckboxes)
   }
 
   function loopProvinceGroup () {
     const provinceGroups = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
-    const provinceGroupsTpl: TemplateResult[] = []
 
-    for (const provinceGroup of provinceGroups) {
+    return Array.from(provinceGroups).map(provinceGroup => {
       const provinceName = provinceGroup.label
       const cities = provinceGroup.childNodes as NodeListOf<HTMLOptionElement>
-      const citiesTpl: TemplateResult[] = []
-
-      for (const city of cities) {
-        const tpl = html`
+      const citiesTpl = Array.from(cities).map(
+        city => html`
           ${Utils.isMunicipality(city.label)
             ? nothing
             : html`
@@ -54,15 +51,11 @@ export const Checkbox = () => {
             >&nbsp;</span
           >
         `
-        citiesTpl.push(tpl)
-      }
+      )
 
-      const provinceBlock = html`
+      return html`
         <div>${citiesTpl}</div>
       `
-      provinceGroupsTpl.push(provinceBlock)
-    }
-
-    return provinceGroupsTpl
+    })
   }
 }

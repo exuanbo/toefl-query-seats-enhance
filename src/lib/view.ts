@@ -14,9 +14,10 @@ const init = (state: State) => {
   render(nothing, wrapper)
   render(App(state), wrapper)
 }
+
 const renderProgress = (state: State) => {
-  const progressWrapper = document.getElementById('progressWrapper')
-  if (progressWrapper) render(Progress(state), progressWrapper)
+  const wrapper = document.getElementById('progressWrapper')
+  if (wrapper) render(Progress(state), wrapper)
 }
 
 const renderTable = (data: QueryData, state: State) => {

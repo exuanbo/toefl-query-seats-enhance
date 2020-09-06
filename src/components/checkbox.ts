@@ -29,32 +29,33 @@ export const Checkbox = () => {
     return Array.from(provinceGroups).map(provinceGroup => {
       const provinceName = provinceGroup.label
       const cities = provinceGroup.childNodes as NodeListOf<HTMLOptionElement>
-      const citiesTpl = Array.from(cities).map(
-        city => html`
-          ${Utils.isMunicipality(city.label)
-            ? nothing
-            : html`
-                ${city === cities.item(0)
-                  ? html`
-                      <span
-                        class="muted"
-                        style="${provinceName.length === 3 ? '' : 'margin-right:1em;'}"
-                        >${provinceName}：</span
-                      >
-                    `
-                  : nothing}
-              `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-            ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" />&nbsp;<label
-              for=${city.value}
-              style="display:inline;"
-              >${city.label}</label
-            >&nbsp;</span
-          >
-        `
-      )
 
       return html`
-        <div>${citiesTpl}</div>
+        <div>
+          ${Array.from(cities).map(
+            city => html`
+              ${Utils.isMunicipality(city.label)
+                ? nothing
+                : html`
+                    ${city === cities.item(0)
+                      ? html`
+                          <span
+                            class="muted"
+                            style="${provinceName.length === 3 ? '' : 'margin-right:1em;'}"
+                            >${provinceName}：</span
+                          >
+                        `
+                      : nothing}
+                  `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+                ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" />&nbsp;<label
+                  for=${city.value}
+                  style="display:inline;"
+                  >${city.label}</label
+                >&nbsp;</span
+              >
+            `
+          )}
+        </div>
       `
     })
   }

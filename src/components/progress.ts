@@ -36,11 +36,7 @@ export const Progress = (state: State) => {
                 : nothing}${state.datesLeft}个日期
             `}
       </div>
-      <div
-        id="progress"
-        class="progress progress-striped ${state.isComplete.val ? '' : 'active'}"
-        style=${styleMap(barStyle)}
-      >
+      <div id="progress" class="progress progress-striped" style=${styleMap(barStyle)}>
         <div class="bar" style=${styleMap(barWidth)}></div>
       </div>
     </div>

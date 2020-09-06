@@ -1,7 +1,7 @@
 import * as Utils from './lib/utils'
 import * as View from './lib/view'
 import { State } from './lib/state'
-import { QueryData, filterSeats } from './lib/seat'
+import { getData } from './lib/query'
 
 const query = () => {
   const state = new State()
@@ -47,11 +47,10 @@ const query = () => {
       state.currentDate.val = testDay
 
       try {
-        const response = await View.grab.response(state.currentCity.val, state.currentDate.val)
-        const filteredData = filterSeats(response.data)
-        if (filteredData) {
-          View.renderTable(filteredData, state)
-          state.availableSeats += filteredData.availableSeats
+        const data = await getData(state)
+        if (data) {
+          View.renderTable(data, state)
+          state.availableSeats += data.availableSeats
         }
       } catch (err) {
         if (err instanceof Error) {

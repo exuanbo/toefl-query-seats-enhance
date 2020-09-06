@@ -1,3 +1,6 @@
+import { State } from './state'
+import axios, { AxiosResponse } from 'axios'
+
 /**
  * @example
  * {
@@ -51,23 +54,33 @@ interface SeatDetail {
   lateRegFlag: 'N' | 'Y'
 }
 
-const filterSeats = (data: QueryData) => {
-  if (data.status === true) {
-    const dataDate = Object.keys(data.testSeats)[0]
-    const seatDetails: SeatDetail[] = data.testSeats[dataDate]
-    const filtered: SeatDetail[] = []
-    for (const seatDetail of seatDetails) {
-      if (seatDetail.seatStatus) filtered.push(seatDetail)
-    }
+const getData = async (state: State) => {
+  const city = state.currentCity.val
+  const testDay = state.currentDate.val
+  const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {
+    params: { city: city, testDay: testDay }
+  })
+  const data = response.data
+  return filterSeats(data)
 
-    const availableSeats = filtered.length
-    if (availableSeats) {
-      data.testSeats[dataDate] = filtered
-      data.availableSeats = availableSeats
-      return data
+  function filterSeats (data: QueryData) {
+    if (data.status === true) {
+      const dataDate = Object.keys(data.testSeats)[0]
+      const seatDetails: SeatDetail[] = data.testSeats[dataDate]
+      const filtered: SeatDetail[] = []
+      for (const seatDetail of seatDetails) {
+        if (seatDetail.seatStatus) filtered.push(seatDetail)
+      }
+
+      const availableSeats = filtered.length
+      if (availableSeats) {
+        data.testSeats[dataDate] = filtered
+        data.availableSeats = availableSeats
+        return data
+      }
     }
+    return null
   }
-  return null
 }
 
-export { QueryData, SeatDetail, filterSeats }
+export { QueryData, SeatDetail, getData }

@@ -1,5 +1,5 @@
 import * as Utils from '../lib/utils'
-import { QueryData, SeatDetail } from '../lib/seat'
+import { QueryData, SeatDetail } from '../lib/query'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 

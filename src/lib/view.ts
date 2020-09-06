@@ -4,10 +4,9 @@ import * as Btn from '../components/btn'
 import { Checkbox } from '../components/checkbox'
 import { Table } from '../components/table'
 import { PityMsg } from '../components/pityMsg'
-import { QueryData } from './seat'
+import { QueryData } from './query'
 import { State } from './state'
 import { TemplateResult, render } from 'lit-html'
-import axios, { AxiosResponse } from 'axios'
 
 const init = (state: State) => {
   render(App(state), document.getElementById('qrySeatResult'))
@@ -168,10 +167,6 @@ const grab = {
       if (day && day !== '-1') dates.push(day)
     }
     return dates
-  },
-
-  async response (city: string, date: string): Promise<AxiosResponse<QueryData>> {
-    return axios.get('testSeat/queryTestSeats', { params: { city: city, testDay: date } })
   }
 }
 

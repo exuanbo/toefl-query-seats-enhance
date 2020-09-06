@@ -3,6 +3,7 @@ import { App } from '../components/app'
 import * as Btn from '../components/btn'
 import { Checkbox } from '../components/checkbox'
 import { Table } from '../components/table'
+import { Progress } from '../components/progress'
 import { PityMsg } from '../components/pityMsg'
 import { QueryData } from './query'
 import { State } from './state'
@@ -12,6 +13,10 @@ const init = (state: State) => {
   const wrapper = document.getElementById('qrySeatResult')
   render(nothing, wrapper)
   render(App(state), wrapper)
+}
+const renderProgress = (state: State) => {
+  const progressWrapper = document.getElementById('progressWrapper')
+  if (progressWrapper) render(Progress(state), progressWrapper)
 }
 
 const renderTable = (data: QueryData, state: State) => {
@@ -182,4 +187,4 @@ const queryBtn = {
   }
 }
 
-export { init, renderTable, utils, insert, grab, queryBtn }
+export { init, renderProgress, renderTable, utils, insert, grab, queryBtn }

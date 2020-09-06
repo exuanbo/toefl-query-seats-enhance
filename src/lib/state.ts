@@ -1,7 +1,5 @@
 import * as Utils from './utils'
 import * as View from './view'
-import { Progress } from '../components/progress'
-import { render } from 'lit-html'
 
 class Prop {
   private _val: any
@@ -67,9 +65,7 @@ class State {
     if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val, this.cities)
     this.datesLeft = Utils.calcLeft(this.currentDate.val, this.dates)
     this.calcProgress()
-
-    const progressWrapper = document.getElementById('progressWrapper')
-    if (progressWrapper) render(Progress(this), progressWrapper)
+    View.renderProgress(this)
   }
 }
 

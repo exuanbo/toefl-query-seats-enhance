@@ -31,7 +31,7 @@ import axios, { AxiosResponse } from 'axios'
   }
  */
 
-interface QueryData {
+export interface QueryData {
   status: boolean
   testDate: string
   testSeats: {
@@ -41,7 +41,7 @@ interface QueryData {
   availableSeats?: number
 }
 
-interface SeatDetail {
+export interface SeatDetail {
   provinceCn: string
   cityCn: string
   centerCode: string
@@ -54,7 +54,7 @@ interface SeatDetail {
   lateRegFlag: 'N' | 'Y'
 }
 
-const getData = async (state: State) => {
+export const getData = async (state: State) => {
   const city = state.currentCity.val
   const testDay = state.currentDate.val
   const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {
@@ -82,5 +82,3 @@ const getData = async (state: State) => {
     return null
   }
 }
-
-export { QueryData, SeatDetail, getData }

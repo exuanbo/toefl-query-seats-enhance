@@ -9,18 +9,18 @@ import { QueryData } from './query'
 import { State } from './state'
 import { TemplateResult, render, nothing } from 'lit-html'
 
-const init = (state: State) => {
+export const init = (state: State) => {
   const wrapper = document.getElementById('qrySeatResult')
   render(nothing, wrapper)
   render(App(state), wrapper)
 }
 
-const renderProgress = (state: State) => {
+export const renderProgress = (state: State) => {
   const wrapper = document.getElementById('progressWrapper')
   if (wrapper) render(Progress(state), wrapper)
 }
 
-const renderTable = (data: QueryData, state: State) => {
+export const renderTable = (data: QueryData, state: State) => {
   const id = `${state.currentCity.val}[${state.currentDate.val}]`
 
   document
@@ -33,7 +33,7 @@ const renderTable = (data: QueryData, state: State) => {
   render(Table(data), document.getElementById(id))
 }
 
-const utils = {
+export const utils = {
   observeMutation (target: HTMLElement, callback: MutationCallback, config: MutationObserverInit) {
     const observeThis = () => this.observeMutation(target, callback, config)
     if (!Utils.untilAvailable(target, observeThis)) return
@@ -66,7 +66,7 @@ const utils = {
   }
 }
 
-const insert = {
+export const insert = {
   checkbox () {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
@@ -153,7 +153,7 @@ function insertComponent ({
   }
 }
 
-const grab = {
+export const grab = {
   selectedCity () {
     const checkedCities: string[] = []
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
@@ -178,7 +178,7 @@ const grab = {
   }
 }
 
-const queryBtn = {
+export const queryBtn = {
   getEl () {
     return document.getElementById('queryBtn')
   },
@@ -187,5 +187,3 @@ const queryBtn = {
     this.getEl().addEventListener('click', fn, { once: true })
   }
 }
-
-export { init, renderProgress, renderTable, utils, insert, grab, queryBtn }

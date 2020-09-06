@@ -1,7 +1,7 @@
 import * as Utils from '../lib/utils'
 import { TemplateResult, html, nothing } from 'lit-html'
 
-const Checkbox = () => {
+export const Checkbox = () => {
   return html`
     <span
       id="toggleAllCheckboxesBtnWrapper"
@@ -66,5 +66,3 @@ const Checkbox = () => {
     return provinceGroupsTpl
   }
 }
-
-export { Checkbox }

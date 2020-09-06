@@ -1,6 +1,6 @@
 import { html } from 'lit-html'
 
-const expandBtn = () => html`
+export const expandBtn = () => html`
   <button
     id="expandBtn"
     class="btn"
@@ -11,10 +11,8 @@ const expandBtn = () => html`
   </button>
 `
 
-const queryBtn = () => html`
+export const queryBtn = () => html`
   <button id="queryBtn" class="btn btn-primary" style="margin-left:13px;">
     查询全部日期
   </button>
 `
-
-export { expandBtn, queryBtn }

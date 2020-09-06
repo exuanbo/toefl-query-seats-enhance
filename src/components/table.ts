@@ -3,7 +3,7 @@ import { QueryData, SeatDetail } from '../lib/query'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 
-const Table = (data: QueryData) => {
+export const Table = (data: QueryData) => {
   const stylesMiddle = {
     textAlign: 'center',
     verticalAlign: 'middle'
@@ -87,5 +87,3 @@ const Table = (data: QueryData) => {
     `
   }
 }
-
-export { Table }

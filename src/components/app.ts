@@ -2,7 +2,7 @@ import { Tabbale } from './tabbale'
 import { State } from '../lib/state'
 import { html } from 'lit-html'
 
-const App = (state: State) => {
+export const App = (state: State) => {
   return html`
     <div id="progressWrapper"></div>
     ${state.city
@@ -14,5 +14,3 @@ const App = (state: State) => {
         `}
   `
 }
-
-export { App }

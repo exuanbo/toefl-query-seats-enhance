@@ -2,7 +2,7 @@ import * as Utils from '../lib/utils'
 import { State } from '../lib/state'
 import { html } from 'lit-html'
 
-const Tabbale = (state: State) => {
+export const Tabbale = (state: State) => {
   const cities = state.cities
   return html`
     <ul class="nav nav-tabs" style="margin:1em auto 0;width:fit-content;">
@@ -26,5 +26,3 @@ const Tabbale = (state: State) => {
     </div>
   `
 }
-
-export { Tabbale }

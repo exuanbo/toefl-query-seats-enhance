@@ -23,7 +23,7 @@ class Prop {
   }
 }
 
-class State {
+export class State {
   city?: string
   cities?: string[]
   currentCity: { val: string } = new Prop(this, null)
@@ -68,5 +68,3 @@ class State {
     View.renderProgress(this)
   }
 }
-
-export { State }

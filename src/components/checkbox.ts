@@ -1,5 +1,5 @@
 import * as Utils from '../lib/utils'
-import { TemplateResult, html, nothing } from 'lit-html'
+import { html, nothing } from 'lit-html'
 
 export const Checkbox = () => {
   return html`

@@ -1,7 +1,7 @@
 import * as Utils from './lib/utils'
 import * as View from './lib/view'
 import { State } from './lib/state'
-import { getData } from './lib/query'
+import { getData } from './lib/data'
 
 View.utils.observeMutation(
   document.getElementById('wg_center'),

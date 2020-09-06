@@ -5,7 +5,7 @@ import { Checkbox } from '../components/checkbox'
 import { Table } from '../components/table'
 import { Progress } from '../components/progress'
 import { PityMsg } from '../components/pityMsg'
-import { QueryData } from './query'
+import { QueryData } from './data'
 import { State } from './state'
 import { TemplateResult, render } from 'lit-html'
 

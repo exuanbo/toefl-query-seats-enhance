@@ -46,11 +46,12 @@ class State {
     const city = View.grab.selectedCity()
     if (city === '-1') {
       return
-    } else if (typeof city === 'string') {
-      this.city = city
-      this.currentCity.val = city
-    } else {
+    } else if (Array.isArray(city) && city.length !== 1) {
       this.cities = city
+    } else {
+      const singleCity = Array.isArray(city) ? city[0] : city
+      this.city = singleCity
+      this.currentCity.val = singleCity
     }
     this.sum = this.dates.length * (this.city ? 1 : this.cities.length)
     this.update()

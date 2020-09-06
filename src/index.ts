@@ -3,7 +3,20 @@ import * as View from './lib/view'
 import { State } from './lib/state'
 import { getData } from './lib/query'
 
-const query = () => {
+View.utils.observeMutation(
+  document.getElementById('wg_center'),
+  () => {
+    if (String(window.location.href).split('#!')[1] === '/testSeat') {
+      View.utils.adjustStyle()
+      View.insert.checkbox()
+      View.insert.expandBtn()
+      View.insert.queryBtn(query)
+    }
+  },
+  { childList: true }
+)
+
+function query () {
   const state = new State()
 
   if (!state.city && !state.cities) {
@@ -68,16 +81,3 @@ const query = () => {
     if (state.cities && state.availableSeats === initialSeatsNum) View.insert.pityMsg(state)
   }
 }
-
-View.utils.observeMutation(
-  document.getElementById('wg_center'),
-  () => {
-    if (String(window.location.href).split('#!')[1] === '/testSeat') {
-      View.utils.adjustStyle()
-      View.insert.checkbox()
-      View.insert.expandBtn()
-      View.insert.queryBtn(query)
-    }
-  },
-  { childList: true }
-)

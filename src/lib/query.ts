@@ -60,13 +60,12 @@ export const getData = async (state: State) => {
   const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {
     params: { city: city, testDay: testDay }
   })
-  const data = response.data
-  return filterSeats(data)
+  return filterSeats(response.data)
 
   function filterSeats (data: QueryData) {
-    if (data.status === true) {
+    if (data.status) {
       const dataDate = Object.keys(data.testSeats)[0]
-      const seatDetails: SeatDetail[] = data.testSeats[dataDate]
+      const seatDetails = data.testSeats[dataDate]
 
       const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
       const availableSeats = filtered.length

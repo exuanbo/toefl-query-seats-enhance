@@ -140,7 +140,7 @@ function insertComponent ({
   function loopAttr (attrs: typeof wrapperAttr) {
     return Object.keys(attrs)
       .map(attr => `${attr}="${attrs[attr]}"`)
-      .join('')
+      .join(' ')
   }
 }
 

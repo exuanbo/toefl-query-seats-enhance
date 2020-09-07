@@ -1,4 +1,4 @@
-import * as Utils from '../lib/utils'
+import { translateCityName } from '../lib/utils'
 import { State } from '../lib/state'
 import { html } from 'lit-html'
 
@@ -10,7 +10,7 @@ export const Tabbale = (state: State) => {
       ${cities.map(
         city => html`
           <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">
-            <a href="#tab-${city}" data-toggle="tab">${Utils.translateCityName(city)}</a>
+            <a href="#tab-${city}" data-toggle="tab">${translateCityName(city)}</a>
           </li>
         `
       )}

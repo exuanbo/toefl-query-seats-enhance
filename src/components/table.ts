@@ -1,4 +1,4 @@
-import * as Utils from '../lib/utils'
+import { firstKeyOf, isMunicipality, formatCurrency } from '../lib/utils'
 import { QueryData, SeatDetail } from '../lib/data'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
@@ -17,9 +17,8 @@ export const Table = (data: QueryData) => {
           ><span style="margin-left:.5em;color:#fff;"
             ><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span
           ><span style="color:#fff;float:right;"
-            >考试时间：${Utils.firstKeyOf(data.testSeats).split('|')[0]}<span
-              style="padding-left:30px;"
-              >最晚到达时间：${Utils.firstKeyOf(data.testSeats).split('|')[2]}</span
+            >考试时间：${firstKeyOf(data.testSeats).split('|')[0]}<span style="padding-left:30px;"
+              >最晚到达时间：${firstKeyOf(data.testSeats).split('|')[2]}</span
             ></span
           >
         </th>
@@ -36,7 +35,7 @@ export const Table = (data: QueryData) => {
       </tr>
     </thead>
     <tbody>
-      ${data.testSeats[Utils.firstKeyOf(data.testSeats)].map(
+      ${data.testSeats[firstKeyOf(data.testSeats)].map(
         (seat: SeatDetail): TemplateResult =>
           html`
             ${rowTpl(seat)}
@@ -49,7 +48,7 @@ export const Table = (data: QueryData) => {
     return html`
       <tr>
         <td style=${styleMap(stylesMiddle)}>
-          ${Utils.isMunicipality(seat.provinceCn)
+          ${isMunicipality(seat.provinceCn)
             ? html`
                 ${seat.cityCn}
               `
@@ -73,7 +72,7 @@ export const Table = (data: QueryData) => {
                 <span style="color:red;">*</span>
               `
             : nothing}
-          <span><strong>${Utils.formatCurrency(seat.testFee / 100)}</strong></span>
+          <span><strong>${formatCurrency(seat.testFee / 100)}</strong></span>
           ${seat.lateRegFlag === 'Y'
             ? html`
                 <br />(已包含逾期费附加费)

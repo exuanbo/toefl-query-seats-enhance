@@ -1,5 +1,5 @@
-import * as Utils from './utils'
-import * as View from './view'
+import { calcLeft } from './utils'
+import { renderProgress, grab } from './view'
 
 class Prop {
   private _val: unknown
@@ -29,7 +29,7 @@ export class State {
   currentCity = new Prop(this, null) as { val: string }
   citiesLeft?: number
 
-  dates: string[] = View.grab.dates()
+  dates: string[] = grab.dates()
   currentDate = new Prop(this, null) as { val: string }
   datesLeft: number
 
@@ -41,7 +41,7 @@ export class State {
   isComplete = new Prop(this, false) as { val: boolean }
 
   constructor () {
-    const city = View.grab.selectedCity()
+    const city = grab.selectedCity()
     if (city === '-1') {
       return
     } else if (Array.isArray(city) && city.length !== 1) {
@@ -62,9 +62,9 @@ export class State {
   }
 
   update () {
-    if (this.cities) this.citiesLeft = Utils.calcLeft(this.currentCity.val, this.cities)
-    this.datesLeft = Utils.calcLeft(this.currentDate.val, this.dates)
+    if (this.cities) this.citiesLeft = calcLeft(this.currentCity.val, this.cities)
+    this.datesLeft = calcLeft(this.currentDate.val, this.dates)
     this.calcProgress()
-    View.renderProgress(this)
+    renderProgress(this)
   }
 }

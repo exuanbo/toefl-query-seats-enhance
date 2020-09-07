@@ -1,4 +1,4 @@
-import * as Utils from '../lib/utils'
+import { isMunicipality } from '../lib/utils'
 import { html, nothing } from 'lit-html'
 
 export const Checkbox = () => {
@@ -34,7 +34,7 @@ export const Checkbox = () => {
         <div>
           ${Array.from(cities).map(
             city => html`
-              ${Utils.isMunicipality(city.label)
+              ${isMunicipality(city.label)
                 ? nothing
                 : html`
                     ${city === cities.item(0)
@@ -46,7 +46,7 @@ export const Checkbox = () => {
                           >
                         `
                       : nothing}
-                  `}<span style="${Utils.isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+                  `}<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
                 ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" />&nbsp;<label
                   for=${city.value}
                   style="display:inline;"

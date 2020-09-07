@@ -1,5 +1,5 @@
-import * as Utils from './utils'
-import * as View from './view'
+import { sleep } from './utils'
+import { init, renderTable, insert, queryBtn } from './view'
 import { State } from './state'
 import { getData } from './data'
 
@@ -8,23 +8,23 @@ export const Query = () => {
 
   if (!state.city && !state.cities) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
-    View.queryBtn.listen(Query)
+    queryBtn.listen(Query)
     return
   }
   start()
 
   async function start () {
-    View.queryBtn.getEl().innerText = '停止当前查询'
-    View.queryBtn.listen(end)
-    View.init(state)
+    queryBtn.getEl().innerText = '停止当前查询'
+    queryBtn.listen(end)
+    init(state)
     state.city ? await single() : await multi()
     end()
   }
 
   function end () {
     state.isComplete.val = true
-    View.queryBtn.getEl().innerText = '查询全部日期'
-    View.queryBtn.listen(Query)
+    queryBtn.getEl().innerText = '查询全部日期'
+    queryBtn.listen(Query)
   }
 
   async function multi () {
@@ -32,7 +32,7 @@ export const Query = () => {
       state.currentCity.val = city
       await single()
       if (state.isComplete.val) break
-      if (state.citiesLeft) await Utils.sleep(2000)
+      if (state.citiesLeft) await sleep(2000)
     }
   }
 
@@ -44,7 +44,7 @@ export const Query = () => {
       try {
         const data = await getData(state)
         if (data) {
-          View.renderTable(data, state)
+          renderTable(data, state)
           state.availableSeats += data.availableSeats
         }
       } catch (err) {
@@ -56,9 +56,9 @@ export const Query = () => {
         }
       }
       if (state.isComplete.val) break
-      if (state.datesLeft) await Utils.sleep(2000)
+      if (state.datesLeft) await sleep(2000)
     }
 
-    if (state.cities && state.availableSeats === initialSeatsNum) View.insert.pityMsg(state)
+    if (state.cities && state.availableSeats === initialSeatsNum) insert.pityMsg(state)
   }
 }

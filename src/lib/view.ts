@@ -1,4 +1,4 @@
-import * as Utils from './utils'
+import { untilAvailable } from './utils'
 import { App } from '../components/app'
 import * as Btn from '../components/btn'
 import { Checkbox } from '../components/checkbox'
@@ -38,7 +38,7 @@ export const utils = {
   observeMutation (target: HTMLElement, callback: MutationCallback, config: MutationObserverInit) {
     const observeThis = () => this.observeMutation(target, callback, config)
 
-    if (!Utils.untilAvailable(target, observeThis)) {
+    if (!untilAvailable(target, observeThis)) {
       return
     }
 
@@ -50,7 +50,7 @@ export const utils = {
     const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
     const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
 
-    if (!Utils.untilAvailable(formWrapper && selects, this.adjustStyle)) {
+    if (!untilAvailable(formWrapper && selects, this.adjustStyle)) {
       return
     }
 
@@ -69,11 +69,11 @@ export const insert = {
     >
     const provinceNum = provinceGroup.length
 
-    if (!Utils.untilAvailable(provinceNum, insert.checkbox)) {
+    if (!untilAvailable(provinceNum, insert.checkbox)) {
       return
     }
 
-    if (!Utils.untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', insert.checkbox)) {
+    if (!untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', insert.checkbox)) {
       return
     }
 

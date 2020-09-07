@@ -2,18 +2,18 @@ import * as Utils from './utils'
 import * as View from './view'
 
 class Prop {
-  private _val: any
+  private _val: unknown
   private state: State
 
-  constructor (state: State, value: any) {
+  constructor (state: State, value: unknown) {
     this.state = state
     this._val = value
   }
 
-  get val (): any {
+  get val (): unknown {
     return this._val
   }
-  set val (value: any) {
+  set val (value: unknown) {
     this._val = value
     this.update()
   }
@@ -26,11 +26,11 @@ class Prop {
 export class State {
   city?: string
   cities?: string[]
-  currentCity: { val: string } = new Prop(this, null)
+  currentCity = new Prop(this, null) as { val: string }
   citiesLeft?: number
 
   dates: string[] = View.grab.dates()
-  currentDate: { val: string } = new Prop(this, null)
+  currentDate = new Prop(this, null) as { val: string }
   datesLeft: number
 
   sum: number
@@ -38,7 +38,7 @@ export class State {
 
   availableSeats = 0
   err = 0
-  isComplete: { val: boolean } = new Prop(this, false)
+  isComplete = new Prop(this, false) as { val: boolean }
 
   constructor () {
     const city = View.grab.selectedCity()

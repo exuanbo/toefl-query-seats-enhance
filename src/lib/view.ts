@@ -23,15 +23,21 @@ export const renderProgress = (state: State) => {
 
 export const renderTable = (data: QueryData, state: State) => {
   const id = `${state.currentCity.val}[${state.currentDate.val}]`
+  const target = document.getElementById(
+    `${state.city ? 'tables' : `tab-${state.currentCity.val}`}`
+  )
 
-  document
-    .getElementById(`${state.city ? 'tables' : `tab-${state.currentCity.val}`}`)
-    .insertAdjacentHTML(
-      'beforeend',
-      `<table id="${id}" class="table table-bordered" style="margin-top:12px;font-size:16px;"></table>`
-    )
-
-  render(Table(data), document.getElementById(id))
+  insertComponent({
+    component: Table(data),
+    wrapperTag: 'table',
+    wrapperAttr: {
+      id: id,
+      class: 'table table-bordered',
+      style: 'margin-top:12px;font-size:16px;'
+    },
+    target: target,
+    position: 'beforeend'
+  })
 }
 
 export const utils = {
@@ -115,35 +121,6 @@ export const insert = {
   }
 }
 
-function insertComponent ({
-  component,
-  wrapperTag = 'span',
-  wrapperAttr,
-  target,
-  position = 'afterend'
-}: {
-  component: TemplateResult
-  wrapperTag?: string
-  wrapperAttr: {
-    id: string
-    [Attr: string]: string
-  }
-  target: HTMLElement
-  position?: string
-}) {
-  target.insertAdjacentHTML(
-    position as InsertPosition,
-    `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`
-  )
-  render(component, document.getElementById(wrapperAttr.id))
-
-  function loopAttr (attrs: typeof wrapperAttr) {
-    return Object.keys(attrs)
-      .map(attr => `${attr}="${attrs[attr]}"`)
-      .join(' ')
-  }
-}
-
 export const grab = {
   selectedCity () {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
@@ -181,5 +158,34 @@ export const queryBtn = {
 
   listen (fn: Function) {
     this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
+  }
+}
+
+function insertComponent ({
+  component,
+  wrapperTag = 'span',
+  wrapperAttr,
+  target,
+  position = 'afterend'
+}: {
+  component: TemplateResult
+  wrapperTag?: string
+  wrapperAttr: {
+    id: string
+    [Attr: string]: string
+  }
+  target: HTMLElement
+  position?: string
+}) {
+  target.insertAdjacentHTML(
+    position as InsertPosition,
+    `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`
+  )
+  render(component, document.getElementById(wrapperAttr.id))
+
+  function loopAttr (attrs: typeof wrapperAttr) {
+    return Object.keys(attrs)
+      .map(attr => `${attr}="${attrs[attr]}"`)
+      .join(' ')
   }
 }

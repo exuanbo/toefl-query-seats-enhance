@@ -94,15 +94,12 @@ export const insert = {
     })
   },
 
-  queryBtn (fn: Function) {
+  queryBtn () {
     insertComponent({
       component: Btn.queryBtn(),
       wrapperAttr: { id: 'queryBtnWrapper' },
       target: document.getElementById('expandBtn')
     })
-    document
-      .getElementById('queryBtn')
-      .addEventListener('click', fn as EventHandlerNonNull, { once: true })
   },
 
   pityMsg (state: State) {
@@ -174,7 +171,7 @@ export const queryBtn = {
     return document.getElementById('queryBtn')
   },
 
-  listen (fn: EventHandlerNonNull) {
-    this.getEl().addEventListener('click', fn, { once: true })
+  listen (fn: Function) {
+    this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
   }
 }

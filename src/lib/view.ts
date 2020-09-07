@@ -7,12 +7,12 @@ import { Progress } from '../components/progress'
 import { PityMsg } from '../components/pityMsg'
 import { QueryData } from './data'
 import { State } from './state'
-import { TemplateResult, render } from 'lit-html'
+import { TemplateResult, render, nothing } from 'lit-html'
 
 export const init = (state: State) => {
   document.getElementById('checkboxes').classList.add('hide')
   const wrapper = document.getElementById('qrySeatResult')
-  render('', wrapper)
+  render(nothing, wrapper)
   render(App(state), wrapper)
 }
 

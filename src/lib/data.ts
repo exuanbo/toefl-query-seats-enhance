@@ -60,6 +60,7 @@ export const getData = async (state: State) => {
   const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {
     params: { city: city, testDay: testDay }
   })
+
   return filterSeats(response.data)
 
   function filterSeats (data: QueryData) {
@@ -76,6 +77,7 @@ export const getData = async (state: State) => {
         return data
       }
     }
+
     return null
   }
 }

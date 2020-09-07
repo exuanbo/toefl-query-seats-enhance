@@ -37,7 +37,11 @@ export const renderTable = (data: QueryData, state: State) => {
 export const utils = {
   observeMutation (target: HTMLElement, callback: MutationCallback, config: MutationObserverInit) {
     const observeThis = () => this.observeMutation(target, callback, config)
-    if (!Utils.untilAvailable(target, observeThis)) return
+
+    if (!Utils.untilAvailable(target, observeThis)) {
+      return
+    }
+
     const observer = new MutationObserver(callback)
     observer.observe(target, config)
   },
@@ -45,7 +49,10 @@ export const utils = {
   adjustStyle () {
     const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
     const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
-    if (!Utils.untilAvailable(formWrapper && selects, this.adjustStyle)) return
+
+    if (!Utils.untilAvailable(formWrapper && selects, this.adjustStyle)) {
+      return
+    }
 
     formWrapper.classList.remove('offset1')
     formWrapper.style.textAlign = 'center'
@@ -60,14 +67,15 @@ export const insert = {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
-    if (!Utils.untilAvailable(provinceGroup.length, insert.checkbox)) return
-    if (
-      !Utils.untilAvailable(
-        provinceGroup[provinceGroup.length - 1].label === '浙江',
-        insert.checkbox
-      )
-    )
+    const provinceNum = provinceGroup.length
+
+    if (!Utils.untilAvailable(provinceNum, insert.checkbox)) {
       return
+    }
+
+    if (!Utils.untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', insert.checkbox)) {
+      return
+    }
 
     const selectCity = document.getElementById('centerProvinceCity')
     const formWrapper = selectCity.parentElement.parentElement.parentElement

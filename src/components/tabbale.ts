@@ -4,6 +4,7 @@ import { html } from 'lit-html'
 
 export const Tabbale = (state: State) => {
   const cities = state.cities
+
   return html`
     <ul class="nav nav-tabs" style="margin:1em auto 0;width:fit-content;">
       ${cities.map(

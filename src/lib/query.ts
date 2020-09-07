@@ -41,7 +41,6 @@ export const Query = () => {
 
     for (const testDay of state.dates) {
       state.currentDate.val = testDay
-
       try {
         const data = await getData(state)
         if (data) {
@@ -56,7 +55,6 @@ export const Query = () => {
           throw err
         }
       }
-
       if (state.isComplete.val) break
       if (state.datesLeft) await Utils.sleep(2000)
     }

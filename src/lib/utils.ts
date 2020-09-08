@@ -25,6 +25,13 @@ export const mapElOf = <El extends Node, T>(
   return Array.from(nodeList).map(cb)
 }
 
+export const someElOf = <T extends Node>(
+  nodeList: NodeListOf<T>,
+  cb: (node: T, index?: number) => boolean
+) => {
+  return Array.from(nodeList).some(cb)
+}
+
 export const formatCurrency = (value: number) => 'RMB￥' + value.toFixed(2)
 
 export const isMunicipality = (cityName: string) =>

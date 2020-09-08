@@ -1,4 +1,4 @@
-import { forEachElOf, mapElOf, isMunicipality } from '../lib/utils'
+import { forEachElOf, mapElOf, someElOf, isMunicipality } from '../lib/utils'
 import { TemplateResult, html, nothing } from 'lit-html'
 
 export const Checkbox = () => {
@@ -7,7 +7,7 @@ export const Checkbox = () => {
       id="toggleAllCheckboxesBtnWrapper"
       style="float:right;font-size:13px;text-decoration:underline;"
     >
-      <a href="javascript:void(0);" @click=${toggle}>全选/反选</a>
+      <a href="javascript:void(0);" @click=${toggle}>全选/全不选</a>
     </span>
     ${loopProvinceGroup()}
   `
@@ -16,8 +16,9 @@ export const Checkbox = () => {
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
+    const notAllChecked = someElOf(allCheckboxes, box => !box.checked)
     forEachElOf(allCheckboxes, box => {
-      box.checked = !box.checked
+      box.checked = notAllChecked
     })
   }
 

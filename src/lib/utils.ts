@@ -12,9 +12,12 @@ export const untilAvailable = (con: any, fn: Function) => {
   return true
 }
 
-export const forEachElOf = <T extends Node>(THIS: NodeListOf<T>, cb: (node: T) => void) => {
+export const forEachElOf = <T extends Node>(
+  THIS: NodeListOf<T>,
+  cb: (node: T, index: number) => void
+) => {
   THIS.forEach(function (this: typeof THIS, _, index) {
-    cb(this[index])
+    cb(this[index], index)
   }, THIS)
 }
 

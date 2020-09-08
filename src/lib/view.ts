@@ -1,4 +1,4 @@
-import { untilAvailable, forEachElOf, mapNodeList } from './utils'
+import { untilAvailable, forEachElOf, mapElOf } from './utils'
 import { App } from '../components/app'
 import * as Btn from '../components/btn'
 import { Checkbox } from '../components/checkbox'
@@ -126,7 +126,7 @@ export const grab = {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
-    const checkedCities = mapNodeList(checkboxes, (box): string =>
+    const checkedCities = mapElOf(checkboxes, (box): string =>
       box.checked ? box.id : null
     ).filter(Boolean)
 
@@ -140,7 +140,7 @@ export const grab = {
 
   dates () {
     const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
-    return mapNodeList(options, (option): string => {
+    return mapElOf(options, (option): string => {
       const day = option.value
       if (day && day !== '-1') return day
     }).filter(Boolean)

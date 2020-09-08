@@ -1,4 +1,4 @@
-import { forEachElOf, mapNodeList, isMunicipality } from '../lib/utils'
+import { forEachElOf, mapElOf, isMunicipality } from '../lib/utils'
 import { TemplateResult, html, nothing } from 'lit-html'
 
 export const Checkbox = () => {
@@ -26,7 +26,7 @@ export const Checkbox = () => {
       HTMLOptGroupElement
     >
 
-    return mapNodeList(
+    return mapElOf(
       provinceGroups,
       (provinceGroup): TemplateResult => {
         const provinceName = provinceGroup.label
@@ -34,7 +34,7 @@ export const Checkbox = () => {
 
         return html`
           <div>
-            ${mapNodeList(
+            ${mapElOf(
               cities,
               (city, index): TemplateResult => html`
                 ${isMunicipality(city.label)

@@ -1,4 +1,4 @@
-import { untilAvailable } from './utils'
+import { untilAvailable, forEachElOf, mapNodeList } from './utils'
 import { App } from '../components/app'
 import * as Btn from '../components/btn'
 import { Checkbox } from '../components/checkbox'
@@ -62,9 +62,9 @@ export const utils = {
 
     formWrapper.classList.remove('offset1')
     formWrapper.style.textAlign = 'center'
-    selects.forEach(function (this: typeof selects, _, index) {
-      this[index].style.width = '12em'
-    }, selects)
+    forEachElOf(selects, el => {
+      el.style.width = '12em'
+    })
   }
 }
 
@@ -126,11 +126,9 @@ export const grab = {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
-    const checkedCities = Array.from(checkboxes)
-      .map(checkbox => {
-        if (checkbox.checked) return checkbox.id
-      })
-      .filter(Boolean)
+    const checkedCities = mapNodeList(checkboxes, (box): string =>
+      box.checked ? box.id : null
+    ).filter(Boolean)
 
     if (checkedCities.length) {
       return checkedCities
@@ -142,12 +140,10 @@ export const grab = {
 
   dates () {
     const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
-    return Array.from(options)
-      .map(option => {
-        const day = option.value
-        if (day && day !== '-1') return day
-      })
-      .filter(Boolean)
+    return mapNodeList(options, (option): string => {
+      const day = option.value
+      if (day && day !== '-1') return day
+    }).filter(Boolean)
   }
 }
 

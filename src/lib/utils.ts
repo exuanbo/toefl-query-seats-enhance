@@ -12,6 +12,16 @@ export const untilAvailable = (con: any, fn: Function) => {
   return true
 }
 
+export const forEachElOf = <T extends Node>(THIS: NodeListOf<T>, cb: (node: T) => void) => {
+  THIS.forEach(function (this: typeof THIS, _, index) {
+    cb(this[index])
+  }, THIS)
+}
+
+export const mapNodeList = <El extends Node, T>(nodeList: NodeListOf<El>, cb: (node: El) => T) => {
+  return Array.from(nodeList).map(cb)
+}
+
 export const formatCurrency = (value: number) => 'RMB￥' + value.toFixed(2)
 
 export const isMunicipality = (cityName: string) =>

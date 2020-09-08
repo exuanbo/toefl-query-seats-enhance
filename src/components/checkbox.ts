@@ -1,5 +1,5 @@
-import { isMunicipality } from '../lib/utils'
-import { html, nothing } from 'lit-html'
+import { forEachElOf, mapNodeList, isMunicipality } from '../lib/utils'
+import { TemplateResult, html, nothing } from 'lit-html'
 
 export const Checkbox = () => {
   return html`
@@ -16,9 +16,9 @@ export const Checkbox = () => {
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
-    allCheckboxes.forEach(function (this: typeof allCheckboxes, _, index) {
-      this[index].checked = !this[index].checked
-    }, allCheckboxes)
+    forEachElOf(allCheckboxes, box => {
+      box.checked = !box.checked
+    })
   }
 
   function loopProvinceGroup () {
@@ -26,37 +26,41 @@ export const Checkbox = () => {
       HTMLOptGroupElement
     >
 
-    return Array.from(provinceGroups).map(provinceGroup => {
-      const provinceName = provinceGroup.label
-      const cities = provinceGroup.childNodes as NodeListOf<HTMLOptionElement>
+    return mapNodeList(
+      provinceGroups,
+      (provinceGroup): TemplateResult => {
+        const provinceName = provinceGroup.label
+        const cities = provinceGroup.childNodes as NodeListOf<HTMLOptionElement>
 
-      return html`
-        <div>
-          ${Array.from(cities).map(
-            city => html`
-              ${isMunicipality(city.label)
-                ? nothing
-                : html`
-                    ${city === cities.item(0)
-                      ? html`
-                          <span
-                            class="muted"
-                            style="${provinceName.length === 3 ? '' : 'margin-right:1em;'}"
-                            >${provinceName}：</span
-                          >
-                        `
-                      : nothing}
-                  `}<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-                ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" /><label
-                  for=${city.value}
-                  style="display:inline;margin:0 8px 0 4px;"
-                  >${city.label}</label
-                ></span
-              >
-            `
-          )}
-        </div>
-      `
-    })
+        return html`
+          <div>
+            ${mapNodeList(
+              cities,
+              (city): TemplateResult => html`
+                ${isMunicipality(city.label)
+                  ? nothing
+                  : html`
+                      ${city === cities.item(0)
+                        ? html`
+                            <span
+                              class="muted"
+                              style="${provinceName.length === 3 ? '' : 'margin-right:1em;'}"
+                              >${provinceName}：</span
+                            >
+                          `
+                        : nothing}
+                    `}<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+                  ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" /><label
+                    for=${city.value}
+                    style="display:inline;margin:0 8px 0 4px;"
+                    >${city.label}</label
+                  ></span
+                >
+              `
+            )}
+          </div>
+        `
+      }
+    )
   }
 }

@@ -4,9 +4,9 @@ export const calcLeft = (cur: string, arr: string[]) => arr.length - arr.indexOf
 
 export const sleep = (ms: number): Promise<void> => new Promise(res => setTimeout(res, ms))
 
-export const untilAvailable = (con: any, fn: Function) => {
+export const untilAvailable = (con: any, fn: Function, interval: number = 100) => {
   if (!con) {
-    window.setTimeout(fn, 100)
+    window.setTimeout(fn, interval)
     return false
   }
   return true

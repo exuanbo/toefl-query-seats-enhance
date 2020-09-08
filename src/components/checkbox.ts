@@ -36,11 +36,11 @@ export const Checkbox = () => {
           <div>
             ${mapNodeList(
               cities,
-              (city): TemplateResult => html`
+              (city, index): TemplateResult => html`
                 ${isMunicipality(city.label)
                   ? nothing
                   : html`
-                      ${city === cities.item(0)
+                      ${index === 0
                         ? html`
                             <span
                               class="muted"
@@ -52,7 +52,9 @@ export const Checkbox = () => {
                     `}<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
                   ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" /><label
                     for=${city.value}
-                    style="display:inline;margin:0 8px 0 4px;"
+                    style="display:inline;margin:${index === cities.length - 1
+                      ? '0 0 0 4px'
+                      : '0 8px 0 4px'}"
                     >${city.label}</label
                   ></span
                 >

@@ -18,7 +18,10 @@ export const forEachElOf = <T extends Node>(THIS: NodeListOf<T>, cb: (node: T) =
   }, THIS)
 }
 
-export const mapNodeList = <El extends Node, T>(nodeList: NodeListOf<El>, cb: (node: El) => T) => {
+export const mapNodeList = <El extends Node, T>(
+  nodeList: NodeListOf<El>,
+  cb: (node: El, index?: number) => T
+) => {
   return Array.from(nodeList).map(cb)
 }
 

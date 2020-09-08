@@ -47,11 +47,11 @@ export const Checkbox = () => {
                         `
                       : nothing}
                   `}<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-                ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" />&nbsp;<label
+                ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" /><label
                   for=${city.value}
-                  style="display:inline;"
+                  style="display:inline;margin:0 8px 0 4px;"
                   >${city.label}</label
-                >&nbsp;</span
+                ></span
               >
             `
           )}

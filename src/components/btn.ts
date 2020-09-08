@@ -5,7 +5,7 @@ export const expandBtn = () => html`
     id="expandBtn"
     class="btn"
     @click=${() => document.getElementById('checkboxes').classList.toggle('hide')}
-    style="margin-left:8px;"
+    style="margin-left:6px;"
   >
     展开多选
   </button>

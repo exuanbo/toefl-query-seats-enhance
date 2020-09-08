@@ -64,12 +64,12 @@ export const Table = (data: QueryData) => {
               style="text-decoration:underline;"
               >${seat.centerCode}</a
             ></span
-          >&nbsp;<span>${seat.centerNameCn}</span>
+          ><span style="margin-left:8px;">${seat.centerNameCn}</span>
         </td>
         <td style=${styleMap(stylesMiddle)}>
           ${seat.lateRegFlag === 'Y'
             ? html`
-                <span style="color:red;">*</span>
+                <span style="color:#FF0000;">*</span>
               `
             : nothing}
           <span><strong>${formatCurrency(seat.testFee / 100)}</strong></span>

@@ -11,6 +11,7 @@ export const Query = () => {
     queryBtn.listen(Query)
     return
   }
+
   start()
 
   async function start () {

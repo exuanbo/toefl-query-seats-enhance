@@ -15,10 +15,6 @@ class Prop {
   }
   set val (value: unknown) {
     this._val = value
-    this.update()
-  }
-
-  private update () {
     this.state.update()
   }
 }
@@ -42,12 +38,13 @@ export class State {
 
   constructor () {
     const city = grab.selectedCity()
-    if (city === '-1') {
+    const isCityArray = Array.isArray(city)
+    if (isCityArray && city.length !== 1) {
+      this.cities = city as string[]
+    } else if (city === '-1') {
       return
-    } else if (Array.isArray(city) && city.length !== 1) {
-      this.cities = city
     } else {
-      const singleCity = Array.isArray(city) ? city[0] : city
+      const singleCity = isCityArray ? city[0] : (city as string)
       this.city = singleCity
       this.currentCity.val = singleCity
     }

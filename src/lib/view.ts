@@ -129,8 +129,9 @@ export const grab = {
     const checkedCities = mapElOf(checkboxes, (box): string =>
       box.checked ? box.id : null
     ).filter(Boolean)
+    const isExpanded = !document.getElementById('checkboxes').classList.contains('hide')
 
-    if (checkedCities.length) {
+    if (checkedCities.length && isExpanded) {
       return checkedCities
     } else {
       const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement

@@ -4,7 +4,7 @@ import { Query } from './lib/query'
 View.utils.observeMutation(
   document.getElementById('wg_center'),
   () => {
-    if (String(window.location.href).split('#!')[1] === '/testSeat') {
+    if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.utils.adjustStyle()
       View.insert.checkbox()
       View.insert.expandBtn()

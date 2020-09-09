@@ -1,4 +1,7 @@
+import fs from 'fs'
+import path from 'path'
 import gulp from 'gulp'
+import through from 'through2'
 import source from 'vinyl-source-stream'
 import terser from 'gulp-terser'
 import del from 'del'
@@ -10,6 +13,14 @@ import minifyHtml from 'rollup-plugin-minify-html-template-literals'
 import { exec } from 'child_process'
 
 const { src, dest, series, parallel, watch } = gulp
+
+const header = filePath => {
+  return through.obj((file, _, callback) => {
+    const headerContent = String(fs.readFileSync(path.join(process.cwd(), filePath)))
+    file.contents = Buffer.from(headerContent + String(file.contents))
+    callback(null, file)
+  })
+}
 
 function clean () {
   return del('dist')
@@ -24,6 +35,12 @@ function build () {
   return rollupStream(options)
     .pipe(source('app.js'))
     .pipe(dest('dist/extension'))
+}
+
+function addHeader () {
+  return src('dist/extension/app.js')
+    .pipe(header('src/extension/meta.js'))
+    .pipe(dest('dist/userscript'))
 }
 
 function minifyJS () {
@@ -45,5 +62,5 @@ function server () {
   watch('src/**/*', { ignoreInitial: false }, build)
 }
 
-export default series(clean, parallel(series(build, minifyJS), mix), pack)
+export default series(clean, parallel(series(build, addHeader, minifyJS), mix), pack)
 export { server }

@@ -1,19 +1,19 @@
 import { calcLeft } from './utils'
 import { renderProgress, grab } from './view'
 
-class Prop {
-  private _val: unknown
+class Prop<T> {
+  private _val: T
   private state: State
 
-  constructor (state: State, value: unknown) {
+  constructor (state: State, value: T) {
     this.state = state
     this._val = value
   }
 
-  get val (): unknown {
+  get val (): T {
     return this._val
   }
-  set val (value: unknown) {
+  set val (value: T) {
     this._val = value
     this.state.update()
   }
@@ -22,11 +22,11 @@ class Prop {
 export class State {
   city?: string
   cities?: string[]
-  currentCity = new Prop(this, null) as { val: string }
+  currentCity = new Prop(this, '')
   citiesLeft?: number
 
   dates: string[] = grab.dates()
-  currentDate = new Prop(this, null) as { val: string }
+  currentDate = new Prop(this, '')
   datesLeft: number
 
   sum: number
@@ -34,7 +34,7 @@ export class State {
 
   availableSeats = 0
   err = 0
-  isComplete = new Prop(this, false) as { val: boolean }
+  isComplete = new Prop(this, false)
 
   constructor () {
     const city = grab.selectedCity()

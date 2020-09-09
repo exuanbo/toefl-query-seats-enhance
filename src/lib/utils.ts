@@ -13,12 +13,12 @@ export const untilAvailable = (con: any, fn: Function, interval: number = 100) =
 }
 
 export const forEachElOf = <T extends Node>(
-  THIS: NodeListOf<T>,
-  cb: (node: T, index: number) => void
+  nodeList: NodeListOf<T>,
+  cb: (node: T, index?: number) => void
 ) => {
-  THIS.forEach(function (this: typeof THIS, _, index) {
-    cb(this[index], index)
-  }, THIS)
+  nodeList.forEach((_, index) => {
+    cb(nodeList[index], index)
+  })
 }
 
 export const mapElOf = <El extends Node, T>(

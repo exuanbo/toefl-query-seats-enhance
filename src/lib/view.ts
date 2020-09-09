@@ -22,27 +22,22 @@ export const renderProgress = (state: State) => {
 }
 
 export const renderTable = (data: QueryData, state: State) => {
-  const id = `${state.currentCity.val}[${state.currentDate.val}]`
-  const target = document.getElementById(
-    `${state.city ? 'tables' : `tab-${state.currentCity.val}`}`
-  )
-
   insertComponent({
     component: Table(data),
     wrapperTag: 'table',
     wrapperAttr: {
-      id: id,
+      id: `${state.currentCity.val}[${state.currentDate.val}]`,
       class: 'table table-bordered',
       style: 'margin-top:12px;font-size:16px;'
     },
-    target: target,
+    target: document.getElementById(`${state.city ? 'tables' : `tab-${state.currentCity.val}`}`),
     position: 'beforeend'
   })
 }
 
 export const utils = {
   observeMutation (target: HTMLElement, callback: MutationCallback, config: MutationObserverInit) {
-    const observeThis = () => this.observeMutation(target, callback, config)
+    const observeThis = () => utils.observeMutation(target, callback, config)
 
     if (!untilAvailable(target, observeThis)) {
       return
@@ -56,7 +51,7 @@ export const utils = {
     const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
     const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
 
-    if (!untilAvailable(formWrapper && selects, this.adjustStyle)) {
+    if (!untilAvailable(formWrapper && selects, utils.adjustStyle)) {
       return
     }
 

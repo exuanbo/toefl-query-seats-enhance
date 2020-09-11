@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         托福考位查询增强
 // @namespace    https://github.com/exuanbo
-// @version      2
+// @version      2.0.1
 // @author       Exuanbo
 // @description  一键查询所选地点所有时间的可预定考位
 // @icon         https://raw.githubusercontent.com/exuanbo/toefl-query-seats-enhance/master/src/img/icon48.png

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "托福考位查询增强",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "一键查询所选地点所有时间的可预定考位",
   "icons": {
     "16": "icon16.png",

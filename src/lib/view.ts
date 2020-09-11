@@ -114,6 +114,8 @@ export const insert = {
   pityMsg (state: State) {
     render(PityMsg(), document.getElementById(`tab-${state.currentCity.val}`))
   }
+
+  // TODO: add donate btn
 }
 
 export const grab = {

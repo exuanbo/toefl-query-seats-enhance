@@ -38,13 +38,12 @@ export class State {
 
   constructor () {
     const city = grab.selectedCity()
-    const isCityArray = Array.isArray(city)
-    if (isCityArray && city.length !== 1) {
-      this.cities = city as string[]
+    if (city instanceof Array && city.length !== 1) {
+      this.cities = city
     } else if (city === '-1') {
       return
     } else {
-      const singleCity = isCityArray ? city[0] : (city as string)
+      const singleCity = city instanceof Array ? city[0] : city
       this.city = singleCity
       this.currentCity.val = singleCity
     }

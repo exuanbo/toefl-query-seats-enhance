@@ -9,19 +9,19 @@ import { QueryData } from './data'
 import { State } from './state'
 import { TemplateResult, render, nothing } from 'lit-html'
 
-export const init = (state: State) => {
+export const init = (state: State): void => {
   document.getElementById('checkboxes').classList.add('hide')
   const wrapper = document.getElementById('qrySeatResult')
   render(nothing, wrapper)
   render(App(state), wrapper)
 }
 
-export const renderProgress = (state: State) => {
+export const renderProgress = (state: State): void => {
   const wrapper = document.getElementById('progressWrapper')
   if (wrapper) render(Progress(state), wrapper)
 }
 
-export const renderTable = (data: QueryData, state: State) => {
+export const renderTable = (data: QueryData, state: State): void => {
   insertComponent({
     component: Table(data),
     wrapperTag: 'table',
@@ -36,8 +36,12 @@ export const renderTable = (data: QueryData, state: State) => {
 }
 
 export const utils = {
-  observeMutation (target: HTMLElement, callback: MutationCallback, config: MutationObserverInit) {
-    const observeThis = () => utils.observeMutation(target, callback, config)
+  observeMutation (
+    target: HTMLElement,
+    callback: MutationCallback,
+    config: MutationObserverInit
+  ): void {
+    const observeThis = (): void => utils.observeMutation(target, callback, config)
 
     if (!untilAvailable(target, observeThis)) {
       return
@@ -47,7 +51,7 @@ export const utils = {
     observer.observe(target, config)
   },
 
-  adjustStyle () {
+  adjustStyle (): void {
     const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
     const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
 
@@ -64,7 +68,7 @@ export const utils = {
 }
 
 export const insert = {
-  checkbox () {
+  checkbox (): void {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
@@ -95,7 +99,7 @@ export const insert = {
     })
   },
 
-  expandBtn () {
+  expandBtn (): void {
     insertComponent({
       component: Btn.expandBtn(),
       wrapperAttr: { id: 'expandBtnWrapper' },
@@ -103,7 +107,7 @@ export const insert = {
     })
   },
 
-  queryBtn () {
+  queryBtn (): void {
     insertComponent({
       component: Btn.queryBtn(),
       wrapperAttr: { id: 'queryBtnWrapper' },
@@ -111,7 +115,7 @@ export const insert = {
     })
   },
 
-  pityMsg (state: State) {
+  pityMsg (state: State): void {
     render(PityMsg(), document.getElementById(`tab-${state.currentCity.val}`))
   }
 
@@ -119,7 +123,7 @@ export const insert = {
 }
 
 export const grab = {
-  selectedCity () {
+  selectedCity (): string | string[] {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
@@ -136,7 +140,7 @@ export const grab = {
     }
   },
 
-  dates () {
+  dates (): string[] {
     const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
     return mapElOf(options, (option): string => {
       const day = option.value
@@ -146,11 +150,11 @@ export const grab = {
 }
 
 export const queryBtn = {
-  getEl () {
+  getEl (): HTMLElement {
     return document.getElementById('queryBtn')
   },
 
-  listen (fn: Function) {
+  listen (fn: Function): void {
     this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
   }
 }
@@ -170,7 +174,7 @@ function insertComponent ({
   }
   target: HTMLElement
   position?: string
-}) {
+}): void {
   target.insertAdjacentHTML(
     position as InsertPosition,
     `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`

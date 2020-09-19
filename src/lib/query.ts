@@ -3,7 +3,7 @@ import { init, renderTable, insert, queryBtn } from './view'
 import { State } from './state'
 import { getData } from './data'
 
-export const Query = () => {
+export const Query = (): void => {
   const state = new State()
 
   if (!state.city && !state.cities) {
@@ -14,7 +14,7 @@ export const Query = () => {
 
   start()
 
-  async function start () {
+  async function start (): Promise<void> {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.listen(end)
     init(state)
@@ -22,13 +22,13 @@ export const Query = () => {
     end()
   }
 
-  function end () {
+  function end (): void {
     state.isComplete.val = true
     queryBtn.getEl().innerText = '查询全部日期'
     queryBtn.listen(Query)
   }
 
-  async function multi () {
+  async function multi (): Promise<void> {
     for (const city of state.cities) {
       state.currentCity.val = city
       await single()
@@ -37,7 +37,7 @@ export const Query = () => {
     }
   }
 
-  async function single () {
+  async function single (): Promise<void> {
     const initialSeatsNum = state.availableSeats
 
     for (const testDay of state.dates) {

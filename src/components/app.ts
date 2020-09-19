@@ -1,8 +1,8 @@
 import { Tabbale } from './tabbale'
 import { State } from '../lib/state'
-import { html } from 'lit-html'
+import { TemplateResult, html } from 'lit-html'
 
-export const App = (state: State) => {
+export const App = (state: State): TemplateResult => {
   return html`
     <div id="progressWrapper"></div>
     ${state.city

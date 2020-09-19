@@ -3,7 +3,7 @@ import { QueryData, SeatDetail } from '../lib/data'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 
-export const Table = (data: QueryData) => {
+export const Table = (data: QueryData): TemplateResult => {
   const stylesMiddle = {
     textAlign: 'center',
     verticalAlign: 'middle'
@@ -44,7 +44,7 @@ export const Table = (data: QueryData) => {
     </tbody>
   `
 
-  function rowTpl (seat: SeatDetail) {
+  function rowTpl (seat: SeatDetail): TemplateResult {
     return html`
       <tr>
         <td style=${styleMap(stylesMiddle)}>

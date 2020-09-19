@@ -1,8 +1,8 @@
 import { State } from '../lib/state'
-import { html, nothing } from 'lit-html'
+import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 
-export const Progress = (state: State) => {
+export const Progress = (state: State): TemplateResult => {
   const btn = document.getElementById('btnQuerySeat')
   const label = document.querySelector('label[for="centerProvinceCity"]') as HTMLElement
   const barStyle = {

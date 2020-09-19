@@ -1,7 +1,7 @@
 import { forEachElOf, mapElOf, someElOf, isMunicipality } from '../lib/utils'
 import { TemplateResult, html, nothing } from 'lit-html'
 
-export const Checkbox = () => {
+export const Checkbox = (): TemplateResult => {
   return html`
     <span
       id="toggleAllCheckboxesBtnWrapper"
@@ -12,7 +12,7 @@ export const Checkbox = () => {
     ${loopProvinceGroup()}
   `
 
-  function toggle () {
+  function toggle (): void {
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement
     >
@@ -22,7 +22,7 @@ export const Checkbox = () => {
     })
   }
 
-  function loopProvinceGroup () {
+  function loopProvinceGroup (): TemplateResult[] {
     const provinceGroups = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >

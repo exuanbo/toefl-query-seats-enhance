@@ -51,13 +51,13 @@ export class State {
     this.update()
   }
 
-  private calcProgress () {
+  private calcProgress (): void {
     this.progress =
       100 -
       (((this.cities ? this.citiesLeft * this.dates.length : 0) + this.datesLeft) / this.sum) * 100
   }
 
-  update () {
+  update (): void {
     if (this.cities) this.citiesLeft = calcLeft(this.currentCity.val, this.cities)
     this.datesLeft = calcLeft(this.currentDate.val, this.dates)
     this.calcProgress()

@@ -1,6 +1,6 @@
-import { html } from 'lit-html'
+import { TemplateResult, html } from 'lit-html'
 
-export const expandBtn = () => html`
+export const expandBtn = (): TemplateResult => html`
   <button
     id="expandBtn"
     class="btn"

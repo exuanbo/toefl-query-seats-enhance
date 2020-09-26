@@ -15,7 +15,7 @@
     "@rollup/plugin-typescript": "6.0.0",
     "@rollup/stream": "1.1.0",
     "@types/layui-layer": "1.0.0",
-    "del": "5.1.0",
+    "del": "6.0.0",
     "gulp": "4.0.2",
     "gulp-terser": "1.4.0",
     "prettier-standard": "16.4.1",

@@ -1,16 +1,15 @@
 import fs from 'fs'
 import path from 'path'
+import { exec } from 'child_process'
 import gulp from 'gulp'
 import through from 'through2'
 import source from 'vinyl-source-stream'
 import terser from 'gulp-terser'
-import del from 'del'
 import rollupStream from '@rollup/stream'
 import typescript from '@rollup/plugin-typescript'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import minifyHtml from 'rollup-plugin-minify-html-template-literals'
-import { exec } from 'child_process'
 
 const { src, dest, series, parallel, watch } = gulp
 
@@ -23,7 +22,7 @@ const header = filePath => {
 }
 
 function clean () {
-  return del('dist')
+  return exec('rm -rf dist')
 }
 
 function build () {

@@ -42,20 +42,17 @@ export const Query = (): void => {
 
     for (const testDay of state.dates) {
       state.currentDate.val = testDay
+
       try {
         const data = await getData(state)
         if (data) {
           renderTable(data, state)
           state.availableSeats += data.availableSeats
         }
-      } catch (err) {
-        if (err instanceof Error) {
-          state.err++
-        } else {
-          console.log(err)
-          throw err
-        }
+      } catch {
+        state.err++
       }
+
       if (state.isComplete.val) break
       if (state.datesLeft) await sleep(2000)
     }

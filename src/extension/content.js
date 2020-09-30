@@ -3,7 +3,6 @@ const loadScript = source => {
     const onloadHander = (_, isAbort) => {
       if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
         script.onload = null
-        script.onreadystatechange = null
         script = undefined
 
         isAbort ? reject(new Error('Failed to load script')) : resolve()
@@ -14,7 +13,6 @@ const loadScript = source => {
     script.src = source
     script.defer = true
     script.onload = onloadHander
-    script.onreadystatechange = onloadHander
 
     document.head.insertBefore(script, null)
   })

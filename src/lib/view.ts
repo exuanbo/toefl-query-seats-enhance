@@ -163,23 +163,7 @@ export const grab = {
   }
 }
 
-export const queryBtn = {
-  getEl (): HTMLElement {
-    return document.getElementById('queryBtn')
-  },
-
-  onClick (fn: Function): void {
-    this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
-  }
-}
-
-function insertComponent ({
-  component,
-  wrapperTag = 'span',
-  wrapperAttr,
-  target,
-  position = 'afterend'
-}: {
+interface insertOptions {
   component: TemplateResult
   wrapperTag?: string
   wrapperAttr: {
@@ -188,7 +172,15 @@ function insertComponent ({
   }
   target: HTMLElement
   position?: string
-}): void {
+}
+
+function insertComponent ({
+  component,
+  wrapperTag = 'span',
+  wrapperAttr,
+  target,
+  position = 'afterend'
+}: insertOptions): void {
   target.insertAdjacentHTML(
     position as InsertPosition,
     `<${wrapperTag} ${loopAttr(wrapperAttr)}></${wrapperTag}>`

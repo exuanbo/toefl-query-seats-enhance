@@ -6,7 +6,7 @@ import { getData } from './data'
 export const Query = (): void => {
   const state = new State()
 
-  if (!state.city && !state.cities) {
+  if (!state.get('city') && !state.get('cities')) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     queryBtn.listen(Query)
     return
@@ -18,45 +18,47 @@ export const Query = (): void => {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.listen(end)
     init(state)
-    state.city ? await single() : await multi()
+    state.get('city') ? await single() : await multi()
     end()
   }
 
   function end (): void {
-    state.isComplete.val = true
+    state.set({ isComplete: true }, true)
     queryBtn.getEl().innerText = '查询全部日期'
     queryBtn.listen(Query)
   }
 
   async function multi (): Promise<void> {
-    for (const city of state.cities) {
-      state.currentCity.val = city
+    for (const city of state.get('cities')) {
+      state.set({ currentCity: city }, true)
+
       await single()
-      if (state.isComplete.val) break
-      if (state.citiesLeft) await sleep(2000)
+      if (state.get('isComplete')) break
+      if (state.get('citiesLeft')) await sleep(2000)
     }
   }
 
   async function single (): Promise<void> {
-    const initialSeatsNum = state.availableSeats
+    const initialSeatsNum = state.get('availableSeats')
 
-    for (const testDay of state.dates) {
-      state.currentDate.val = testDay
+    for (const testDay of state.get('dates')) {
+      state.set({ currentDate: testDay }, true)
 
       try {
         const data = await getData(state)
         if (data) {
           renderTable(data, state)
-          state.availableSeats += data.availableSeats
+          state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
       } catch {
-        state.err++
+        state.set({ err: state.get('err') + 1 })
       }
 
-      if (state.isComplete.val) break
-      if (state.datesLeft) await sleep(2000)
+      if (state.get('isComplete')) break
+      if (state.get('datesLeft')) await sleep(2000)
     }
 
-    if (state.cities && state.availableSeats === initialSeatsNum) insert.pityMsg(state)
+    if (state.get('cities') && state.get('availableSeats') === initialSeatsNum)
+      insert.pityMsg(state)
   }
 }

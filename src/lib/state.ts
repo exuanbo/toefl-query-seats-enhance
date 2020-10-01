@@ -1,65 +1,70 @@
 import { calcLeft } from './utils'
 import { renderProgress, grab } from './view'
 
-class Prop<T> {
-  private _val: T
-  private state: State
-
-  constructor (state: State, value: T) {
-    this.state = state
-    this._val = value
-  }
-
-  get val (): T {
-    return this._val
-  }
-  set val (value: T) {
-    this._val = value
-    this.state.update()
-  }
-}
-
-export class State {
+interface StateData {
   city?: string
   cities?: string[]
-  currentCity = new Prop(this, '')
+  currentCity?: string
   citiesLeft?: number
 
-  dates: string[] = grab.dates()
-  currentDate = new Prop(this, '')
-  datesLeft: number
+  dates?: string[]
+  currentDate?: string
+  datesLeft?: number
 
-  sum: number
-  progress: number
+  sum?: number
+  progress?: number
 
-  availableSeats = 0
-  err = 0
-  isComplete = new Prop(this, false)
+  availableSeats?: number
+  err?: number
+  isComplete?: boolean
+}
+
+type StateDataKey = keyof StateData
+
+export class State {
+  private data: StateData = {
+    dates: grab.dates(),
+    availableSeats: 0,
+    err: 0,
+    isComplete: false
+  }
 
   constructor () {
     const city = grab.selectedCity()
     if (city instanceof Array && city.length !== 1) {
-      this.cities = city
+      this.data.cities = city
     } else if (city === '-1') {
       return
     } else {
       const singleCity = city instanceof Array ? city[0] : city
-      this.city = singleCity
-      this.currentCity.val = singleCity
+      this.data.city = singleCity
+      this.data.currentCity = singleCity
     }
-    this.sum = this.dates.length * (this.city ? 1 : this.cities.length)
+    this.data.sum = this.data.dates.length * (this.data.city ? 1 : this.data.cities.length)
     this.update()
   }
 
   private calcProgress (): void {
-    this.progress =
+    this.data.progress =
       100 -
-      (((this.cities ? this.citiesLeft * this.dates.length : 0) + this.datesLeft) / this.sum) * 100
+      (((this.data.cities ? this.data.citiesLeft * this.data.dates.length : 0) +
+        this.data.datesLeft) /
+        this.data.sum) *
+        100
+  }
+
+  set (newData: StateData, render = false): void {
+    Object.assign(this.data, newData)
+    if (render) this.update()
+  }
+
+  get<T extends StateDataKey> (prop: T): StateData[T] {
+    return this.data[prop]
   }
 
   update (): void {
-    if (this.cities) this.citiesLeft = calcLeft(this.currentCity.val, this.cities)
-    this.datesLeft = calcLeft(this.currentDate.val, this.dates)
+    if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
+    this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
     this.calcProgress()
     renderProgress(this)
   }

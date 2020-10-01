@@ -5,7 +5,7 @@ import { TemplateResult, html } from 'lit-html'
 export const App = (state: State): TemplateResult => {
   return html`
     <div id="progressWrapper"></div>
-    ${state.city
+    ${state.get('city')
       ? html`
           <div id="tables"></div>
         `

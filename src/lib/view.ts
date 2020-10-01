@@ -26,11 +26,13 @@ export const renderTable = (data: QueryData, state: State): void => {
     component: Table(data),
     wrapperTag: 'table',
     wrapperAttr: {
-      id: `${state.currentCity.val}[${state.currentDate.val}]`,
+      id: `${state.get('currentCity')}[${state.get('currentDate')}]`,
       class: 'table table-bordered',
       style: 'margin-top:12px;font-size:16px;'
     },
-    target: document.getElementById(`${state.city ? 'tables' : `tab-${state.currentCity.val}`}`),
+    target: document.getElementById(
+      `${state.get('city') ? 'tables' : `tab-${state.get('currentCity')}`}`
+    ),
     position: 'beforeend'
   })
 }
@@ -116,7 +118,7 @@ export const insert = {
   },
 
   pityMsg (state: State): void {
-    render(PityMsg(), document.getElementById(`tab-${state.currentCity.val}`))
+    render(PityMsg(), document.getElementById(`tab-${state.get('currentCity')}`))
   }
 
   // TODO: add donate btn

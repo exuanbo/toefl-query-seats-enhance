@@ -14,26 +14,26 @@ export const Progress = (state: State): TemplateResult => {
     textAlign: 'center'
   }
   const barWidth = {
-    width: `${state.isComplete.val ? 100 : state.progress}%`
+    width: `${state.get('isComplete') ? 100 : state.get('progress')}%`
   }
 
   return html`
     <div class="well" style=${styleMap(wellStyle)}>
       <div id="statusMsg">
-        ${state.isComplete.val
+        ${state.get('isComplete')
           ? html`
-              查询完成，找到&nbsp;${state.availableSeats}个可预定考位${state.err
+              查询完成，找到&nbsp;${state.get('availableSeats')}个可预定考位${state.get('err')
                 ? html`
-                    。请求失败&nbsp;${state.err}次
+                    。请求失败&nbsp;${state.get('err')}次
                   `
                 : nothing}
             `
           : html`
-              正在查询中，剩余&nbsp;${state.cities
+              正在查询中，剩余&nbsp;${state.get('cities')
                 ? html`
-                    ${state.citiesLeft}个城市&nbsp;
+                    ${state.get('citiesLeft')}个城市&nbsp;
                   `
-                : nothing}${state.datesLeft}个日期
+                : nothing}${state.get('datesLeft')}个日期
             `}
       </div>
       <div id="progress" class="progress progress-striped" style=${styleMap(barStyle)}>

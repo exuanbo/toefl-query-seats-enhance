@@ -1,5 +1,5 @@
 import { calcLeft } from './utils'
-import { renderEl, grab } from './view'
+import { renderComponent, grab } from './view'
 
 interface StateData {
   city?: string
@@ -66,6 +66,6 @@ export class State {
     if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
     this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
     this.calcProgress()
-    renderEl.progress(this)
+    renderComponent.progressBar(this)
   }
 }

@@ -9,7 +9,7 @@ import { QueryData } from './data'
 import { State } from './state'
 import { TemplateResult, render, nothing } from 'lit-html'
 
-export const renderEl = {
+export const renderComponent = {
   initResult (state: State): void {
     document.getElementById('checkboxes').classList.add('hide')
     const wrapper = document.getElementById('qrySeatResult')
@@ -17,12 +17,12 @@ export const renderEl = {
     render(App(state), wrapper)
   },
 
-  progress (state: State): void {
+  progressBar (state: State): void {
     const wrapper = document.getElementById('progressWrapper')
     if (wrapper) render(Progress(state), wrapper)
   },
 
-  table (data: QueryData, state: State): void {
+  newTable (data: QueryData, state: State): void {
     insertComponent({
       component: Table(data),
       wrapperTag: 'table',
@@ -187,7 +187,7 @@ function insertComponent ({
   )
   render(component, document.getElementById(wrapperAttr.id))
 
-  function loopAttr (attrs: typeof wrapperAttr) {
+  function loopAttr (attrs: typeof wrapperAttr): string {
     return Object.keys(attrs)
       .map(attr => `${attr}="${attrs[attr]}"`)
       .join(' ')

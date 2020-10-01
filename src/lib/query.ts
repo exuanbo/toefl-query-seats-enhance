@@ -1,5 +1,5 @@
 import { sleep } from './utils'
-import { renderEl, insert, grab } from './view'
+import { renderComponent, insert, grab } from './view'
 import { State } from './state'
 import { getData } from './data'
 
@@ -17,7 +17,7 @@ export const Query = (): void => {
   async function start (): Promise<void> {
     grab.queryBtn.getEl().innerText = '停止当前查询'
     grab.queryBtn.onClick(end)
-    renderEl.initResult(state)
+    renderComponent.initResult(state)
     state.get('city') ? await single() : await multi()
     end()
   }
@@ -47,7 +47,7 @@ export const Query = (): void => {
       try {
         const data = await getData(state)
         if (data) {
-          renderEl.table(data, state)
+          renderComponent.newTable(data, state)
           state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
       } catch {

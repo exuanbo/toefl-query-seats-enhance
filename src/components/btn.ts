@@ -11,7 +11,7 @@ export const expandBtn = (): TemplateResult => html`
   </button>
 `
 
-export const queryBtn = () => html`
+export const queryBtn = (): TemplateResult => html`
   <button id="queryBtn" class="btn btn-primary" style="margin-left:13px;">
     查询全部日期
   </button>

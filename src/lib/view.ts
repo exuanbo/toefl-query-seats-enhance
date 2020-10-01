@@ -156,7 +156,7 @@ export const queryBtn = {
     return document.getElementById('queryBtn')
   },
 
-  listen (fn: Function): void {
+  onClick (fn: Function): void {
     this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
   }
 }

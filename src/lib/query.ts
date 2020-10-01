@@ -8,7 +8,7 @@ export const Query = (): void => {
 
   if (!state.get('city') && !state.get('cities')) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
-    queryBtn.listen(Query)
+    queryBtn.onClick(Query)
     return
   }
 
@@ -16,7 +16,7 @@ export const Query = (): void => {
 
   async function start (): Promise<void> {
     queryBtn.getEl().innerText = '停止当前查询'
-    queryBtn.listen(end)
+    queryBtn.onClick(end)
     init(state)
     state.get('city') ? await single() : await multi()
     end()
@@ -25,7 +25,7 @@ export const Query = (): void => {
   function end (): void {
     state.set({ isComplete: true }, true)
     queryBtn.getEl().innerText = '查询全部日期'
-    queryBtn.listen(Query)
+    queryBtn.onClick(Query)
   }
 
   async function multi (): Promise<void> {

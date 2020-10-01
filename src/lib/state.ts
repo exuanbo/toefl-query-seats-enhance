@@ -19,8 +19,6 @@ interface StateData {
   isComplete?: boolean
 }
 
-type StateDataKey = keyof StateData
-
 export class State {
   private data: StateData = {
     dates: grab.dates(),
@@ -58,8 +56,8 @@ export class State {
     if (render) this.update()
   }
 
-  get<T extends StateDataKey> (prop: T): StateData[T] {
-    return this.data[prop]
+  get<K extends keyof StateData> (key: K): StateData[K] {
+    return this.data[key]
   }
 
   update (): void {

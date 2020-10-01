@@ -49,7 +49,9 @@ function minifyJS () {
 }
 
 function mix () {
-  return src(['src/extension/*', 'src/img/*']).pipe(dest('dist/extension'))
+  return src(['src/extension/content.js', 'src/extension/manifest.json', 'src/img/*']).pipe(
+    dest('dist/extension')
+  )
 }
 
 function pack () {
@@ -61,5 +63,5 @@ function server () {
   watch('src/**/*', { ignoreInitial: false }, build)
 }
 
-export default series(clean, parallel(series(build, addHeader, minifyJS), mix), pack)
+export default series(clean, parallel(series(build, parallel(addHeader, minifyJS)), mix), pack)
 export { server }

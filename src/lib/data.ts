@@ -54,7 +54,9 @@ export interface SeatDetail {
   lateRegFlag: 'N' | 'Y'
 }
 
-export const getData = async (state: State): Promise<QueryData> => {
+type Data = QueryData | null
+
+export const getData = async (state: State): Promise<Data> => {
   const city = state.get('currentCity')
   const testDay = state.get('currentDate')
   const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {
@@ -63,7 +65,7 @@ export const getData = async (state: State): Promise<QueryData> => {
 
   return filterSeats(response.data)
 
-  function filterSeats (data: QueryData): QueryData {
+  function filterSeats (data: QueryData): Data {
     if (data.status) {
       const dataDate = Object.keys(data.testSeats)[0]
       const seatDetails = data.testSeats[dataDate]

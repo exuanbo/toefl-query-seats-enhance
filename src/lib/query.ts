@@ -1,5 +1,5 @@
 import { sleep } from './utils'
-import { init, renderTable, insert, queryBtn } from './view'
+import { renderEl, insert, grab } from './view'
 import { State } from './state'
 import { getData } from './data'
 
@@ -8,24 +8,24 @@ export const Query = (): void => {
 
   if (!state.get('city') && !state.get('cities')) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
-    queryBtn.onClick(Query)
+    grab.queryBtn.onClick(Query)
     return
   }
 
   start()
 
   async function start (): Promise<void> {
-    queryBtn.getEl().innerText = '停止当前查询'
-    queryBtn.onClick(end)
-    init(state)
+    grab.queryBtn.getEl().innerText = '停止当前查询'
+    grab.queryBtn.onClick(end)
+    renderEl.initResult(state)
     state.get('city') ? await single() : await multi()
     end()
   }
 
   function end (): void {
     state.set({ isComplete: true }, true)
-    queryBtn.getEl().innerText = '查询全部日期'
-    queryBtn.onClick(Query)
+    grab.queryBtn.getEl().innerText = '查询全部日期'
+    grab.queryBtn.onClick(Query)
   }
 
   async function multi (): Promise<void> {
@@ -47,7 +47,7 @@ export const Query = (): void => {
       try {
         const data = await getData(state)
         if (data) {
-          renderTable(data, state)
+          renderEl.table(data, state)
           state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
       } catch {

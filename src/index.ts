@@ -9,7 +9,7 @@ View.utils.observeMutation(
       View.insert.checkbox()
       View.insert.expandBtn()
       View.insert.queryBtn()
-      View.queryBtn.listen(Query)
+      View.grab.queryBtn.onClick(Query)
     }
   },
   { childList: true }

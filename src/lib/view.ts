@@ -9,32 +9,34 @@ import { QueryData } from './data'
 import { State } from './state'
 import { TemplateResult, render, nothing } from 'lit-html'
 
-export const init = (state: State): void => {
-  document.getElementById('checkboxes').classList.add('hide')
-  const wrapper = document.getElementById('qrySeatResult')
-  render(nothing, wrapper)
-  render(App(state), wrapper)
-}
+export const renderEl = {
+  initResult (state: State): void {
+    document.getElementById('checkboxes').classList.add('hide')
+    const wrapper = document.getElementById('qrySeatResult')
+    render(nothing, wrapper)
+    render(App(state), wrapper)
+  },
 
-export const renderProgress = (state: State): void => {
-  const wrapper = document.getElementById('progressWrapper')
-  if (wrapper) render(Progress(state), wrapper)
-}
+  progress (state: State): void {
+    const wrapper = document.getElementById('progressWrapper')
+    if (wrapper) render(Progress(state), wrapper)
+  },
 
-export const renderTable = (data: QueryData, state: State): void => {
-  insertComponent({
-    component: Table(data),
-    wrapperTag: 'table',
-    wrapperAttr: {
-      id: `${state.get('currentCity')}[${state.get('currentDate')}]`,
-      class: 'table table-bordered',
-      style: 'margin-top:12px;font-size:16px;'
-    },
-    target: document.getElementById(
-      `${state.get('city') ? 'tables' : `tab-${state.get('currentCity')}`}`
-    ),
-    position: 'beforeend'
-  })
+  table (data: QueryData, state: State): void {
+    insertComponent({
+      component: Table(data),
+      wrapperTag: 'table',
+      wrapperAttr: {
+        id: `${state.get('currentCity')}[${state.get('currentDate')}]`,
+        class: 'table table-bordered',
+        style: 'margin-top:12px;font-size:16px;'
+      },
+      target: document.getElementById(
+        `${state.get('city') ? 'tables' : `tab-${state.get('currentCity')}`}`
+      ),
+      position: 'beforeend'
+    })
+  }
 }
 
 export const utils = {
@@ -125,6 +127,16 @@ export const insert = {
 }
 
 export const grab = {
+  queryBtn: {
+    getEl (): HTMLElement {
+      return document.getElementById('queryBtn')
+    },
+
+    onClick (fn: Function): void {
+      this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
+    }
+  },
+
   selectedCity (): string | string[] {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
       HTMLInputElement

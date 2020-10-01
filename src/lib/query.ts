@@ -17,7 +17,7 @@ export const Query = (): void => {
   async function start (): Promise<void> {
     grab.queryBtn.getEl().innerText = '停止当前查询'
     grab.queryBtn.onClick(end)
-    renderComponent.initResult(state)
+    renderComponent.app(state)
     state.get('city') ? await single() : await multi()
     end()
   }
@@ -47,7 +47,7 @@ export const Query = (): void => {
       try {
         const data = await getData(state)
         if (data) {
-          renderComponent.newTable(data, state)
+          renderComponent.table(data, state)
           state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
       } catch {

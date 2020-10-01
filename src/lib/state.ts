@@ -66,6 +66,6 @@ export class State {
     if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
     this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
     this.calcProgress()
-    renderComponent.progressBar(this)
+    renderComponent.progress(this)
   }
 }

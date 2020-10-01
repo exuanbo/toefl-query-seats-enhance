@@ -10,19 +10,19 @@ import { State } from './state'
 import { TemplateResult, render, nothing } from 'lit-html'
 
 export const renderComponent = {
-  initResult (state: State): void {
+  app (state: State): void {
     document.getElementById('checkboxes').classList.add('hide')
     const wrapper = document.getElementById('qrySeatResult')
     render(nothing, wrapper)
     render(App(state), wrapper)
   },
 
-  progressBar (state: State): void {
+  progress (state: State): void {
     const wrapper = document.getElementById('progressWrapper')
     if (wrapper) render(Progress(state), wrapper)
   },
 
-  newTable (data: QueryData, state: State): void {
+  table (data: QueryData, state: State): void {
     insertComponent({
       component: Table(data),
       wrapperTag: 'table',

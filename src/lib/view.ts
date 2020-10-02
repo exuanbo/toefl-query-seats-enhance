@@ -9,6 +9,43 @@ import { QueryData } from './data'
 import { State } from './state'
 import { TemplateResult, render, nothing } from 'lit-html'
 
+export const grab = {
+  queryBtn: {
+    getEl (): HTMLElement {
+      return document.getElementById('queryBtn')
+    },
+
+    onClick (fn: Function): void {
+      this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
+    }
+  },
+
+  selectedCity (): string | string[] {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
+      HTMLInputElement
+    >
+    const checkedCities = mapElOf(checkboxes, (box): string =>
+      box.checked ? box.id : null
+    ).filter(Boolean)
+    const isExpanded = !document.getElementById('checkboxes').classList.contains('hide')
+
+    if (checkedCities.length && isExpanded) {
+      return checkedCities
+    } else {
+      const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
+      return selectedCity.value
+    }
+  },
+
+  dates (): string[] {
+    const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
+    return mapElOf(options, (option): string => {
+      const day = option.value
+      if (day && day !== '-1') return day
+    }).filter(Boolean)
+  }
+}
+
 export const renderComponent = {
   app (state: State): void {
     document.getElementById('checkboxes').classList.add('hide')
@@ -36,55 +73,17 @@ export const renderComponent = {
       ),
       position: 'beforeend'
     })
-  }
-}
-
-export const utils = {
-  observeMutation (
-    target: HTMLElement,
-    callback: MutationCallback,
-    config: MutationObserverInit
-  ): void {
-    const observeThis = (): void => utils.observeMutation(target, callback, config)
-
-    if (!untilAvailable(target, observeThis)) {
-      return
-    }
-
-    const observer = new MutationObserver(callback)
-    observer.observe(target, config)
   },
 
-  adjustStyle (): void {
-    const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
-    const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
-
-    if (!untilAvailable(formWrapper && selects, utils.adjustStyle)) {
-      return
-    }
-
-    formWrapper.classList.remove('offset1')
-    formWrapper.style.textAlign = 'center'
-    forEachElOf(selects, el => {
-      el.style.width = '12em'
-    })
-  }
-}
-
-export const insert = {
   checkbox (): void {
     const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
       HTMLOptGroupElement
     >
     const provinceNum = provinceGroup.length
 
-    if (!untilAvailable(provinceNum, insert.checkbox)) {
+    if (!untilAvailable(provinceNum, renderComponent.checkbox)) return
+    if (!untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', renderComponent.checkbox))
       return
-    }
-
-    if (!untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', insert.checkbox)) {
-      return
-    }
 
     const selectCity = document.getElementById('centerProvinceCity')
     const formWrapper = selectCity.parentElement.parentElement.parentElement
@@ -126,40 +125,35 @@ export const insert = {
   // TODO: add donate btn
 }
 
-export const grab = {
-  queryBtn: {
-    getEl (): HTMLElement {
-      return document.getElementById('queryBtn')
-    },
+export const utils = {
+  observeMutation (
+    target: HTMLElement,
+    callback: MutationCallback,
+    config: MutationObserverInit
+  ): void {
+    const observeThis = (): void => utils.observeMutation(target, callback, config)
 
-    onClick (fn: Function): void {
-      this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
+    if (!untilAvailable(target, observeThis)) {
+      return
     }
+
+    const observer = new MutationObserver(callback)
+    observer.observe(target, config)
   },
 
-  selectedCity (): string | string[] {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-      HTMLInputElement
-    >
-    const checkedCities = mapElOf(checkboxes, (box): string =>
-      box.checked ? box.id : null
-    ).filter(Boolean)
-    const isExpanded = !document.getElementById('checkboxes').classList.contains('hide')
+  adjustStyle (): void {
+    const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
+    const selects = document.querySelectorAll('.form-inline select') as NodeListOf<HTMLElement>
 
-    if (checkedCities.length && isExpanded) {
-      return checkedCities
-    } else {
-      const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
-      return selectedCity.value
+    if (!untilAvailable(formWrapper && selects, utils.adjustStyle)) {
+      return
     }
-  },
 
-  dates (): string[] {
-    const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
-    return mapElOf(options, (option): string => {
-      const day = option.value
-      if (day && day !== '-1') return day
-    }).filter(Boolean)
+    formWrapper.classList.remove('offset1')
+    formWrapper.style.textAlign = 'center'
+    forEachElOf(selects, el => {
+      el.style.width = '12em'
+    })
   }
 }
 

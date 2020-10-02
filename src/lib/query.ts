@@ -1,5 +1,5 @@
 import { sleep } from './utils'
-import { renderComponent, insert, grab } from './view'
+import { renderComponent, grab } from './view'
 import { State } from './state'
 import { getData } from './data'
 
@@ -59,6 +59,6 @@ export const Query = (): void => {
     }
 
     if (state.get('cities') && state.get('availableSeats') === initialSeatsNum)
-      insert.pityMsg(state)
+      renderComponent.pityMsg(state)
   }
 }

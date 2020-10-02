@@ -6,9 +6,9 @@ View.utils.observeMutation(
   () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       View.utils.adjustStyle()
-      View.insert.checkbox()
-      View.insert.expandBtn()
-      View.insert.queryBtn()
+      View.renderComponent.checkbox()
+      View.renderComponent.expandBtn()
+      View.renderComponent.queryBtn()
       View.grab.queryBtn.onClick(Query)
     }
   },

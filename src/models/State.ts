@@ -1,5 +1,6 @@
-import { calcLeft } from './utils'
-import { renderComponent, grab } from './view'
+import { calcLeft } from '../utils'
+import * as Render from '../views/render'
+import { selectedCity, dates } from '../views/get'
 
 interface StateData {
   city?: string
@@ -21,13 +22,13 @@ interface StateData {
 
 export class State {
   private data: StateData = {
-    dates: grab.dates(),
+    dates: dates(),
     availableSeats: 0,
     err: 0
   }
 
   constructor () {
-    const city = grab.selectedCity()
+    const city = selectedCity()
     if (city instanceof Array && city.length !== 1) {
       this.data.cities = city
     } else if (city === '-1') {
@@ -50,7 +51,7 @@ export class State {
         this.data.datesLeft) /
         this.data.sum) *
         100
-    renderComponent.progress(this)
+    Render.progress(this)
   }
 
   set (newData: StateData, render = false): void {

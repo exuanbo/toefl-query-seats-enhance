@@ -1,15 +1,17 @@
-import * as View from './lib/view'
-import { Query } from './lib/query'
+import { observeMutation, adjustStyle } from './views/utils'
+import * as Render from './views/render'
+import { queryBtn } from './views/get'
+import { query } from './query'
 
-View.utils.observeMutation(
+observeMutation(
   document.getElementById('wg_center'),
   () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
-      View.utils.adjustStyle()
-      View.renderComponent.checkbox()
-      View.renderComponent.expandBtn()
-      View.renderComponent.queryBtn()
-      View.grab.queryBtn.onClick(Query)
+      adjustStyle()
+      Render.checkbox()
+      Render.expandBtn()
+      Render.queryBtn()
+      queryBtn.onClick(query)
     }
   },
   { childList: true }

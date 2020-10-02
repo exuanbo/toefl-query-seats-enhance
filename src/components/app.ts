@@ -1,5 +1,5 @@
 import { Tabbale } from './tabbale'
-import { State } from '../lib/state'
+import { State } from '../models/State'
 import { TemplateResult, html } from 'lit-html'
 
 export const App = (state: State): TemplateResult => {

@@ -1,31 +1,32 @@
 import { sleep } from './utils'
-import { renderComponent, grab } from './view'
-import { State } from './state'
-import { getData } from './data'
+import { queryBtn } from './views/get'
+import * as Render from './views/render'
+import { State } from './models/State'
+import * as Data from './models/Data'
 
-export const Query = (): void => {
+export const query = (): void => {
   const state = new State()
 
   if (!state.get('city') && !state.get('cities')) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
-    grab.queryBtn.onClick(Query)
+    queryBtn.onClick(query)
     return
   }
 
   start()
 
   async function start (): Promise<void> {
-    grab.queryBtn.getEl().innerText = '停止当前查询'
-    grab.queryBtn.onClick(end)
-    renderComponent.app(state)
+    queryBtn.getEl().innerText = '停止当前查询'
+    queryBtn.onClick(end)
+    Render.app(state)
     state.get('city') ? await single() : await multi()
     end()
   }
 
   function end (): void {
     state.set({ isComplete: true }, true)
-    grab.queryBtn.getEl().innerText = '查询全部日期'
-    grab.queryBtn.onClick(Query)
+    queryBtn.getEl().innerText = '查询全部日期'
+    queryBtn.onClick(query)
   }
 
   async function multi (): Promise<void> {
@@ -45,9 +46,9 @@ export const Query = (): void => {
       state.set({ currentDate: testDay }, true)
 
       try {
-        const data = await getData(state)
+        const data = await Data.get(state)
         if (data) {
-          renderComponent.table(data, state)
+          Render.table(data, state)
           state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
       } catch {
@@ -59,6 +60,6 @@ export const Query = (): void => {
     }
 
     if (state.get('cities') && state.get('availableSeats') === initialSeatsNum)
-      renderComponent.pityMsg(state)
+      Render.pityMsg(state)
   }
 }

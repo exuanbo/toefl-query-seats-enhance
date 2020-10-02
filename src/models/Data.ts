@@ -1,4 +1,4 @@
-import { State } from './state'
+import { State } from './State'
 import axios, { AxiosResponse } from 'axios'
 
 /**
@@ -56,7 +56,7 @@ export interface SeatDetail {
 
 type Data = QueryData | null
 
-export const getData = async (state: State): Promise<Data> => {
+export const get = async (state: State): Promise<Data> => {
   const city = state.get('currentCity')
   const testDay = state.get('currentDate')
   const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {

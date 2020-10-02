@@ -1,4 +1,4 @@
-import { forEachElOf, mapElOf, someElOf, isMunicipality } from '../lib/utils'
+import { forEachElOf, mapElOf, someElOf, isMunicipality } from '../utils'
 import { TemplateResult, html, nothing } from 'lit-html'
 
 export const Checkbox = (): TemplateResult => {

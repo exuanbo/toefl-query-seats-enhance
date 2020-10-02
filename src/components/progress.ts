@@ -1,4 +1,4 @@
-import { State } from '../lib/state'
+import { State } from '../models/State'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 

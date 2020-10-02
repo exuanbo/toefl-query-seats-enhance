@@ -1,5 +1,5 @@
-import { translateCityName } from '../lib/utils'
-import { State } from '../lib/state'
+import { translateCityName } from '../utils'
+import { State } from '../models/State'
 import { TemplateResult, html } from 'lit-html'
 
 export const Tabbale = (state: State): TemplateResult => {

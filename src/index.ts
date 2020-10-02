@@ -1,5 +1,5 @@
 import { observeMutation, adjustStyle } from './views/utils'
-import * as Render from './views/render'
+import * as render from './views/render'
 import { queryBtn } from './views/get'
 import { query } from './query'
 
@@ -8,9 +8,9 @@ observeMutation(
   () => {
     if (window.location.href.toString().split('#!')[1] === '/testSeat') {
       adjustStyle()
-      Render.checkbox()
-      Render.expandBtn()
-      Render.queryBtn()
+      render.checkbox()
+      render.expandBtn()
+      render.queryBtn()
       queryBtn.onClick(query)
     }
   },

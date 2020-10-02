@@ -1,5 +1,5 @@
 import { calcLeft } from '../utils'
-import * as Render from '../views/render'
+import * as render from '../views/render'
 import { selectedCity, dates } from '../views/get'
 
 interface StateData {
@@ -51,12 +51,12 @@ export class State {
         this.data.datesLeft) /
         this.data.sum) *
         100
-    Render.progress(this)
+    render.progress(this)
   }
 
-  set (newData: StateData, render = false): void {
+  set (newData: StateData, update = false): void {
     Object.assign(this.data, newData)
-    if (render) this.update()
+    if (update) this.update()
   }
 
   get<K extends keyof StateData> (key: K): StateData[K] {

@@ -1,6 +1,6 @@
 import { sleep } from './utils'
 import { queryBtn } from './views/get'
-import * as Render from './views/render'
+import * as render from './views/render'
 import { State } from './models/State'
 import { Data } from './models/Data'
 
@@ -18,7 +18,7 @@ export const query = (): void => {
   async function start (): Promise<void> {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.onClick(end)
-    Render.app(state)
+    render.app(state)
     state.get('city') ? await single() : await multi()
     end()
   }
@@ -48,7 +48,7 @@ export const query = (): void => {
       try {
         const data = await Data.get(state)
         if (data) {
-          Render.table(data, state)
+          render.table(data, state)
           state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
       } catch {
@@ -60,6 +60,6 @@ export const query = (): void => {
     }
 
     if (state.get('cities') && state.get('availableSeats') === initialSeatsNum)
-      Render.pityMsg(state)
+      render.pityMsg(state)
   }
 }

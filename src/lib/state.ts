@@ -23,8 +23,7 @@ export class State {
   private data: StateData = {
     dates: grab.dates(),
     availableSeats: 0,
-    err: 0,
-    isComplete: false
+    err: 0
   }
 
   constructor () {
@@ -42,13 +41,16 @@ export class State {
     this.update()
   }
 
-  private calcProgress (): void {
+  private update (): void {
+    if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
+    this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
     this.data.progress =
       100 -
       (((this.data.cities ? this.data.citiesLeft * this.data.dates.length : 0) +
         this.data.datesLeft) /
         this.data.sum) *
         100
+    renderComponent.progress(this)
   }
 
   set (newData: StateData, render = false): void {
@@ -58,12 +60,5 @@ export class State {
 
   get<K extends keyof StateData> (key: K): StateData[K] {
     return this.data[key]
-  }
-
-  update (): void {
-    if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
-    this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
-    this.calcProgress()
-    renderComponent.progress(this)
   }
 }

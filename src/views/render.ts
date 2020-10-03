@@ -1,12 +1,7 @@
 import { untilAvailable } from '../utils'
 import { QueryData } from '../models/Data'
 import { State } from '../models/State'
-import { App } from '../components/app'
-import { Progress } from '../components/progress'
-import { Table } from '../components/table'
-import { Checkbox } from '../components/checkbox'
-import * as Btn from '../components/btn'
-import { PityMsg } from '../components/pityMsg'
+import { App, Progress, Table, Checkbox, Btn, PityMsg } from '../components'
 import { TemplateResult, render, nothing } from 'lit-html'
 
 export const app = (state: State): void => {

@@ -1,4 +1,3 @@
-import { translateCityName } from '../utils'
 import { State } from '../models/State'
 import { TemplateResult, html } from 'lit-html'
 
@@ -27,3 +26,6 @@ export const Tabbale = (state: State): TemplateResult => {
     </div>
   `
 }
+
+const translateCityName = (cityName: string): string =>
+  document.querySelector(`option[value="${cityName}"]`).innerHTML

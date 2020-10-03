@@ -35,10 +35,5 @@ export const someElOf = <T extends Node>(
   return Array.from(nodeList).some(cb)
 }
 
-export const formatCurrency = (value: number): string => 'RMB￥' + value.toFixed(2)
-
 export const isMunicipality = (cityName: string): boolean =>
   cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
-
-export const translateCityName = (cityName: string): string =>
-  document.querySelector(`option[value="${cityName}"]`).innerHTML

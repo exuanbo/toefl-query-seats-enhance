@@ -1,6 +1,6 @@
 import { untilAvailable } from '../utils'
-import { QueryData } from '../models/Data'
-import { State } from '../models/State'
+import { QueryData } from '../Data'
+import { State } from '../State'
 import { App, Progress, Table, Checkbox, Btn, PityMsg } from '../components'
 import { TemplateResult, render, nothing } from 'lit-html'
 

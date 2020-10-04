@@ -1,4 +1,4 @@
-import { State } from '../models/State'
+import { State } from '../State'
 import { TemplateResult, html } from 'lit-html'
 
 export const Tabbale = (state: State): TemplateResult => {

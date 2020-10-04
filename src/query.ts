@@ -1,8 +1,8 @@
 import { sleep } from './utils'
 import { queryBtn } from './views/get'
 import * as render from './views/render'
-import { State } from './models/State'
-import { Data } from './models/Data'
+import { State } from './State'
+import { Data } from './Data'
 
 export const query = (): void => {
   const state = new State()

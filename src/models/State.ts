@@ -42,6 +42,15 @@ export class State {
     this.update()
   }
 
+  get<K extends keyof StateData> (key: K): StateData[K] {
+    return this.data[key]
+  }
+
+  set (newData: StateData, update = false): void {
+    Object.assign(this.data, newData)
+    if (update) this.update()
+  }
+
   private update (): void {
     if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
     this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
@@ -52,14 +61,5 @@ export class State {
         this.data.sum) *
         100
     render.progress(this)
-  }
-
-  set (newData: StateData, update = false): void {
-    Object.assign(this.data, newData)
-    if (update) this.update()
-  }
-
-  get<K extends keyof StateData> (key: K): StateData[K] {
-    return this.data[key]
   }
 }

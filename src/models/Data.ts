@@ -1,5 +1,5 @@
 import { State } from './State'
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 /**
  * @example
@@ -60,28 +60,28 @@ export class Data {
   static async get (state: State): Promise<filteredData> {
     const city = state.get('currentCity')
     const testDay = state.get('currentDate')
-    const response: AxiosResponse<QueryData> = await axios.get('testSeat/queryTestSeats', {
+    const response = await axios.get<QueryData>('testSeat/queryTestSeats', {
       params: { city: city, testDay: testDay }
     })
 
-    return filterSeats(response.data)
+    return this.filterSeats(response.data)
+  }
 
-    function filterSeats (data: QueryData): filteredData {
-      if (data.status) {
-        const dataDate = Object.keys(data.testSeats)[0]
-        const seatDetails = data.testSeats[dataDate]
+  private static filterSeats (data: QueryData): filteredData {
+    if (data.status) {
+      const dataDate = Object.keys(data.testSeats)[0]
+      const seatDetails = data.testSeats[dataDate]
 
-        const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
-        const availableSeats = filtered.length
+      const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
+      const availableSeats = filtered.length
 
-        if (availableSeats) {
-          data.testSeats[dataDate] = filtered
-          data.availableSeats = availableSeats
-          return data
-        }
+      if (availableSeats) {
+        data.testSeats[dataDate] = filtered
+        data.availableSeats = availableSeats
+        return data
       }
-
-      return null
     }
+
+    return null
   }
 }

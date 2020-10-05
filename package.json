@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "gulp",
-    "dev": "gulp server",
-    "format": "prettier-standard --format"
+    "dev": "gulp server"
   },
   "author": "exuanbo",
   "license": "MIT",

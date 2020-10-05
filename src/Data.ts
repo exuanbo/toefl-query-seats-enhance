@@ -56,18 +56,18 @@ export interface SeatDetail {
 
 type filteredData = QueryData | null
 
-export class Data {
-  static async get (state: State): Promise<filteredData> {
+export const Data = {
+  async get (state: State): Promise<filteredData> {
     const city = state.get('currentCity')
     const testDay = state.get('currentDate')
     const response = await axios.get<QueryData>('testSeat/queryTestSeats', {
       params: { city: city, testDay: testDay }
     })
 
-    return this.filterSeats(response.data)
-  }
+    return this._filterSeats(response.data)
+  },
 
-  private static filterSeats (data: QueryData): filteredData {
+  _filterSeats (data: QueryData): filteredData {
     if (data.status) {
       const dataDate = Object.keys(data.testSeats)[0]
       const seatDetails = data.testSeats[dataDate]

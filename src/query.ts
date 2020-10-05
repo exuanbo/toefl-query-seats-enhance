@@ -4,7 +4,7 @@ import * as render from './views/render'
 import { State } from './State'
 import { Data } from './Data'
 
-export const query = (): void => {
+export const query = async (): Promise<void> => {
   const state = new State()
 
   if (!state.get('city') && !state.get('cities')) {
@@ -13,7 +13,7 @@ export const query = (): void => {
     return
   }
 
-  start()
+  await start()
 
   async function start (): Promise<void> {
     queryBtn.getEl().innerText = '停止当前查询'

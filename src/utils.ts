@@ -2,7 +2,7 @@ export const firstKeyOf = (obj: object): string => Object.keys(obj)[0]
 
 export const calcLeft = (cur: string, arr: string[]): number => arr.length - arr.indexOf(cur) - 1
 
-export const sleep = (ms: number): Promise<void> => new Promise(res => setTimeout(res, ms))
+export const sleep = async (ms: number): Promise<void> => await new Promise(resolve => setTimeout(resolve, ms))
 
 export const untilAvailable = (con: any, fn: Function, interval: number = 100): boolean => {
   if (!con) {

@@ -7,7 +7,8 @@ import { Data } from './Data'
 export const query = async (): Promise<void> => {
   const state = new State()
 
-  if (!state.get('city') && !state.get('cities')) {
+  const noCitySelected = state.get('city') === undefined && state.get('cities') === undefined
+  if (noCitySelected) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     queryBtn.onClick(query)
     return
@@ -19,7 +20,7 @@ export const query = async (): Promise<void> => {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.onClick(end)
     render.app(state)
-    state.get('city') ? await single() : await multi()
+    state.get('city') !== undefined ? await single() : await multi()
     end()
   }
 
@@ -35,7 +36,7 @@ export const query = async (): Promise<void> => {
 
       await single()
       if (state.get('isComplete')) break
-      if (state.get('citiesLeft')) await sleep(2000)
+      if (state.get('citiesLeft') > 0) await sleep(2000)
     }
   }
 
@@ -47,7 +48,7 @@ export const query = async (): Promise<void> => {
 
       try {
         const data = await Data.get(state)
-        if (data) {
+        if (data !== null) {
           render.table(data, state)
           state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
         }
@@ -56,10 +57,9 @@ export const query = async (): Promise<void> => {
       }
 
       if (state.get('isComplete')) break
-      if (state.get('datesLeft')) await sleep(2000)
+      if (state.get('datesLeft') > 0) await sleep(2000)
     }
 
-    if (state.get('cities') && state.get('availableSeats') === initialSeatsNum)
-      render.pityMsg(state)
+    if (state.get('cities') !== undefined && state.get('availableSeats') === initialSeatsNum) { render.pityMsg(state) }
   }
 }

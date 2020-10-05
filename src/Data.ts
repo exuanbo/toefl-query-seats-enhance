@@ -75,7 +75,7 @@ export class Data {
       const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
       const availableSeats = filtered.length
 
-      if (availableSeats) {
+      if (availableSeats > 0) {
         data.testSeats[dataDate] = filtered
         data.availableSeats = availableSeats
         return data

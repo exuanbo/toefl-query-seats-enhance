@@ -13,7 +13,7 @@ export const app = (state: State): void => {
 
 export const progress = (state: State): void => {
   const wrapper = document.getElementById('progressWrapper')
-  if (wrapper) render(Progress(state), wrapper)
+  if (wrapper !== null) render(Progress(state), wrapper)
 }
 
 export const table = (data: QueryData, state: State): void => {
@@ -26,7 +26,7 @@ export const table = (data: QueryData, state: State): void => {
       style: 'margin-top:12px;font-size:16px;'
     },
     target: document.getElementById(
-      `${state.get('city') ? 'tables' : `tab-${state.get('currentCity')}`}`
+      `${state.get('city') !== undefined ? 'tables' : `tab-${state.get('currentCity')}`}`
     ),
     position: 'beforeend'
   })

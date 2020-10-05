@@ -38,11 +38,11 @@ export class State {
       this.data.city = singleCity
       this.data.currentCity = singleCity
     }
-    this.data.sum = this.data.dates.length * (this.data.city ? 1 : this.data.cities.length)
+    this.data.sum = this.data.dates.length * (this.data.city !== undefined ? 1 : this.data.cities.length)
     this.update()
   }
 
-  get<K extends keyof StateData> (key: K): StateData[K] {
+  get<K extends keyof StateData> (key: K): StateData[K] | undefined {
     return this.data[key]
   }
 
@@ -52,11 +52,11 @@ export class State {
   }
 
   private update (): void {
-    if (this.data.cities) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
+    if (this.data.cities !== undefined) this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
     this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
     this.data.progress =
       100 -
-      (((this.data.cities ? this.data.citiesLeft * this.data.dates.length : 0) +
+      (((this.data.cities !== undefined ? this.data.citiesLeft * this.data.dates.length : 0) +
         this.data.datesLeft) /
         this.data.sum) *
         100

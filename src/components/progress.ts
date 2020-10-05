@@ -22,14 +22,14 @@ export const Progress = (state: State): TemplateResult => {
       <div id="statusMsg">
         ${state.get('isComplete')
           ? html`
-              查询完成，找到&nbsp;${state.get('availableSeats')}个可预定考位${state.get('err')
+              查询完成，找到&nbsp;${state.get('availableSeats')}个可预定考位${state.get('err') > 0
                 ? html`
                     。请求失败&nbsp;${state.get('err')}次
                   `
                 : nothing}
             `
           : html`
-              正在查询中，剩余&nbsp;${state.get('cities')
+              正在查询中，剩余&nbsp;${state.get('cities') !== undefined
                 ? html`
                     ${state.get('citiesLeft')}个城市&nbsp;
                   `

@@ -17,7 +17,7 @@ export const selectedCity = (): string | string[] => {
   )
   const isExpanded = !document.getElementById('checkboxes').classList.contains('hide')
 
-  if (checkedCities.length && isExpanded) {
+  if (checkedCities.length > 0 && isExpanded) {
     return checkedCities
   } else {
     const selectedCity = document.getElementById('centerProvinceCity') as HTMLInputElement
@@ -29,6 +29,6 @@ export const dates = (): string[] => {
   const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
   return mapElOf(options, (option): string => {
     const day = option.value
-    if (day && day !== '-1') return day
+    if (day !== undefined && day !== '-1') return day
   }).filter(Boolean)
 }

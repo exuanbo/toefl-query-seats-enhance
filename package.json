@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "gulp",
-    "dev": "gulp server"
+    "dev": "gulp server",
+    "test": "npm run build && ts-standard"
   },
   "author": "exuanbo",
   "license": "MIT",
@@ -25,5 +26,8 @@
   "dependencies": {
     "axios": "0.20.0",
     "lit-html": "1.3.0"
+  },
+  "ts-standard": {
+    "globals": ["chrome"]
   }
 }

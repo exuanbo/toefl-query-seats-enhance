@@ -11,9 +11,7 @@ export const queryBtn = {
 }
 
 export const selectedCity = (): string | string[] => {
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-    HTMLInputElement
-  >
+  const checkboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')
   const checkedCities = mapElOf(checkboxes, (box): string => (box.checked ? box.id : null)).filter(
     Boolean
   )

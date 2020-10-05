@@ -4,7 +4,7 @@ import { styleMap } from 'lit-html/directives/style-map.js'
 
 export const Progress = (state: State): TemplateResult => {
   const btn = document.getElementById('btnQuerySeat')
-  const label = document.querySelector('label[for="centerProvinceCity"]') as HTMLElement
+  const label = document.querySelector<HTMLElement>('label[for="centerProvinceCity"]')
   const barStyle = {
     margin: '1em auto 0',
     width: `${btn.offsetLeft - label.offsetLeft + label.offsetWidth}px`

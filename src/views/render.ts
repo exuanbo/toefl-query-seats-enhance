@@ -33,9 +33,7 @@ export const table = (data: QueryData, state: State): void => {
 }
 
 export const checkbox = (): void => {
-  const provinceGroup = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
-    HTMLOptGroupElement
-  >
+  const provinceGroup = document.querySelectorAll<HTMLOptGroupElement>('#centerProvinceCity optgroup')
   const provinceNum = provinceGroup.length
 
   if (!untilAvailable(provinceNum, checkbox)) return

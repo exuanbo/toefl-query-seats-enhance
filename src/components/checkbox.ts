@@ -12,9 +12,7 @@ export const Checkbox = (): TemplateResult => html`
 `
 
 const toggleCheck = (): void => {
-  const allCheckboxes = document.querySelectorAll('input[type="checkbox"]') as NodeListOf<
-    HTMLInputElement
-  >
+  const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')
   const notAllChecked = someElOf(allCheckboxes, box => !box.checked)
   forEachElOf(allCheckboxes, box => {
     box.checked = notAllChecked
@@ -22,9 +20,7 @@ const toggleCheck = (): void => {
 }
 
 const loopProvinceGroup = (): TemplateResult[] => {
-  const provinceGroups = document.querySelectorAll('#centerProvinceCity optgroup') as NodeListOf<
-    HTMLOptGroupElement
-  >
+  const provinceGroups = document.querySelectorAll<HTMLOptGroupElement>('#centerProvinceCity optgroup')
 
   return mapElOf(
     provinceGroups,

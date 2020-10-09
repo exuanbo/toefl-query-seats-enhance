@@ -1,5 +1,5 @@
 import { firstKeyOf, isMunicipality } from '../utils'
-import { QueryData, SeatDetail } from '../Data'
+import { QueryData, SeatDetail } from '../data'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 

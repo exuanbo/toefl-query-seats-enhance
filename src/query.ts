@@ -2,7 +2,7 @@ import { sleep } from './utils'
 import { queryBtn } from './views/get'
 import * as render from './views/render'
 import { State } from './State'
-import { Data } from './Data'
+import { getData } from './data'
 
 export const query = async (): Promise<void> => {
   const state = new State()
@@ -48,7 +48,7 @@ export const query = async (): Promise<void> => {
       set({ currentDate: testDay }, true)
 
       try {
-        const data = await Data.get(state)
+        const data = await getData(state)
         if (data !== null) {
           render.table(data, state)
           set({ availableSeats: get('availableSeats') + data.availableSeats })

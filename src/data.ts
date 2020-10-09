@@ -56,32 +56,30 @@ export interface SeatDetail {
 
 type filteredData = QueryData | null
 
-export const Data = {
-  async get ({ get }: State): Promise<filteredData> {
-    const city = get('currentCity')
-    const testDay = get('currentDate')
-    const response = await axios.get<QueryData>('testSeat/queryTestSeats', {
-      params: { city: city, testDay: testDay }
-    })
+export const getData = async ({ get }: State): Promise<filteredData> => {
+  const city = get('currentCity')
+  const testDay = get('currentDate')
+  const response = await axios.get<QueryData>('testSeat/queryTestSeats', {
+    params: { city: city, testDay: testDay }
+  })
 
-    return this._filterSeats(response.data)
-  },
+  return filterSeats(response.data)
+}
 
-  _filterSeats (data: QueryData): filteredData {
-    if (data.status) {
-      const dataDate = Object.keys(data.testSeats)[0]
-      const seatDetails = data.testSeats[dataDate]
+const filterSeats = (data: QueryData): filteredData => {
+  if (data.status) {
+    const dataDate = Object.keys(data.testSeats)[0]
+    const seatDetails = data.testSeats[dataDate]
 
-      const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
-      const availableSeats = filtered.length
+    const filtered = seatDetails.filter(seatDetail => seatDetail.seatStatus)
+    const availableSeats = filtered.length
 
-      if (availableSeats > 0) {
-        data.testSeats[dataDate] = filtered
-        data.availableSeats = availableSeats
-        return data
-      }
+    if (availableSeats > 0) {
+      data.testSeats[dataDate] = filtered
+      data.availableSeats = availableSeats
+      return data
     }
-
-    return null
   }
+
+  return null
 }

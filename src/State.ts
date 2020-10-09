@@ -27,6 +27,15 @@ export class State {
     err: 0
   }
 
+  get = <K extends keyof StateData>(key: K): StateData[K] | undefined => {
+    return this.data[key]
+  }
+
+  set = (newData: StateData, update = false): void => {
+    Object.assign(this.data, newData)
+    if (update) this.update()
+  }
+
   constructor () {
     const city = selectedCity()
     if (city instanceof Array && city.length !== 1) {
@@ -40,15 +49,6 @@ export class State {
     }
     this.data.sum = this.data.dates.length * (this.data.city !== undefined ? 1 : this.data.cities.length)
     this.update()
-  }
-
-  get<K extends keyof StateData> (key: K): StateData[K] | undefined {
-    return this.data[key]
-  }
-
-  set (newData: StateData, update = false): void {
-    Object.assign(this.data, newData)
-    if (update) this.update()
   }
 
   private update (): void {

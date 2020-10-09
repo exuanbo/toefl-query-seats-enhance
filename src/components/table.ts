@@ -3,16 +3,16 @@ import { QueryData, SeatDetail } from '../Data'
 import { TemplateResult, html, nothing } from 'lit-html'
 import { styleMap } from 'lit-html/directives/style-map.js'
 
-export const Table = (data: QueryData): TemplateResult => html`
+export const Table = ({ testDate, testSeats }: QueryData): TemplateResult => html`
   <thead>
     <tr style="background-color:#993333;">
       <th colspan="4">
-        <span style="color:#fff;">考试日期：${data.testDate}</span
+        <span style="color:#fff;">考试日期：${testDate}</span
         ><span style="margin-left:.5em;color:#fff;"
           ><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span
         ><span style="color:#fff;float:right;"
-          >考试时间：${firstKeyOf(data.testSeats).split('|')[0]}<span style="padding-left:30px;"
-            >最晚到达时间：${firstKeyOf(data.testSeats).split('|')[2]}</span
+          >考试时间：${firstKeyOf(testSeats).split('|')[0]}<span style="padding-left:30px;"
+            >最晚到达时间：${firstKeyOf(testSeats).split('|')[2]}</span
           ></span
         >
       </th>
@@ -29,7 +29,7 @@ export const Table = (data: QueryData): TemplateResult => html`
     </tr>
   </thead>
   <tbody>
-    ${data.testSeats[firstKeyOf(data.testSeats)].map(
+    ${testSeats[firstKeyOf(testSeats)].map(
       (seat: SeatDetail): TemplateResult =>
         html`
           ${rowTpl(seat)}

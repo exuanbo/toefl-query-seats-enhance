@@ -16,17 +16,17 @@ export const progress = (state: State): void => {
   if (wrapper !== null) render(Progress(state), wrapper)
 }
 
-export const table = (data: QueryData, state: State): void => {
+export const table = (data: QueryData, { get }: State): void => {
   insertComponent({
     component: Table(data),
     wrapperTag: 'table',
     wrapperAttr: {
-      id: `${state.get('currentCity')}[${state.get('currentDate')}]`,
+      id: `${get('currentCity')}[${get('currentDate')}]`,
       class: 'table table-bordered',
       style: 'margin-top:12px;font-size:16px;'
     },
     target: document.getElementById(
-      `${state.get('city') !== undefined ? 'tables' : `tab-${state.get('currentCity')}`}`
+      `${get('city') !== undefined ? 'tables' : `tab-${get('currentCity')}`}`
     ),
     position: 'beforeend'
   })

@@ -6,8 +6,9 @@ import { Data } from './Data'
 
 export const query = async (): Promise<void> => {
   const state = new State()
+  const { get, set } = state
 
-  const noCitySelected = state.get('city') === undefined && state.get('cities') === undefined
+  const noCitySelected = get('city') === undefined && get('cities') === undefined
   if (noCitySelected) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     queryBtn.onClick(query)
@@ -20,46 +21,46 @@ export const query = async (): Promise<void> => {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.onClick(end)
     render.app(state)
-    state.get('city') !== undefined ? await single() : await multi()
+    get('city') !== undefined ? await single() : await multi()
     end()
   }
 
   function end (): void {
-    state.set({ isComplete: true }, true)
+    set({ isComplete: true }, true)
     queryBtn.getEl().innerText = '查询全部日期'
     queryBtn.onClick(query)
   }
 
   async function multi (): Promise<void> {
-    for (const city of state.get('cities')) {
-      state.set({ currentCity: city }, true)
+    for (const city of get('cities')) {
+      set({ currentCity: city }, true)
 
       await single()
-      if (state.get('isComplete')) break
-      if (state.get('citiesLeft') > 0) await sleep(2000)
+      if (get('isComplete')) break
+      if (get('citiesLeft') > 0) await sleep(2000)
     }
   }
 
   async function single (): Promise<void> {
-    const initialSeatsNum = state.get('availableSeats')
+    const initialSeatsNum = get('availableSeats')
 
-    for (const testDay of state.get('dates')) {
-      state.set({ currentDate: testDay }, true)
+    for (const testDay of get('dates')) {
+      set({ currentDate: testDay }, true)
 
       try {
         const data = await Data.get(state)
         if (data !== null) {
           render.table(data, state)
-          state.set({ availableSeats: state.get('availableSeats') + data.availableSeats })
+          set({ availableSeats: get('availableSeats') + data.availableSeats })
         }
       } catch {
-        state.set({ err: state.get('err') + 1 })
+        set({ err: get('err') + 1 })
       }
 
-      if (state.get('isComplete')) break
-      if (state.get('datesLeft') > 0) await sleep(2000)
+      if (get('isComplete')) break
+      if (get('datesLeft') > 0) await sleep(2000)
     }
 
-    if (state.get('cities') !== undefined && state.get('availableSeats') === initialSeatsNum) { render.pityMsg(state) }
+    if (get('cities') !== undefined && get('availableSeats') === initialSeatsNum) { render.pityMsg(state) }
   }
 }

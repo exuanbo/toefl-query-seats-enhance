@@ -57,9 +57,9 @@ export interface SeatDetail {
 type filteredData = QueryData | null
 
 export const Data = {
-  async get (state: State): Promise<filteredData> {
-    const city = state.get('currentCity')
-    const testDay = state.get('currentDate')
+  async get ({ get }: State): Promise<filteredData> {
+    const city = get('currentCity')
+    const testDay = get('currentDate')
     const response = await axios.get<QueryData>('testSeat/queryTestSeats', {
       params: { city: city, testDay: testDay }
     })

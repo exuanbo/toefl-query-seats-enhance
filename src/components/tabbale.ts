@@ -1,8 +1,8 @@
 import { State } from '../State'
 import { TemplateResult, html } from 'lit-html'
 
-export const Tabbale = (state: State): TemplateResult => {
-  const cities = state.get('cities')
+export const Tabbale = ({ get }: State): TemplateResult => {
+  const cities = get('cities')
 
   return html`
     <ul class="nav nav-tabs" style="margin:1em auto 0;width:fit-content;">

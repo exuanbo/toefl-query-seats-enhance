@@ -43,7 +43,7 @@ export class State {
     return this.data[prop]
   }
 
-  set (newData: Partial<StateData>, update = true): void {
+  set = (newData: Partial<StateData>, update = true): void => {
     Object.assign(this.data, newData)
     if (update) {
       this.update()

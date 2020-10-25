@@ -8,11 +8,11 @@ class StateData {
   currentCity: string
   citiesLeft: number
 
-  dates = availableDates()
+  dates: string[]
   currentDate: string
   datesLeft: number
 
-  sum: number
+  sum?: number
   progress = 0
 
   availableSeats = 0
@@ -20,6 +20,8 @@ class StateData {
   isComplete = false
 
   constructor () {
+    this.dates = availableDates()
+
     const city = selectedCity()
     if (city instanceof Array && city.length !== 1) {
       this.cities = city
@@ -29,6 +31,7 @@ class StateData {
       const singleCity = city instanceof Array ? city[0] : city
       this.city = singleCity
     }
+
     this.sum = this.dates.length * (this.city !== undefined ? 1 : this.cities.length)
   }
 }

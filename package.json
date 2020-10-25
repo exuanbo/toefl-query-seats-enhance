@@ -5,7 +5,8 @@
   "scripts": {
     "build": "gulp",
     "dev": "gulp server",
-    "test": "npm run build && ts-standard"
+    "test": "npm run build && ts-standard",
+    "format": "ts-standard --fix"
   },
   "author": "exuanbo",
   "license": "MIT",

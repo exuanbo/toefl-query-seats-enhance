@@ -5,8 +5,9 @@ export const queryBtn = {
     return document.getElementById('queryBtn')
   },
 
-  onClick (fn: Function): void {
-    this.getEl().addEventListener('click', fn as EventHandlerNonNull, { once: true })
+  onClick (fn: () => void | Promise<void>): void {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    this.getEl().addEventListener('click', fn, { once: true })
   }
 }
 

@@ -36,15 +36,11 @@ class StateData {
 export class State {
   private data = new StateData()
 
-  constructor () {
-    this.update()
+  get = <P extends keyof StateData>(prop: P): StateData[P] | undefined => {
+    return this.data[prop]
   }
 
-  get <K extends keyof StateData>(key: K): StateData[K] | undefined {
-    return this.data[key]
-  }
-
-  set (newData: Partial<StateData>, update = false): void {
+  set = (newData: Partial<StateData>, update = false): void => {
     Object.assign(this.data, newData)
     if (update) {
       this.update()

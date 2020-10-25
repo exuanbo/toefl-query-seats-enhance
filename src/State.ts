@@ -1,6 +1,6 @@
 import { calcLeft } from './utils'
 import * as render from './views/render'
-import { selectedCity, dates } from './views/get'
+import { selectedCity, availableDates } from './views/get'
 
 interface StateData {
   city?: string

@@ -25,7 +25,7 @@ export const selectedCity = (): string | string[] => {
   }
 }
 
-export const dates = (): string[] => {
+export const availableDates = (): string[] => {
   const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
   return mapElOf(options, (option): string => {
     const day = option.value

@@ -29,6 +29,8 @@ export const availableDates = (): string[] => {
   const options = document.getElementById('testDays').childNodes as NodeListOf<HTMLInputElement>
   return mapElOf(options, (option): string => {
     const day = option.value
-    if (day !== undefined && day !== '-1') return day
+    if (day !== undefined && day !== '-1') {
+      return day
+    }
   }).filter(Boolean)
 }

@@ -34,7 +34,7 @@ class StateData {
 }
 
 export class State {
-  private data = new StateData
+  private data = new StateData()
 
   constructor () {
     this.update()

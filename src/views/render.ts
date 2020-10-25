@@ -13,7 +13,9 @@ export const app = (state: State): void => {
 
 export const progress = (state: State): void => {
   const wrapper = document.getElementById('progressWrapper')
-  if (wrapper !== null) render(Progress(state), wrapper)
+  if (wrapper !== null) {
+    render(Progress(state), wrapper)
+  }
 }
 
 export const table = (data: QueryData, { get }: State): void => {
@@ -36,8 +38,12 @@ export const checkbox = (): void => {
   const provinceGroup = document.querySelectorAll<HTMLOptGroupElement>('#centerProvinceCity optgroup')
   const provinceNum = provinceGroup.length
 
-  if (!untilAvailable(provinceNum, checkbox)) return
-  if (!untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', checkbox)) return
+  if (!untilAvailable(provinceNum, checkbox)) {
+    return
+  }
+  if (!untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', checkbox)) {
+    return
+  }
 
   const selectCity = document.getElementById('centerProvinceCity')
   const formWrapper = selectCity.parentElement.parentElement.parentElement

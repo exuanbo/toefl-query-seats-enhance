@@ -43,8 +43,13 @@ export const query = async (): Promise<void> => {
       set({ currentCity: city }, true)
 
       await single()
-      if (get('isComplete')) break
-      if (get('citiesLeft') > 0) await sleep(2000)
+
+      if (get('isComplete')) {
+        break
+      }
+      if (get('citiesLeft') > 0) {
+        await sleep(2000)
+      }
     }
   }
 
@@ -64,10 +69,16 @@ export const query = async (): Promise<void> => {
         set({ err: get('err') + 1 })
       }
 
-      if (get('isComplete')) break
-      if (get('datesLeft') > 0) await sleep(2000)
+      if (get('isComplete')) {
+        break
+      }
+      if (get('datesLeft') > 0) {
+        await sleep(2000)
+      }
     }
 
-    if (get('cities') !== undefined && get('availableSeats') === initialSeatsNum) { render.pityMsg(state) }
+    if (get('cities') !== undefined && get('availableSeats') === initialSeatsNum) {
+      render.pityMsg(state)
+    }
   }
 }

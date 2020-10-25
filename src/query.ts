@@ -23,7 +23,7 @@ export const query = async (): Promise<void> => {
     render.app(state)
 
     if (get('city') !== undefined) {
-      set({ currentCity: get('city') }, true)
+      set({ currentCity: get('city') })
       await single()
     } else {
       await multi()
@@ -33,14 +33,14 @@ export const query = async (): Promise<void> => {
   }
 
   function end (): void {
-    set({ isComplete: true }, true)
+    set({ isComplete: true })
     queryBtn.getEl().innerText = '查询全部日期'
     queryBtn.onClick(query)
   }
 
   async function multi (): Promise<void> {
     for (const city of get('cities')) {
-      set({ currentCity: city }, true)
+      set({ currentCity: city })
 
       await single()
 
@@ -57,16 +57,16 @@ export const query = async (): Promise<void> => {
     const initialSeatsNum = get('availableSeats')
 
     for (const testDay of get('dates')) {
-      set({ currentDate: testDay }, true)
+      set({ currentDate: testDay })
 
       try {
         const data = await getData(state)
         if (data !== null) {
           render.table(data, state)
-          set({ availableSeats: get('availableSeats') + data.availableSeats })
+          set({ availableSeats: get('availableSeats') + data.availableSeats }, false)
         }
       } catch {
-        set({ err: get('err') + 1 })
+        set({ err: get('err') + 1 }, false)
       }
 
       if (get('isComplete')) {

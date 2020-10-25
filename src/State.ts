@@ -45,7 +45,6 @@ export class State {
     } else {
       const singleCity = city instanceof Array ? city[0] : city
       this.data.city = singleCity
-      this.data.currentCity = singleCity
     }
     this.data.sum = this.data.dates.length * (this.data.city !== undefined ? 1 : this.data.cities.length)
     this.update()

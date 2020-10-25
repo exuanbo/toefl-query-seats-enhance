@@ -21,7 +21,14 @@ export const query = async (): Promise<void> => {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.onClick(end)
     render.app(state)
-    get('city') !== undefined ? await single() : await multi()
+
+    if (get('city') !== undefined) {
+      set({ currentCity: get('city') }, true)
+      await single()
+    } else {
+      await multi()
+    }
+
     end()
   }
 

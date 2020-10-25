@@ -8,8 +8,7 @@ export const query = async (): Promise<void> => {
   const state = new State()
   const { get, set } = state
 
-  const noCitySelected = get('city') === undefined && get('cities') === undefined
-  if (noCitySelected) {
+  if (get('city') === undefined && get('cities') === undefined) {
     layer.msg('请选择考点所在城市', { time: 2000, icon: 0 })
     queryBtn.onClick(query)
     return

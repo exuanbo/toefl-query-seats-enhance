@@ -59,11 +59,11 @@ type filteredData = QueryData | null
 export const getData = async ({ get }: State): Promise<filteredData> => {
   const city = get('currentCity')
   const testDay = get('currentDate')
-  const response = await axios.get<QueryData>('testSeat/queryTestSeats', {
+  const { data } = await axios.get<QueryData>('testSeat/queryTestSeats', {
     params: { city: city, testDay: testDay }
   })
 
-  return filterSeats(response.data)
+  return filterSeats(data)
 }
 
 const filterSeats = (data: QueryData): filteredData => {

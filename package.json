@@ -5,8 +5,9 @@
   "scripts": {
     "build": "gulp",
     "dev": "gulp server",
-    "test": "npm run build && ts-standard",
-    "format": "ts-standard --fix"
+    "lint": "ts-standardx",
+    "lint:fix": "ts-standardx --fix",
+    "test": "npm run lint && npm run build"
   },
   "author": "exuanbo",
   "license": "MIT",

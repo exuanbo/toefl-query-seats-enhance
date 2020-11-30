@@ -3,6 +3,7 @@
     "target": "ES2015",
 
     "strict": true,
+    "strictNullChecks": false,
 
     "moduleResolution": "node",
     "esModuleInterop": true,

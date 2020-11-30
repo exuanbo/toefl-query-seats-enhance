@@ -16,7 +16,7 @@ export const query = async (): Promise<void> => {
 
   await start()
 
-  async function start (): Promise<void> {
+  async function start(): Promise<void> {
     queryBtn.getEl().innerText = '停止当前查询'
     queryBtn.onClick(end)
     render.app(state)
@@ -31,13 +31,13 @@ export const query = async (): Promise<void> => {
     end()
   }
 
-  function end (): void {
+  function end(): void {
     set({ isComplete: true })
     queryBtn.getEl().innerText = '查询全部日期'
     queryBtn.onClick(query)
   }
 
-  async function multi (): Promise<void> {
+  async function multi(): Promise<void> {
     for (const city of get('cities')) {
       set({ currentCity: city })
 
@@ -52,7 +52,7 @@ export const query = async (): Promise<void> => {
     }
   }
 
-  async function single (): Promise<void> {
+  async function single(): Promise<void> {
     const initialSeatsNum = get('availableSeats')
 
     for (const testDay of get('dates')) {
@@ -62,7 +62,10 @@ export const query = async (): Promise<void> => {
         const data = await getData(state)
         if (data !== null) {
           render.table(data, state)
-          set({ availableSeats: get('availableSeats') + data.availableSeats }, false)
+          set(
+            { availableSeats: get('availableSeats') + data.availableSeats },
+            false
+          )
         }
       } catch {
         set({ err: get('err') + 1 }, false)
@@ -76,7 +79,10 @@ export const query = async (): Promise<void> => {
       }
     }
 
-    if (get('cities') !== undefined && get('availableSeats') === initialSeatsNum) {
+    if (
+      get('cities') !== undefined &&
+      get('availableSeats') === initialSeatsNum
+    ) {
       render.pityMsg(state)
     }
   }

@@ -6,11 +6,7 @@ export const App = (state: State): TemplateResult => {
   return html`
     <div id="progressWrapper"></div>
     ${state.get('city') !== undefined
-      ? html`
-          <div id="tables"></div>
-        `
-      : html`
-          <div class="tabbable">${Tabbale(state)}</div>
-        `}
+      ? html`<div id="tables"></div> `
+      : html`<div class="tabbable">${Tabbale(state)}</div> `}
   `
 }

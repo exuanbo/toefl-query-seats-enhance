@@ -19,7 +19,7 @@ class StateData {
   err = 0
   isComplete = false
 
-  constructor () {
+  constructor() {
     this.dates = availableDates()
 
     const city = selectedCity()
@@ -32,7 +32,8 @@ class StateData {
       this.city = singleCity
     }
 
-    this.sum = this.dates.length * (this.city !== undefined ? 1 : this.cities.length)
+    this.sum =
+      this.dates.length * (this.city !== undefined ? 1 : this.cities.length)
   }
 }
 
@@ -50,14 +51,16 @@ export class State {
     }
   }
 
-  private update (): void {
+  private update(): void {
     if (this.data.cities !== undefined) {
       this.data.citiesLeft = calcLeft(this.data.currentCity, this.data.cities)
     }
     this.data.datesLeft = calcLeft(this.data.currentDate, this.data.dates)
     this.data.progress =
       100 -
-      (((this.data.cities !== undefined ? this.data.citiesLeft * this.data.dates.length : 0) +
+      (((this.data.cities !== undefined
+        ? this.data.citiesLeft * this.data.dates.length
+        : 0) +
         this.data.datesLeft) /
         this.data.sum) *
         100

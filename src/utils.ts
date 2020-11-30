@@ -1,10 +1,16 @@
 export const firstKeyOf = (obj: object): string => Object.keys(obj)[0]
 
-export const calcLeft = (cur: string, arr: string[]): number => arr.length - arr.indexOf(cur) - 1
+export const calcLeft = (cur: string, arr: string[]): number =>
+  arr.length - arr.indexOf(cur) - 1
 
-export const sleep = async (ms: number): Promise<void> => await new Promise(resolve => setTimeout(resolve, ms))
+export const sleep = async (ms: number): Promise<void> =>
+  await new Promise(resolve => setTimeout(resolve, ms))
 
-export const untilAvailable = (el: any, fn: () => void, interval: number = 100): boolean => {
+export const untilAvailable = (
+  el: any,
+  fn: () => void,
+  interval = 100
+): boolean => {
   const isAvailable = Boolean(el)
   if (!isAvailable) {
     window.setTimeout(fn, interval)
@@ -37,4 +43,7 @@ export const someElOf = <T extends Node>(
 }
 
 export const isMunicipality = (cityName: string): boolean =>
-  cityName === '北京' || cityName === '上海' || cityName === '天津' || cityName === '重庆'
+  cityName === '北京' ||
+  cityName === '上海' ||
+  cityName === '天津' ||
+  cityName === '重庆'

@@ -16,7 +16,8 @@ export const observeMutation = (
 }
 
 export const adjustStyle = (): void => {
-  const formWrapper = document.getElementById('centerProvinceCity').parentElement.parentElement
+  const formWrapper = document.getElementById('centerProvinceCity')
+    .parentElement.parentElement
   const selects = document.querySelectorAll<HTMLElement>('.form-inline select')
 
   if (!untilAvailable(formWrapper !== null && selects, adjustStyle)) {

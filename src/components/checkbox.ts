@@ -12,7 +12,9 @@ export const Checkbox = (): TemplateResult => html`
 `
 
 const toggleCheck = (): void => {
-  const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')
+  const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
+    'input[type="checkbox"]'
+  )
   const notAllChecked = someElOf(allCheckboxes, box => !box.checked)
   forEachElOf(allCheckboxes, box => {
     box.checked = notAllChecked
@@ -20,7 +22,9 @@ const toggleCheck = (): void => {
 }
 
 const loopProvinceGroup = (): TemplateResult[] => {
-  const provinceGroups = document.querySelectorAll<HTMLOptGroupElement>('#centerProvinceCity optgroup')
+  const provinceGroups = document.querySelectorAll<HTMLOptGroupElement>(
+    '#centerProvinceCity optgroup'
+  )
 
   return mapElOf(
     provinceGroups,
@@ -40,13 +44,20 @@ const loopProvinceGroup = (): TemplateResult[] => {
                       ? html`
                           <span
                             class="muted"
-                            style="${provinceName.length === 3 ? '' : 'margin-right:1em;'}"
+                            style="${provinceName.length === 3
+                              ? ''
+                              : 'margin-right:1em;'}"
                             >${provinceName}：</span
                           >
                         `
                       : nothing}
-                  `}<span style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
-                ><input type="checkbox" id=${city.value} style="margin:0 0 2px;" /><label
+                  `}<span
+                style="${isMunicipality(city.label) ? 'margin-left:4em;' : ''}"
+                ><input
+                  type="checkbox"
+                  id=${city.value}
+                  style="margin:0 0 2px;"
+                /><label
                   for=${city.value}
                   style="display:inline;margin:${index === cities.length - 1
                     ? '0 0 0 4px'

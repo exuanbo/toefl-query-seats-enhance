@@ -9,7 +9,9 @@ export const Tabbale = ({ get }: State): TemplateResult => {
       ${cities.map(
         city => html`
           <li class="${cities.indexOf(city) === 0 ? 'active' : ''}">
-            <a href="#tab-${city}" data-toggle="tab">${translateCityName(city)}</a>
+            <a href="#tab-${city}" data-toggle="tab"
+              >${translateCityName(city)}</a
+            >
           </li>
         `
       )}

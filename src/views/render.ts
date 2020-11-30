@@ -35,13 +35,17 @@ export const table = (data: QueryData, { get }: State): void => {
 }
 
 export const checkbox = (): void => {
-  const provinceGroup = document.querySelectorAll<HTMLOptGroupElement>('#centerProvinceCity optgroup')
+  const provinceGroup = document.querySelectorAll<HTMLOptGroupElement>(
+    '#centerProvinceCity optgroup'
+  )
   const provinceNum = provinceGroup.length
 
   if (!untilAvailable(provinceNum, checkbox)) {
     return
   }
-  if (!untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', checkbox)) {
+  if (
+    !untilAvailable(provinceGroup[provinceNum - 1].label === '浙江', checkbox)
+  ) {
     return
   }
 
@@ -54,8 +58,9 @@ export const checkbox = (): void => {
     wrapperAttr: {
       id: 'checkboxes',
       class: 'hide well',
-      style: `max-width:fit-content;margin:4px 0 0 ${selectCity.offsetLeft -
-        selectCity.parentElement.offsetLeft}px;padding:1em;`
+      style: `max-width:fit-content;margin:4px 0 0 ${
+        selectCity.offsetLeft - selectCity.parentElement.offsetLeft
+      }px;padding:1em;`
     },
     target: formWrapper,
     position: 'beforeend'
@@ -93,7 +98,7 @@ interface insertOptions {
   position?: string
 }
 
-function insertComponent ({
+function insertComponent({
   component,
   wrapperTag = 'span',
   wrapperAttr,
@@ -106,7 +111,7 @@ function insertComponent ({
   )
   render(component, document.getElementById(wrapperAttr.id))
 
-  function loopAttr (attrs: typeof wrapperAttr): string {
+  function loopAttr(attrs: typeof wrapperAttr): string {
     return Object.keys(attrs)
       .map(attr => `${attr}="${attrs[attr]}"`)
       .join(' ')

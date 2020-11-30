@@ -11,7 +11,7 @@
   "author": "exuanbo",
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "16.0.0",
+    "@rollup/plugin-commonjs": "17.0.0",
     "@rollup/plugin-node-resolve": "10.0.0",
     "@rollup/plugin-typescript": "6.1.0",
     "@rollup/stream": "1.1.0",

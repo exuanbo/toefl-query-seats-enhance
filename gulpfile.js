@@ -12,6 +12,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import minifyHtml from 'rollup-plugin-minify-html-template-literals'
+import cleanup from 'rollup-plugin-cleanup'
 
 const { src, dest, series, parallel, watch } = gulp
 
@@ -33,8 +34,9 @@ const build = () => {
     plugins: [
       nodeResolve({ browser: true }),
       commonjs(),
+      typescript(),
       minifyHtml(),
-      typescript()
+      cleanup()
     ]
   }
   return rollupStream(options)

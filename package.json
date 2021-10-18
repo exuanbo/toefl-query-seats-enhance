@@ -18,7 +18,7 @@
     "@rollup/stream": "1.1.0",
     "@types/layui-layer": "1.0.0",
     "gulp": "4.0.2",
-    "gulp-terser": "2.0.0",
+    "gulp-terser": "2.1.0",
     "rollup": "2.34.0",
     "rollup-plugin-cleanup": "3.2.1",
     "rollup-plugin-minify-html-template-literals": "1.2.0",

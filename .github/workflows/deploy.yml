@@ -28,7 +28,7 @@ jobs:
 
       - run: npm run build
 
-      - uses: exuanbo/actions-deploy-gist@v1.0.3
+      - uses: exuanbo/actions-deploy-gist@v1.1.4
         with:
           token: ${{ secrets.TOKEN }}
           gist_id: 32ebda63925b60e7817ba0346b980d14

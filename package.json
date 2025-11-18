@@ -14,7 +14,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "17.0.0",
     "@rollup/plugin-node-resolve": "11.0.0",
-    "@rollup/plugin-typescript": "8.0.0",
+    "@rollup/plugin-typescript": "8.5.0",
     "@rollup/stream": "1.1.0",
     "@types/layui-layer": "1.0.0",
     "gulp": "4.0.2",
